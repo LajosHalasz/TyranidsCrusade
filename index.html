@@ -406,6 +406,52 @@ td.modv{font-weight:800}
 .presets{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
 .presets li{display:flex;justify-content:space-between;gap:8px;align-items:center;border:1px solid var(--line);border-radius:6px;padding:6px 8px;background:var(--bg)}
 @media (max-width:980px){.depwrap{grid-template-columns:1fr}}
+
+/* sections, home, battle */
+.sections{display:flex;flex-direction:column;gap:4px;padding:0 4px}
+.sections a{font-family:var(--head);font-weight:700;font-size:1.05rem;text-decoration:none;color:var(--ink);padding:6px 10px;border-radius:6px;border:1px solid var(--line)}
+.sections a.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.home{max-width:1000px}
+.homegrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:20px}
+.homecard{display:flex;flex-direction:column;gap:10px;padding:22px;border-radius:12px;text-decoration:none;color:var(--ink);border:2px solid var(--line);background:var(--surface);min-height:180px}
+.homecard b{font-family:var(--head);font-size:2rem;line-height:1}
+.homecard.tyr{border-color:var(--chitin)}.homecard.tyr b{color:var(--chitin)}
+.homecard.um{border-color:var(--syn)}.homecard.um b{color:var(--syn)}
+.homecard.bat{border-color:var(--blood)}.homecard.bat b{color:var(--blood)}
+.homecard:hover{transform:translateY(-2px)}
+.bhead{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--chitin);padding-bottom:10px;margin-bottom:16px}
+.bstep h3{display:flex;align-items:center;gap:8px}
+.bstep.done{border-color:var(--synapse)}
+.seat{border:1px solid var(--line);border-radius:8px;padding:10px}
+.seat.tyr h4{color:var(--chitin)}.seat.um h4{color:var(--syn)}
+button.big{font-size:1.15rem;padding:10px 22px}
+button:disabled{opacity:.45;cursor:not-allowed}
+.bstatus{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:12px}
+.bround b{font-family:var(--head);font-size:2.4rem;display:block;line-height:1}
+.bturn b{font-family:var(--head);font-size:1.6rem;display:block}
+b.tyr{color:var(--chitin)}b.um{color:var(--syn)}
+.bphases{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.bph{font-family:var(--head);font-size:.9rem;padding:2px 10px;border-radius:12px;border:1px solid var(--line);color:var(--muted)}
+.bph.on{background:var(--chitin);color:var(--chitin-ink);border-color:var(--chitin)}
+.bph.past{opacity:.6;text-decoration:line-through}
+.bscores{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.bscore{display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--surface)}
+.bscore.tyr b{color:var(--chitin)}.bscore.um b{color:var(--syn)}
+.bscore.active{box-shadow:inset 0 0 0 2px var(--chitin)}
+.bscore .big{font-family:var(--head);font-size:2rem;font-weight:800}
+.bscore button{padding:0 8px}
+.atkgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.atkgrid label{display:flex;flex-direction:column;font-family:var(--head);font-size:.9rem;gap:2px}
+.atkgrid select{max-width:100%}
+.atkres{margin-top:10px;border-left:4px solid var(--blood);padding:6px 12px;background:var(--bg);border-radius:4px}
+.atkres ul{margin:4px 0 0;padding-left:18px}
+.btab td,.btab th{padding:4px 6px;font-size:.92rem}
+.btab button{padding:0 6px;font-size:.8rem}
+.deadrow{opacity:.45;text-decoration:line-through}
+.blog{list-style:none;margin:0;padding:0;max-height:260px;overflow:auto;font-size:.9rem}
+.blog li{padding:3px 0;border-bottom:1px dashed var(--line)}
+.endpanel{text-align:center}.endpanel .big{font-family:var(--head);font-size:1.6rem}
+@media (max-width:860px){.sections{flex-direction:row;overflow-x:auto}.sections a{white-space:nowrap}.bstatus{grid-template-columns:1fr}.bscores{grid-template-columns:1fr}}
 /* mobile */
 .halfrow td{background:color-mix(in srgb,var(--blood) 7%,transparent);font-size:.92rem;border-top:0}
 .halflbl{display:block;padding-left:14px;border-left:2px solid var(--blood);font-family:var(--head);font-size:.88rem;color:var(--muted)}
@@ -437,7 +483,8 @@ td.modv{font-weight:800}
 <body>
 <div class="app">
   <aside class="rail">
-    <div class="brand" id="brand">Hive Fleet Crusade<small>Tyranids, Invasion Fleet</small></div>
+    <a class="brand" id="brand" href="#home" style="text-decoration:none">Crusade Command<small>Leviathan, 10th edition</small></a>
+    <nav class="sections" id="sections" aria-label="Armies"></nav>
     <div class="status" id="status"></div>
     <nav class="tabs" id="tabs" aria-label="Sheets"></nav>
     <div class="rail-tools">
@@ -2101,16 +2148,401 @@ MAIN.addEventListener('dblclick',e=>{const g=e.target.closest&&e.target.closest(
 MAIN.addEventListener('keydown',e=>{const g=e.target.closest&&e.target.closest('#depsvg .tok');if(!g)return;if(e.key==='r'||e.key==='R'){e.preventDefault();depSelect(g);depRotate(e.shiftKey?-15:15)}});
 
 
-const RENDER={'introduction':pIntroduction,'crusade-rules':pCrusadeRules,'battle-tally':pBattleTally,'agendas':pAgendas,'order-of-battle':pOrderOfBattle,'crusade-cards':pCrusadeCards,'updated-datasheets':pUpdatedDatasheets,'battle-honours':pBattleHonours,'battle-traits':pBattleTraits,'crusade-relics':pCrusadeRelics,'battle-scars':pBattleScars};
+/* =========================================================
+   HOME, ULTRAMARINES AND LET'S BATTLE
+   ========================================================= */
+// ---------- Ultramarines datasheets (profiles from memory: verify on Wahapedia) ----------
+const UM_DS = {
+  'Captain':{M:6,T:4,Sv:'3+',W:5,Ld:'6+',OC:1,inv:'4+',kw:'Infantry, Character, Imperium, Tacticus, Captain',base:40,pts:80,
+    ranged:[W('Bolt pistol','12"','1','2+','4','0','1','Pistol'),W('Master-crafted bolt rifle','24"','2','2+','4','-1','2','Assault, Heavy')],melee:[W('Master-crafted power weapon','Melee','6','2+','5','-2','2')]},
+  'Lieutenant':{M:6,T:4,Sv:'3+',W:4,Ld:'6+',OC:1,inv:'',kw:'Infantry, Character, Imperium, Tacticus, Lieutenant',base:40,pts:65,
+    ranged:[W('Master-crafted bolt rifle','24"','2','2+','4','-1','2','Assault, Heavy')],melee:[W('Close combat weapon','Melee','5','2+','4','0','1')]},
+  'Intercessor Squad':{M:6,T:4,Sv:'3+',W:2,Ld:'6+',OC:2,inv:'',kw:'Infantry, Battleline, Imperium, Tacticus, Grenades',base:32,pts:80,
+    ranged:[W('Bolt rifle','24"','2','3+','4','-1','1','Assault, Heavy')],melee:[W('Close combat weapon','Melee','3','3+','4','0','1')]},
+  'Assault Intercessor Squad':{M:6,T:4,Sv:'3+',W:2,Ld:'6+',OC:2,inv:'',kw:'Infantry, Battleline, Imperium, Tacticus, Grenades',base:32,pts:75,
+    ranged:[W('Heavy bolt pistol','18"','1','3+','4','-1','1','Pistol')],melee:[W('Astartes chainsword','Melee','4','3+','4','-1','1')]},
+  'Hellblaster Squad':{M:6,T:4,Sv:'3+',W:2,Ld:'6+',OC:1,inv:'',kw:'Infantry, Imperium, Hellblaster Squad',base:32,pts:110,
+    ranged:[W('Plasma incinerator – standard','24"','2','3+','7','-2','1','Assault, Heavy'),W('Plasma incinerator – supercharge','24"','2','3+','8','-3','2','Assault, Hazardous, Heavy')],melee:[W('Close combat weapon','Melee','3','3+','4','0','1')]},
+  'Infernus Squad':{M:6,T:4,Sv:'3+',W:2,Ld:'6+',OC:1,inv:'',kw:'Infantry, Imperium, Infernus Squad',base:32,pts:90,
+    ranged:[W('Pyreblaster','12"','D6','N/A','5','-1','1','Ignores Cover, Torrent')],melee:[W('Close combat weapon','Melee','3','3+','4','0','1')]},
+  'Terminator Squad':{M:5,T:5,Sv:'2+',W:3,Ld:'6+',OC:1,inv:'4+',kw:'Infantry, Imperium, Terminator, Terminator Squad',base:40,pts:170,
+    ranged:[W('Storm bolter','24"','2','3+','4','0','1','Rapid Fire 2')],melee:[W('Power fist','Melee','3','3+','8','-2','2')]},
+  'Eradicator Squad':{M:5,T:6,Sv:'3+',W:3,Ld:'6+',OC:1,inv:'',kw:'Infantry, Imperium, Gravis, Eradicator Squad',base:40,pts:95,
+    ranged:[W('Melta rifle','18"','1','3+','9','-4','D6','Heavy, Melta 2')],melee:[W('Close combat weapon','Melee','3','3+','4','0','1')]},
+  'Redemptor Dreadnought':{M:8,T:10,Sv:'2+',W:12,Ld:'6+',OC:4,inv:'',kw:'Vehicle, Walker, Imperium, Redemptor Dreadnought',base:90,pts:210,
+    ranged:[W('Macro plasma incinerator – standard','36"','D6+1','3+','8','-3','2','Blast'),W('Heavy onslaught gatling cannon','30"','12','3+','6','-1','1','Devastating Wounds'),W('Twin fragstorm grenade launcher','18"','D6','3+','4','0','1','Blast, Twin-linked')],melee:[W('Redemptor fist','Melee','5','3+','12','-2','3')]},
+};
+function umWahaUrl(ds){return 'https://wahapedia.ru/wh40k10ed/factions/space-marines/'+String(ds).replace(/\s+/g,'-')}
+function umDefault(){
+  const mk=(id,name,ds,models,lists)=>({id,name,ds,models,pts:UM_DS[ds].pts,xp:0,honours:'',scars:'',lists});
+  return {lists:[{name:'Strike Force Alpha'},{name:'List 2'},{name:'List 3'}],
+    units:[mk('m1','Captain Severus','Captain',1,[true,true,false]),mk('m2','Lieutenant Calvo','Lieutenant',1,[true,false,true]),mk('m3','Squad Aurelius','Intercessor Squad',5,[true,true,true]),mk('m4','Squad Varro','Intercessor Squad',5,[true,false,true]),mk('m5','Squad Drusus','Assault Intercessor Squad',5,[true,true,false]),mk('m6','Squad Ignis','Infernus Squad',5,[false,true,false]),mk('m7','Squad Pyrus','Hellblaster Squad',5,[true,false,true]),mk('m8','Brother Castor','Redemptor Dreadnought',1,[true,true,true]),mk('m9','Squad Tarchon','Terminator Squad',5,[false,true,true])]};
+}
+function umState(){if(!state.um)state.um=umDefault();return state.um}
+function umSheet(u){const d=UM_DS[u.ds];if(!d)return null;return {M:d.M,T:d.T,Sv:d.Sv,W:d.W,Ld:d.Ld,OC:d.OC,inv:d.inv,kw:d.kw.split(',').map(s=>s.trim()),ranged:d.ranged.map(w=>Object.assign({},w)),melee:d.melee.map(w=>Object.assign({},w))}}
+
+function pHome(){
+  const c=calc(); const um=umState(); const umPts=um.units.reduce((a,u)=>a+n(u.pts),0);
+  return `<div class="home">
+    <h1>Crusade Command</h1>
+    <p class="muted prose">Warhammer 40,000 Crusade (10th edition, Leviathan). Pick an army to manage, or start a battle with a friend.</p>
+    <div class="homegrid">
+      <a class="homecard tyr" href="#introduction"><b>Tyranids</b><span>Invasion Fleet crusade force: ${state.units.length} units, ${c.used} pts, ${c.wins}/${c.battles} wins, ${esc(state.world.type)} ${c.stage>=3?'devoured':STAGE_NAMES[c.stage]}.</span></a>
+      <a class="homecard um" href="#ultramarines"><b>Ultramarines</b><span>Opponent’s crusade force: ${um.units.length} units, ${umPts} pts. Edit units and 1000-point lists.</span></a>
+      <a class="homecard bat" href="#battle"><b>Let’s Battle</b><span>Turn-based Crusade battle for two players: roll the mission, track CP and VP, resolve attacks and play five battle rounds.</span></a>
+    </div></div>`;
+}
+function pUltramarines(){
+  const um=umState();
+  const rows=um.units.map((u,i)=>{const d=UM_DS[u.ds]||{};return `<tr>
+    <td>${inp(`um.units.${i}.name`,u.name)}</td>
+    <td><select data-bind="um.units.${i}.ds">${Object.keys(UM_DS).map(k=>`<option ${k===u.ds?'selected':''}>${k}</option>`).join('')}</select><br><a class="small" href="${esc(umWahaUrl(u.ds))}" target="_blank" rel="noopener">Wahapedia</a></td>
+    <td class="num">${inp(`um.units.${i}.models`,u.models,'num','min="1"')}</td>
+    <td class="num">${inp(`um.units.${i}.pts`,u.pts,'num','min="0"')}</td>
+    <td class="small">M${d.M}" T${d.T} Sv${d.Sv} W${d.W}${d.inv?` ${d.inv}++`:''}</td>
+    <td class="num">${inp(`um.units.${i}.xp`,u.xp,'num','min="0"')}</td>
+    ${um.lists.map((L,li)=>`<td class="listcol">${chk(`um.units.${i}.lists.${li}`,u.lists&&u.lists[li])}</td>`).join('')}
+    <td><button type="button" class="danger small" data-action="umDel" data-i="${i}" style="padding:2px 8px">Remove</button></td></tr>`}).join('');
+  const sums=um.lists.map((L,li)=>{const us=um.units.filter(u=>u.lists&&u.lists[li]);const p=us.reduce((a,u)=>a+n(u.pts),0);return `<div><input type="text" data-bind="um.lists.${li}.name" value="${esc(L.name)}" style="font-family:var(--head);font-weight:700;width:100%"><br><b>${p}</b> pts, ${us.length} units<br>${p>1000?`<span class="warn small">${p-1000} pts over 1000</span>`:'<span class="ok small">Fits Incursion (1000 pts)</span>'}</div>`}).join('');
+  return pageHead('Ultramarines','The opposing crusade force. Pick units for each 1000-point list; the Let’s Battle page uses these lists.')+`
+  <div class="listsum">${sums}</div>
+  <div class="scroll-x panel" style="padding:0"><table class="roster"><thead><tr><th>Unit name</th><th>Datasheet</th><th class="num">Models</th><th class="num">Points</th><th>Profile</th><th class="num">XP</th>${um.lists.map(L=>`<th class="listcol">${esc(L.name)}</th>`).join('')}<th></th></tr></thead><tbody>${rows}</tbody></table></div>
+  <div class="panel"><h3>Add a unit</h3><div class="addform"><label>Datasheet<select id="umAddDs">${Object.keys(UM_DS).map(k=>`<option>${k}</option>`).join('')}</select></label><label>Name<input type="text" id="umAddName" placeholder="e.g. Squad Cato"></label><label>Models<input type="number" id="umAddModels" value="5" min="1"></label><button type="button" class="primary" data-action="umAdd">Add</button></div></div>
+  <p class="note">Ultramarines profiles are typed in from memory as a starting point and are not verified. Check each datasheet on Wahapedia before relying on it in a battle.</p>`;
+}
+
+// ---------- Leviathan mission data ----------
+const LEV_PRIMARY=['Take and Hold','Supply Drop','The Ritual','Priority Targets','Sites of Power','Vital Ground','Purge the Foe','Deploy Servo-skulls','Scorched Earth'];
+const LEV_RULES=['Chilling Rain','Chosen Battlefield','Delayed Reserves','Hidden Supplies','Maelstrom of Battle','Minefields','Scrambler Fields','Secret Intel','Supply Lines','Sweep and Clear','Targets of Opportunity','Vox Static'];
+const LEV_SECONDARY=['Assassination','Behind Enemy Lines','Bring It Down','Cleanse','Containment','Defend Stronghold','Deploy Teleport Homer','Engage on All Fronts','Extend Battle Lines','Investigate Signals','Marked for Death','No Prisoners','Overwhelming Force','Sabotage','Secure No Man’s Land','Storm Hostile Objective','A Tempting Target','Area Denial'];
+const B_PHASES=['Command','Movement','Shooting','Charge','Fight'];
+const SIDES={tyr:'Tyranids',um:'Ultramarines'};
+const other=s=>s==='tyr'?'um':'tyr';
+
+// ---------- dice ----------
+function d6(){const a=new Uint32Array(1);crypto.getRandomValues(a);return 1+(a[0]%6)}
+function rollExprR(e){e=String(e).replace(/\s/g,'').toUpperCase();if(e==='N/A'||e==='')return 0;let tot=0;e.split('+').forEach(part=>{const m=part.match(/^(\d*)D(\d)$/);if(m){for(let i=0;i<(+m[1]||1);i++)tot+=part.endsWith('D3')?Math.ceil(d6()/2):d6()}else tot+=Number(part)||0});return tot}
+
+// ---------- battle state & sync ----------
+let BATTLE=null; const NET={avail:false,db:null,user:null,me:null,ref:null,unsub:null,code:null,status:''};
+async function netInit(){
+  try{ if(!window.claude||typeof claude.use!=='function') return;
+    const db=await claude.use('db'); if(!db) return; NET.db=db; NET.avail=true;
+    const user=await claude.use('user'); NET.user=user; try{NET.me=user?await user.id():null}catch(e){}
+    if(current()==='battle') render();
+  }catch(e){}
+}
+function newBattle(code){
+  return {v:1,code,rev:0,created:Date.now(),players:{tyr:null,um:null},
+    setup:{tyrList:0,umList:0,primary:null,rule:null,deploy:null,attRoll:{},attacker:null,firstRoll:{},first:null,secMode:{tyr:'tactical',um:'tactical'},fixed:{tyr:[],um:[]},agendas:{tyr:'',um:''},locked:{tyr:false,um:false}},
+    stage:'setup',round:1,active:null,step:0,cp:{tyr:0,um:0},
+    vp:{tyr:{pri:[0,0,0,0,0],sec:[0,0,0,0,0]},um:{pri:[0,0,0,0,0],sec:[0,0,0,0,0]}},
+    sec:{tyr:{deck:[],hand:[],done:[]},um:{deck:[],hand:[],done:[]}},
+    units:{tyr:[],um:[]},log:[],result:null,applied:{tyr:false,um:false}};
+}
+function blog(txt,who){BATTLE.log.unshift({t:Date.now(),who:who||'',txt});if(BATTLE.log.length>80)BATTLE.log.length=80}
+function mySide(){if(NET.code&&NET.me&&BATTLE&&BATTLE.players){if(BATTLE.players.tyr&&BATTLE.players.tyr.id===NET.me)return 'tyr';if(BATTLE.players.um&&BATTLE.players.um.id===NET.me)return 'um';return null}return 'both'}
+function canAct(side){const m=mySide();return m==='both'||m===side}
+let bSaving=false,bPending=false;
+async function bCommit(){
+  BATTLE.rev=(BATTLE.rev||0)+1;
+  if(NET.code&&NET.ref){ if(bSaving){bPending=true;render();return} bSaving=true; try{await NET.ref.set(JSON.parse(JSON.stringify(BATTLE)))}catch(e){NET.status='Could not save to the shared game ('+(e&&e.code||'error')+'). You may only have view access.'} bSaving=false; if(bPending){bPending=false;return bCommit()} }
+  else { state.battleLocal=BATTLE; save(); }
+  render();
+}
+function bJoin(code){
+  if(!NET.db) return; code=code.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,8); if(!code) return;
+  if(NET.unsub){try{NET.unsub()}catch(e){}}
+  NET.code=code; NET.ref=NET.db.doc('games/'+code); NET.status='Connecting…';
+  let first=true; const timer=setTimeout(()=>{if(first){NET.status='No answer from the shared store yet.';render()}},10000);
+  NET.unsub=NET.ref.onSnapshot(snap=>{clearTimeout(timer);const d=snap.data();
+    if(!d){ if(first){BATTLE=newBattle(code);first=false;NET.status='New game created. Share the code '+code+' with your opponent.';bCommit();return} }
+    else { BATTLE=d; NET.status='Connected to game '+code+'.'; }
+    first=false; if(current()==='battle') render();
+  },err=>{clearTimeout(timer);NET.status='Connection error: '+(err&&err.code||'unknown');render()});
+}
+function bLeave(){if(NET.unsub){try{NET.unsub()}catch(e){}}NET.unsub=null;NET.ref=null;NET.code=null;BATTLE=null;NET.status='';render()}
+function bHotseat(){BATTLE=state.battleLocal||newBattle('LOCAL');NET.code=null;render()}
+
+// ---------- army snapshots ----------
+function snapTyr(li){
+  return state.units.filter(u=>u.lists&&u.lists[li]).map(u=>{const s=buildSheet(u);if(!s)return null;
+    return {uid:u.id,name:u.name,ds:u.ds,models:u.models,left:u.models,W:+s.W,wl:+s.W,T:+s.T,Sv:s.Sv,inv:s.inv||'',fnp:'',M:s.M,OC:s.OC,kw:[...s.kw,...(u.warlord?['Warlord']:[])],ranged:s.ranged.map(w=>({name:w.name,range:w.range,A:w.A,SK:w.SK,S:w.S,AP:w.AP,D:w.D,kw:w.kw})),melee:s.melee.map(w=>({name:w.name,range:w.range,A:w.A,SK:w.SK,S:w.S,AP:w.AP,D:w.D,kw:w.kw})),shocked:false,dead:false,kills:0}}).filter(Boolean);
+}
+function snapUm(li){
+  return umState().units.filter(u=>u.lists&&u.lists[li]).map(u=>{const s=umSheet(u);if(!s)return null;
+    return {uid:u.id,name:u.name,ds:u.ds,models:+u.models,left:+u.models,W:s.W,wl:s.W,T:s.T,Sv:s.Sv,inv:s.inv||'',fnp:'',M:s.M,OC:s.OC,kw:s.kw,ranged:s.ranged,melee:s.melee,shocked:false,dead:false,kills:0}}).filter(Boolean);
+}
+
+// ---------- attack resolution ----------
+function woundTarget(S,T){S=+S;T=+T;if(S>=2*T)return 2;if(S>T)return 3;if(S===T)return 4;if(S*2<=T)return 6;return 5}
+function resolveAttack(o){
+  const w=o.weapon, tgt=o.target, kw=String(w.kw||'').toLowerCase(), out={lines:[],dmgEvents:[],mortal:0};
+  const tkw=tgt.kw.map(k=>k.toLowerCase());
+  let attacks=0; const blast=/blast/.test(kw)?Math.floor(tgt.left/5):0;
+  for(let m=0;m<o.models;m++){attacks+=rollExprR(w.A)+blast}
+  const rf=kw.match(/rapid fire (\d+)/); if(rf&&o.half) attacks+=Number(rf[1])*o.models;
+  out.lines.push(`${attacks} attacks${blast?` (Blast +${blast} each)`:''}`);
+  const torrent=/torrent/.test(kw); let sus=(kw.match(/sustained hits (\d+)/)||[])[1]; sus=sus?+sus:0; let lethal=/lethal hits/.test(kw);
+  if(o.adapt==='swarming'&&(tkw.includes('infantry')||tkw.includes('swarm'))) sus=Math.max(sus,1);
+  if(o.adapt==='aggression'&&(tkw.includes('monster')||tkw.includes('vehicle'))) lethal=true;
+  if(o.sus) sus=Math.max(sus,+o.sus); if(o.lethal) lethal=true;
+  let hitMod=Math.max(-1,Math.min(1,(o.hitMod||0)+(/heavy/.test(kw)&&o.still?1:0)));
+  const bs=parseInt(w.SK)||7; let hits=0, autoW=0;
+  if(torrent){hits=attacks;out.lines.push(`Torrent: ${hits} automatic hits`)}
+  else{ let crits=0;
+    for(let i=0;i<attacks;i++){let r=d6();const fail=x=>x===1||(x!==6&&x+hitMod<bs);
+      if(fail(r)&&(o.rrHit==='all'||(o.rrHit==='1'&&r===1)))r=d6();
+      if(r===6){crits++;if(lethal)autoW++;else hits++;hits+=sus}else if(!fail(r))hits++;}
+    out.lines.push(`Hits: ${hits+autoW} (${crits} critical${sus?`, Sustained Hits ${sus}`:''}${lethal?', Lethal Hits':''})`);
+  }
+  let S=+w.S; let woundMod=Math.max(-1,Math.min(1,(o.woundMod||0)+(/lance/.test(kw)&&o.charged?1:0)));
+  const need=woundTarget(S,tgt.T); const anti=kw.match(/anti-([a-z ]+?) (\d)\+/); const antiOn=anti&&tkw.some(k=>k.includes(anti[1].trim()))?+anti[2]:7;
+  const twin=/twin-linked/.test(kw)||o.rrWound==='all'; const dev=/devastating wounds/.test(kw);
+  let wounds=autoW, devW=0;
+  for(let i=0;i<hits;i++){let r=d6();const crit=x=>x===6||x>=antiOn;const fail=x=>!crit(x)&&(x===1||x+woundMod<need);
+    if(fail(r)&&(twin||(o.rrWound==='1'&&r===1)))r=d6();
+    if(crit(r)&&dev)devW++;else if(!fail(r))wounds++;}
+  out.lines.push(`Wounds: ${wounds+devW} (need ${need}+${antiOn<7?`, Anti ${antiOn}+`:''}${devW?`, ${devW} Devastating`:''})`);
+  const ap=Number(w.AP)||0; const sv=parseInt(tgt.Sv)||7; const inv=parseInt(tgt.inv)||7;
+  const coverOk=o.cover&&!/ignores cover/.test(kw)&&!(sv<=3&&ap===0);
+  const armour=sv-ap-(coverOk?1:0); const saveNeed=Math.max(2,Math.min(armour,inv));
+  let unsaved=0; for(let i=0;i<wounds;i++){const r=d6();if(r===1||r<saveNeed)unsaved++}
+  out.lines.push(`Saves on ${saveNeed}+${coverOk?' (cover)':''}: ${wounds-unsaved} saved, ${unsaved} failed`);
+  const meltaX=(kw.match(/melta (\d+)/)||[])[1];
+  const dmg=()=>rollExprR(w.D)+(meltaX&&o.half?+meltaX:0);
+  for(let i=0;i<unsaved;i++)out.dmgEvents.push(dmg());
+  for(let i=0;i<devW;i++)out.mortal+=dmg();
+  return out;
+}
+function applyDamage(tgt,events,mortal,fnp){
+  const fnpN=parseInt(fnp)||7; let lost=0,ign=0; const before=tgt.left;
+  const take=n=>{let real=0;for(let i=0;i<n;i++){if(d6()>=fnpN)ign++;else real++}return real};
+  events.forEach(d=>{if(tgt.left<=0)return;const r=take(d);lost+=r;if(r>=tgt.wl){tgt.left--;tgt.wl=tgt.W}else tgt.wl-=r});
+  let m=take(mortal);lost+=m;while(m>0&&tgt.left>0){if(m>=tgt.wl){m-=tgt.wl;tgt.left--;tgt.wl=tgt.W}else{tgt.wl-=m;m=0}}
+  if(tgt.left<=0){tgt.left=0;tgt.dead=true}
+  return {lost,ign,slain:before-tgt.left};
+}
+
+// ---------- battle page ----------
+let ATK={side:null,unit:'',weapon:0,target:'',models:0,half:false,still:false,charged:false,cover:false,hitMod:0,woundMod:0,rrHit:'',rrWound:'',sus:'',lethal:false,last:null};
+function pBattle(){
+  if(!BATTLE) return battleLobby();
+  const B=BATTLE, me=mySide();
+  const head=`<div class="bhead"><div><h1 style="margin:0">Let’s Battle</h1><p class="small muted" style="margin:0">${NET.code?`Online game <b>${esc(NET.code)}</b>. ${esc(NET.status)}`:'Hot-seat game on this device.'} ${me&&me!=='both'?`You play the <b>${SIDES[me]}</b>.`:''}</p></div><div class="filter">${NET.code?'':'<button type="button" class="danger" data-action="bReset">New game</button>'}<button type="button" data-action="bLeave">Leave</button></div></div>`;
+  return head+(B.stage==='setup'?battleSetup(B):B.stage==='battle'?battleRun(B):battleEnd(B));
+}
+function battleLobby(){
+  return pageHead('Let’s Battle','A turn-based Crusade battle between the Tyranids and the Ultramarines, Leviathan style.')+`
+  <div class="grid2">
+    <section class="panel"><h3>Play online</h3>
+      ${NET.avail?`<p class="small">Create a game code, share it with your opponent, and both open this page. Each of you claims a side.</p>
+      <div class="presetsave"><input type="text" id="bCode" placeholder="Game code, e.g. HIVE1" maxlength="8" style="text-transform:uppercase"><button type="button" class="primary" data-action="bJoin">Create or join</button></div>
+      <button type="button" class="ghost" data-action="bRandom">Make a random code</button>
+      <p class="small muted">Your opponent needs at least Contributor access to this page to make moves.</p>`
+      :`<p class="small">Online play needs the shared game store, which is only available when this page is opened from its claude.ai link (not from GitHub Pages or a saved file).</p>`}
+      ${NET.status?`<p class="small warn">${esc(NET.status)}</p>`:''}
+    </section>
+    <section class="panel"><h3>Hot-seat</h3><p class="small">Both players share this screen and take turns. The game is saved in this browser.</p>
+      <button type="button" class="primary" data-action="bHotseat">${state.battleLocal?'Continue hot-seat game':'Start hot-seat game'}</button></section>
+  </div>`;
+}
+function rollBtn(action,label,dis){return `<button type="button" data-action="${action}" ${dis?'disabled':''}>${label}</button>`}
+function battleSetup(B){
+  const S=B.setup, me=mySide();
+  const seat=side=>{const p=B.players[side];if(!NET.code)return `<span class="tag bt">Hot-seat</span>`;if(p)return `<span class="tag ${p.id===NET.me?'cr':'bt'}">${p.id===NET.me?'You':'Claimed'}</span>`;return me===null||me==='both'?`<button type="button" class="primary" data-action="bClaim" data-side="${side}">Play the ${SIDES[side]}</button>`:'<span class="small muted">Waiting for opponent</span>'};
+  const listPick=side=>{const lists=side==='tyr'?state.lists:umState().lists;const li=S[side+'List'];
+    if(S.locked[side]) return `<p class="small ok">Army locked in: ${B.units[side].length} units, ${B.units[side].reduce((a,u)=>a+(side==='tyr'?n((state.units.find(x=>x.id===u.uid)||{}).pts):n((umState().units.find(x=>x.id===u.uid)||{}).pts)),0)||''} pts.</p>`;
+    if(!canAct(side)) return `<p class="small muted">The ${SIDES[side]} player picks a list.</p>`;
+    return `<label class="small">Army list <select data-bind="__b.setup.${side}List">${lists.map((L,i)=>`<option value="${i}" ${i==li?'selected':''}>${esc(L.name)}</option>`).join('')}</select></label> <button type="button" class="primary" data-action="bLock" data-side="${side}">Lock in army</button>`};
+  const step=(n_,title,body,done)=>`<section class="panel bstep ${done?'done':''}"><h3><span class="d6">${n_}</span>${title}</h3>${body}</section>`;
+  const ready=S.locked.tyr&&S.locked.um&&S.primary&&S.rule&&S.deploy&&S.attacker&&S.first;
+  return `
+  ${step(1,'Players and armies',`<div class="grid2">${['tyr','um'].map(side=>`<div class="seat ${side}"><h4>${SIDES[side]} ${seat(side)}</h4>${listPick(side)}</div>`).join('')}</div>`,S.locked.tyr&&S.locked.um)}
+  ${step(2,'Mission (Leviathan deck)',`<div class="grid3">
+      <div><b>Primary mission</b><p>${S.primary?`<span class="tag cr">${esc(S.primary)}</span>`:'<span class="muted small">not drawn</span>'}</p>${rollBtn('bDraw" data-what="primary','Draw primary')}</div>
+      <div><b>Mission rule</b><p>${S.rule?`<span class="tag cr">${esc(S.rule)}</span>`:'<span class="muted small">not drawn</span>'}</p>${rollBtn('bDraw" data-what="rule','Draw mission rule')}</div>
+      <div><b>Deployment</b><p>${S.deploy?`<span class="tag cr">${esc(LAYOUTS[S.deploy].name)}</span>`:'<span class="muted small">not drawn</span>'}</p>${rollBtn('bDraw" data-what="deploy','Draw deployment')}</div></div>
+      <p class="small muted">Scoring details are on the mission cards. Battle size: Incursion, 1000 points, 5 battle rounds. Use the Deployment planner on the Tyranids Updated Datasheets page to plan where you set up.</p>`,S.primary&&S.rule&&S.deploy)}
+  ${step(3,'Attacker and Defender',`<p class="small">Roll off: the winner chooses who is the Attacker. The Defender picks a deployment zone and deploys first.</p>
+      <div class="grid2">${['tyr','um'].map(side=>`<div><b>${SIDES[side]}</b>: ${S.attRoll[side]?`<span class="d6">${S.attRoll[side]}</span>`:canAct(side)?rollBtn('bRollOff" data-what="att" data-side="'+side,'Roll D6'):'<span class="muted small">waiting</span>'}</div>`).join('')}</div>
+      ${S.attRoll.tyr&&S.attRoll.um&&!S.attacker?(S.attRoll.tyr===S.attRoll.um?`<p class="warn small">Tie: roll again.</p>${rollBtn('bReroll" data-what="att','Re-roll')}`:(()=>{const w=S.attRoll.tyr>S.attRoll.um?'tyr':'um';return canAct(w)?`<p class="small"><b>${SIDES[w]}</b> won the roll-off and chooses:</p><button type="button" data-action="bAttacker" data-side="${w}">${SIDES[w]} attack</button> <button type="button" data-action="bAttacker" data-side="${other(w)}">${SIDES[other(w)]} attack</button>`:`<p class="small muted">${SIDES[w]} chooses the Attacker.</p>`})()):''}
+      ${S.attacker?`<p class="ok small">Attacker: <b>${SIDES[S.attacker]}</b>. Defender: <b>${SIDES[other(S.attacker)]}</b>.</p>`:''}`,!!S.attacker)}
+  ${step(4,'Secondary missions and Agendas',`<div class="grid2">${['tyr','um'].map(side=>`<div><h4>${SIDES[side]}</h4>
+      ${canAct(side)?`<label class="small">Secondary missions <select data-bind="__b.setup.secMode.${side}"><option value="tactical" ${S.secMode[side]==='tactical'?'selected':''}>Tactical (draw 2 each turn)</option><option value="fixed" ${S.secMode[side]==='fixed'?'selected':''}>Fixed (pick 2)</option></select></label>
+      ${S.secMode[side]==='fixed'?`<div class="small">${[0,1].map(k=>`<select data-bind="__b.setup.fixed.${side}.${k}"><option value="">choose…</option>${LEV_SECONDARY.map(x=>`<option ${S.fixed[side][k]===x?'selected':''}>${esc(x)}</option>`).join('')}</select>`).join(' ')}</div>`:''}
+      <label class="small" style="display:block;margin-top:6px">Agendas<br><input type="text" data-bind="__b.setup.agendas.${side}" value="${esc(S.agendas[side])}" placeholder="${side==='tyr'?'e.g. Hunt and Slay, Tyrannoform the Prey World':'e.g. Assassins, Reconnoitre'}" style="width:100%"></label>`
+      :`<p class="small">${S.secMode[side]==='fixed'?'Fixed: '+esc(S.fixed[side].filter(Boolean).join(', ')||'not chosen'):'Tactical'}<br>Agendas: ${esc(S.agendas[side]||'not chosen')}</p>`}</div>`).join('')}</div>
+      ${S.locked.tyr&&S.locked.um?(()=>{const tc=crusadeTotal('tyr'),uc=crusadeTotal('um');return `<p class="small">Crusade points in the armies: Tyranids <b>${tc}</b>, Ultramarines <b>${uc}</b>.${tc!==uc?` The ${SIDES[tc<uc?'tyr':'um']} are the underdog by ${Math.abs(tc-uc)} and gain Crusade Blessings as the mission pack describes.`:''}</p>`})():''}`,true)}
+  ${step(5,'Deploy and roll for the first turn',`<p class="small">Deploy in alternation (Defender first), then resolve Infiltrators and Scouts. Then roll off: the winner chooses who takes the first turn.</p>
+      <div class="grid2">${['tyr','um'].map(side=>`<div><b>${SIDES[side]}</b>: ${S.firstRoll[side]?`<span class="d6">${S.firstRoll[side]}</span>`:canAct(side)?rollBtn('bRollOff" data-what="first" data-side="'+side,'Roll D6'):'<span class="muted small">waiting</span>'}</div>`).join('')}</div>
+      ${S.firstRoll.tyr&&S.firstRoll.um&&!S.first?(S.firstRoll.tyr===S.firstRoll.um?`<p class="warn small">Tie: roll again.</p>${rollBtn('bReroll" data-what="first','Re-roll')}`:(()=>{const w=S.firstRoll.tyr>S.firstRoll.um?'tyr':'um';return canAct(w)?`<p class="small"><b>${SIDES[w]}</b> won and chooses:</p><button type="button" data-action="bFirst" data-side="${w}">${SIDES[w]} go first</button> <button type="button" data-action="bFirst" data-side="${other(w)}">${SIDES[other(w)]} go first</button>`:`<p class="small muted">${SIDES[w]} chooses who goes first.</p>`})()):''}
+      ${S.first?`<p class="ok small"><b>${SIDES[S.first]}</b> take the first turn.</p>`:''}`,!!S.first)}
+  <div class="panel" style="text-align:center"><button type="button" class="primary big" data-action="bStart" ${ready?'':'disabled'}>Begin the battle</button>${ready?'':'<p class="small muted">Finish steps 1, 2, 3 and 5 first.</p>'}</div>
+  ${logHtml(B)}`;
+}
+function crusadeTotal(side){const ids=BATTLE.units[side].map(u=>u.uid);if(side==='tyr')return state.units.filter(u=>ids.includes(u.id)).reduce((a,u)=>a+(u.epic?0:unitCP(u)),0);return umState().units.filter(u=>ids.includes(u.id)).reduce((a,u)=>a+(String(u.honours||'').split(',').filter(x=>x.trim()).length-String(u.scars||'').split(',').filter(x=>x.trim()).length),0)}
+function vpTot(B,side){const v=B.vp[side];const pri=Math.min(50,v.pri.reduce((a,b)=>a+n(b),0)),sec=Math.min(40,v.sec.reduce((a,b)=>a+n(b),0));return {pri,sec,tot:pri+sec}}
+function unitRow(B,side,u,i){
+  const act=canAct(side);
+  return `<tr class="${u.dead?'deadrow':''}"><td><b>${esc(u.name)}</b><br><span class="small muted">${esc(u.ds)}</span></td>
+    <td class="num">${u.left}/${u.models}</td><td class="num">${u.dead?'–':`${u.wl}/${u.W}`}</td>
+    <td class="num">${act&&!u.dead?`<button type="button" class="ghost" data-action="bHurt" data-side="${side}" data-i="${i}" data-val="1" title="Lose 1 wound">−1W</button>`:''}</td>
+    <td class="num">${act&&!u.dead?`<label class="small">${`<input type="checkbox" data-action-chk="bShock" data-side="${side}" data-i="${i}" ${u.shocked?'checked':''}>`} shocked</label>`:(u.shocked?'Battle-shocked':'')}</td>
+    <td class="num">${u.kills}</td></tr>`;
+}
+function battleRun(B){
+  const act=B.active, ph=B_PHASES[B.step], me=mySide(), myTurn=canAct(act);
+  const ally=B.units[act], foes=B.units[other(act)];
+  const phaseList=B_PHASES.map((p,i)=>`<span class="bph ${i===B.step?'on':i<B.step?'past':''}">${p}</span>`).join('');
+  const vt=s=>vpTot(B,s);
+  const scores=['tyr','um'].map(side=>{const t=vt(side);return `<div class="bscore ${side} ${side===act?'active':''}"><b>${SIDES[side]}</b><span class="big">${t.tot} VP</span><span class="small">Primary ${t.pri}/50, Secondary ${t.sec}/40</span><span class="small">CP <b>${B.cp[side]}</b> ${canAct(side)?`<button type="button" class="ghost" data-action="bCp" data-side="${side}" data-val="-1" title="Spend 1 CP">−</button><button type="button" class="ghost" data-action="bCp" data-side="${side}" data-val="1" title="Gain 1 CP">+</button>`:''}</span></div>`}).join('');
+  const secHand=side=>{const S=B.setup;if(S.secMode[side]==='fixed')return `<p class="small">Fixed: ${esc(S.fixed[side].filter(Boolean).join(', ')||'–')}</p>`;
+    const h=B.sec[side].hand;return `<div class="small">${h.length?h.map((c,k)=>`<span class="tag cr">${esc(c)}</span>${canAct(side)?` <button type="button" class="ghost" data-action="bSecDone" data-side="${side}" data-k="${k}" title="Achieved: score it and discard">✓</button><button type="button" class="ghost" data-action="bSecDiscard" data-side="${side}" data-k="${k}" title="Discard (gain 1 CP once per turn as your mission rules allow)">✕</button>`:''}`).join(' '):'<span class="muted">No cards in hand</span>'} ${canAct(side)&&h.length<2&&B.sec[side].deck.length?`<button type="button" class="ghost" data-action="bSecDraw" data-side="${side}">Draw</button>`:''}</div>`};
+  const r=B.round-1;
+  const vpInputs=['tyr','um'].map(side=>canAct(side)?`<div class="small"><b>${SIDES[side]}</b> round ${B.round}: primary <input type="number" min="0" max="15" data-bind="__b.vp.${side}.pri.${r}" data-type="num" value="${B.vp[side].pri[r]}"> secondary <input type="number" min="0" max="20" data-bind="__b.vp.${side}.sec.${r}" data-type="num" value="${B.vp[side].sec[r]}"></div>`:'').join('');
+  return `
+  <div class="bstatus"><div class="bround"><span class="small">Battle round</span><b>${B.round}<span class="small"> / 5</span></b></div>
+    <div class="bturn"><span class="small">Active player</span><b class="${act}">${SIDES[act]}</b><div class="bphases">${phaseList}</div></div>
+    <div class="bctl">${myTurn?`<button type="button" class="primary big" data-action="bNext">${B.step<4?`Next: ${B_PHASES[B.step+1]} phase`:(act===B.setup.first?`End turn: ${SIDES[other(act)]}’ turn`:(B.round<5?`End battle round ${B.round}`:'End the battle'))}</button>`:`<span class="small muted">Waiting for the ${SIDES[act]}…</span>`}</div></div>
+  <div class="bscores">${scores}</div>
+  <div class="grid2">
+    <section class="panel"><h3>${ph} phase</h3>${phaseHelp(ph,B)}${(ph==='Command'||B.step===0)?vpInputs:''}
+      <h4 style="margin-top:12px">Secondary missions</h4>${['tyr','um'].map(s=>`<div><b class="small">${SIDES[s]}</b>${secHand(s)}</div>`).join('')}</section>
+    <section class="panel">${(ph==='Shooting'||ph==='Fight')?attackPanel(B,act,ph==='Fight'):`<h3>Dice roller</h3><p class="small">Quick rolls for Advance, Charge, Battle-shock and other tests.</p><div class="filter">${rollBtn('bQuick" data-val="D6','D6')}${rollBtn('bQuick" data-val="2D6','2D6 (charge, Battle-shock)')}${rollBtn('bQuick" data-val="3D6','3D6 (Battle-shock in Synapse)')}${rollBtn('bQuick" data-val="D3','D3')}</div>`}</section>
+  </div>
+  <div class="grid2">${['tyr','um'].map(side=>`<section class="panel"><h3>${SIDES[side]} units</h3><div class="scroll-x"><table class="btab"><thead><tr><th>Unit</th><th class="num">Models</th><th class="num">Wounds</th><th></th><th class="num">Status</th><th class="num">Kills</th></tr></thead><tbody>${B.units[side].map((u,i)=>unitRow(B,side,u,i)).join('')}</tbody></table></div></section>`).join('')}</div>
+  ${logHtml(B)}`;
+}
+function phaseHelp(ph,B){
+  const t={Command:'Both players gained 1CP. Take Battle-shock tests for units Below Half-strength (2D6, or 3D6 in Synapse Range). Score primary objectives as your mission card says (from battle round 2). Tactical secondaries: draw up to 2 cards.',
+    Movement:'Move, Advance (M + D6) or Fall Back with each unit. Set up Reinforcements at the end of the phase (more than 9" from enemies).',
+    Shooting:'Select units to shoot. Use the attack resolver to roll hits, wounds, saves and damage; damage is applied to the target automatically.',
+    Charge:'Declare charges against enemies within 12", roll 2D6. A successful charge gives Fights First this turn.',
+    Fight:'Charging units fight first, then players alternate. Pile in 3", fight, consolidate 3". Use the resolver with melee weapons.'};
+  return `<p class="small">${t[ph]}</p>`;
+}
+function attackPanel(B,side,melee){
+  if(!canAct(side)) return `<h3>Attacks</h3><p class="small muted">The ${SIDES[side]} are making attacks.</p>${lastAttack()}`;
+  const ally=B.units[side].filter(u=>!u.dead), foes=B.units[other(side)].filter(u=>!u.dead);
+  if(ATK.side!==side||!ally.find(u=>u.uid===ATK.unit)){ATK.side=side;ATK.unit=(ally[0]||{}).uid||'';ATK.weapon=0;ATK.models=(ally[0]||{}).left||0}
+  if(!foes.find(u=>u.uid===ATK.target))ATK.target=(foes[0]||{}).uid||'';
+  const au=ally.find(u=>u.uid===ATK.unit); const ws=au?(melee?au.melee:au.ranged):[]; if(ATK.weapon>=ws.length)ATK.weapon=0; const w=ws[ATK.weapon]; const tu=foes.find(u=>u.uid===ATK.target);
+  const sel=(k,opts,val)=>`<select data-atk="${k}">${opts.map(([v,l])=>`<option value="${v}" ${String(v)===String(val)?'selected':''}>${esc(l)}</option>`).join('')}</select>`;
+  return `<h3>${melee?'Fight':'Shoot'}: attack resolver</h3>
+   <div class="atkgrid">
+    <label>Attacking unit ${sel('unit',ally.map(u=>[u.uid,`${u.name} (${u.left} models)`]),ATK.unit)}</label>
+    <label>Weapon ${ws.length?sel('weapon',ws.map((x,i)=>[i,`${x.name} – ${x.range} A${x.A} ${x.SK} S${x.S} AP${x.AP} D${x.D}${x.kw?` [${x.kw}]`:''}`]),ATK.weapon):'<span class="small muted">No '+(melee?'melee':'ranged')+' weapons</span>'}</label>
+    <label>Models attacking <input type="number" min="1" data-atk="models" value="${ATK.models||1}"></label>
+    <label>Target ${sel('target',foes.map(u=>[u.uid,`${u.name} (T${u.T} Sv${u.Sv}${u.inv?' '+u.inv+'++':''}, ${u.left} left)`]),ATK.target)}</label>
+    <label>Hit modifier ${sel('hitMod',[[-1,'-1'],[0,'0'],[1,'+1']],ATK.hitMod)}</label>
+    <label>Wound modifier ${sel('woundMod',[[-1,'-1'],[0,'0'],[1,'+1']],ATK.woundMod)}</label>
+    <label>Re-roll hits ${sel('rrHit',[['','none'],['1','1s'],['all','all failed']],ATK.rrHit)}</label>
+    <label>Re-roll wounds ${sel('rrWound',[['','none'],['1','1s'],['all','all failed']],ATK.rrWound)}</label>
+    <label>Extra Sustained Hits ${sel('sus',[['','none'],['1','1'],['2','2']],ATK.sus)}</label>
+    <label>Target Feel No Pain <input type="text" data-atk="fnp" value="${esc((tu&&tu.fnp)||'')}" placeholder="e.g. 5+" style="width:4em"></label>
+   </div>
+   <div class="filter" style="margin:8px 0">${[['half','Within half range'],['still','Remained Stationary'],['charged','Charged this turn'],['cover','Target in cover'],['lethal','Lethal Hits']].map(([k,l])=>`<label class="small" style="display:inline-flex;gap:4px;align-items:center;margin-right:10px"><input type="checkbox" data-atk="${k}" ${ATK[k]?'checked':''}> ${l}</label>`).join('')}</div>
+   ${side==='tyr'?`<p class="small muted">Hyper-adaptation applied automatically: ${ADAPTATIONS[state.settings.adaptation].name}.</p>`:''}
+   <button type="button" class="primary" data-action="bAttack" ${w&&tu?'':'disabled'}>Roll the attacks</button>
+   ${lastAttack()}`;
+}
+function lastAttack(){const L=BATTLE&&BATTLE.lastAttack;if(!L)return '';return `<div class="atkres"><b>${esc(L.title)}</b><ul>${L.lines.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`}
+function logHtml(B){return `<section class="panel"><h3>Battle log</h3><ul class="blog">${B.log.slice(0,30).map(l=>`<li><span class="small muted">${new Date(l.t).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</span> ${l.who?`<b class="${l.who}">${SIDES[l.who]||''}</b> `:''}${esc(l.txt)}</li>`).join('')||'<li class="muted small">Nothing yet.</li>'}</ul></section>`}
+function battleEnd(B){
+  const t=vpTot(B,'tyr').tot,u=vpTot(B,'um').tot; const win=t>u?'tyr':u>t?'um':null;
+  const crusadeSide=side=>{
+    if(!canAct(side)) return `<p class="small muted">The ${SIDES[side]} player records their crusade results.</p>`;
+    if(B.applied[side]) return `<p class="ok small">Results added to the ${SIDES[side]} crusade.</p>`;
+    const us=B.units[side];
+    return `<p class="small">Choose a unit to be Marked for Greatness (+3XP). Every unit that took part gains 1XP; destroyed units take an Out of Action test.</p>
+      <label class="small">Marked for Greatness <select id="mfg_${side}"><option value="">none</option>${us.map(x=>`<option value="${x.uid}">${esc(x.name)}</option>`).join('')}</select></label>
+      <button type="button" class="primary" data-action="bApply" data-side="${side}">Add results to my crusade</button>`;
+  };
+  return `<section class="panel endpanel"><h2 style="margin-top:0">${win?`${SIDES[win]} win`:'Draw'}</h2>
+    <p class="big">Tyranids <b>${t}</b> VP, Ultramarines <b>${u}</b> VP</p>
+    <p class="small muted">${esc(B.setup.primary||'')}, ${esc(B.setup.rule||'')}, ${esc(LAYOUTS[B.setup.deploy]?LAYOUTS[B.setup.deploy].name:'')}</p></section>
+    <div class="grid2">${['tyr','um'].map(side=>`<section class="panel"><h3>${SIDES[side]}: after the battle</h3>
+      <table class="btab"><thead><tr><th>Unit</th><th class="num">Kills</th><th>State</th></tr></thead><tbody>${B.units[side].map(x=>`<tr><td>${esc(x.name)}</td><td class="num">${x.kills}</td><td class="small">${x.dead?(x.ooa?`Destroyed, Out of Action roll ${x.ooa}${x.ooa===1?' (failed: Battle Scar or Devastating Blow)':' (passed)'}`:'Destroyed'):'Survived'}</td></tr>`).join('')}</tbody></table>
+      ${crusadeSide(side)}</section>`).join('')}</div>
+    ${logHtml(B)}`;
+}
+
+// ---------- battle actions ----------
+function bAction(a,b){
+  const B=BATTLE; if(!B) return false;
+  const side=b.dataset.side;
+  switch(a){
+    case 'bClaim': if(B.players[side]) return true; B.players[side]={id:NET.me||('guest-'+side)}; blog(`joined as the ${SIDES[side]}`,side); bCommit(); return true;
+    case 'bLock': { if(!canAct(side)) return true; const li=+B.setup[side+'List']||0; B.units[side]=side==='tyr'?snapTyr(li):snapUm(li); B.setup.locked[side]=true; blog(`locked in ${(side==='tyr'?state.lists:umState().lists)[li].name}: ${B.units[side].length} units`,side); bCommit(); return true; }
+    case 'bDraw': { const what=b.dataset.what; const pick=arr=>arr[Math.floor(Math.random()*arr.length)];
+      if(what==='primary')B.setup.primary=pick(LEV_PRIMARY); if(what==='rule')B.setup.rule=pick(LEV_RULES); if(what==='deploy')B.setup.deploy=pick(['hammer','dawn','search','crucible','sweeping']);
+      blog(`drew ${what==='deploy'?'deployment '+LAYOUTS[B.setup.deploy].name:what+': '+B.setup[what]}`); bCommit(); return true; }
+    case 'bRollOff': { const what=b.dataset.what; if(!canAct(side)) return true; const r=d6(); B.setup[what==='att'?'attRoll':'firstRoll'][side]=r; blog(`rolled ${r} for ${what==='att'?'Attacker':'first turn'}`,side); bCommit(); return true; }
+    case 'bReroll': { const what=b.dataset.what; B.setup[what==='att'?'attRoll':'firstRoll']={}; bCommit(); return true; }
+    case 'bAttacker': B.setup.attacker=side; blog(`${SIDES[side]} are the Attacker`); bCommit(); return true;
+    case 'bFirst': B.setup.first=side; blog(`${SIDES[side]} take the first turn`); bCommit(); return true;
+    case 'bStart': {
+      ['tyr','um'].forEach(s=>{ if(B.setup.secMode[s]==='tactical'){const deck=[...LEV_SECONDARY];for(let i=deck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]]}B.sec[s]={deck,hand:[],done:[]}} });
+      B.stage='battle'; B.round=1; B.active=B.setup.first; B.step=0; startCommand(B); blog('The battle begins'); bCommit(); return true; }
+    case 'bNext': { if(!canAct(B.active)) return true;
+      if(B.step<4){B.step++;blog(`${B_PHASES[B.step]} phase`,B.active)}
+      else if(B.active===B.setup.first){B.active=other(B.active);B.step=0;startCommand(B)}
+      else if(B.round<5){B.round++;B.active=B.setup.first;B.step=0;blog(`Battle round ${B.round}`);startCommand(B)}
+      else{B.stage='end';B.units.tyr.concat(B.units.um).forEach(u=>{if(u.dead)u.ooa=d6()});const t=vpTot(B,'tyr').tot,u=vpTot(B,'um').tot;B.result=t>u?'tyr':u>t?'um':'draw';blog(`The battle ends: Tyranids ${t}, Ultramarines ${u}`)}
+      ATK.last=null; bCommit(); return true; }
+    case 'bCp': if(!canAct(side)) return true; B.cp[side]=Math.max(0,B.cp[side]+Number(b.dataset.val)); blog(`${Number(b.dataset.val)>0?'gained':'spent'} 1 CP (now ${B.cp[side]})`,side); bCommit(); return true;
+    case 'bSecDraw': { const S=B.sec[side]; while(S.hand.length<2&&S.deck.length)S.hand.push(S.deck.shift()); blog(`drew secondaries: ${S.hand.join(', ')}`,side); bCommit(); return true; }
+    case 'bSecDone': { const S=B.sec[side]; const c=S.hand.splice(+b.dataset.k,1)[0]; S.done.push(c); blog(`achieved ${c}`,side); bCommit(); return true; }
+    case 'bSecDiscard': { const S=B.sec[side]; const c=S.hand.splice(+b.dataset.k,1)[0]; blog(`discarded ${c}`,side); bCommit(); return true; }
+    case 'bHurt': { const u=B.units[side][+b.dataset.i]; applyDamage(u,[1],0,''); blog(`${u.name} lost 1 wound${u.dead?' and was destroyed':''}`,side); bCommit(); return true; }
+    case 'bQuick': { const v=b.dataset.val; const parts=[];const rolls=v==='D3'?[Math.ceil(d6()/2)]:Array.from({length:parseInt(v)||1},()=>d6()); blog(`rolled ${v}: ${rolls.join(' + ')} = ${rolls.reduce((a,b)=>a+b,0)}`,mySide()!=='both'?mySide():''); bCommit(); return true; }
+    case 'bAttack': {
+      const s=ATK.side, ally=B.units[s], foes=B.units[other(s)]; const au=ally.find(u=>u.uid===ATK.unit), tu=foes.find(u=>u.uid===ATK.target); if(!au||!tu) return true;
+      const melee=B_PHASES[B.step]==='Fight'; const w=(melee?au.melee:au.ranged)[ATK.weapon]; if(!w) return true;
+      const res=resolveAttack({weapon:w,target:tu,models:Math.max(1,ATK.models||1),half:ATK.half,still:ATK.still,charged:ATK.charged,cover:ATK.cover,hitMod:+ATK.hitMod,woundMod:+ATK.woundMod,rrHit:ATK.rrHit,rrWound:ATK.rrWound,sus:ATK.sus,lethal:ATK.lethal,adapt:s==='tyr'?state.settings.adaptation:null});
+      const ap=applyDamage(tu,res.dmgEvents,res.mortal,ATK.fnp||tu.fnp);
+      res.lines.push(`Damage: ${ap.lost} wounds lost${ap.ign?`, ${ap.ign} ignored by Feel No Pain`:''}${res.mortal?` (incl. ${res.mortal} mortal)`:''}; ${ap.slain} model${ap.slain===1?'':'s'} slain${tu.dead?`. ${tu.name} is destroyed!`:''}`);
+      if(tu.dead) au.kills++;
+      B.lastAttack={title:`${au.name} → ${tu.name} with ${w.name}`,lines:res.lines};
+      blog(`${au.name} attacked ${tu.name} with ${w.name}: ${ap.slain} slain${tu.dead?', unit destroyed':''}`,s); bCommit(); return true; }
+    case 'bApply': applyCrusade(B,side); return true;
+    case 'bReset': if(confirm('Start a new hot-seat game? The current one is lost.')){BATTLE=newBattle('LOCAL');state.battleLocal=BATTLE;save();render()} return true;
+  }
+  return false;
+}
+function startCommand(B){B.cp.tyr++;B.cp.um++;const s=B.active;if(B.setup.secMode[s]==='tactical'){const S=B.sec[s];while(S.hand.length<2&&S.deck.length)S.hand.push(S.deck.shift())}blog(`Command phase: both players gain 1CP`,s)}
+function applyCrusade(B,side){
+  const mfg=(document.getElementById('mfg_'+side)||{}).value;
+  if(side==='tyr'){
+    const ids=B.units.tyr.map(u=>u.uid);
+    state.units.forEach(u=>{const bu=B.units.tyr.find(x=>x.uid===u.id);
+      if(!bu){u.t.skipped=n(u.t.skipped)+1;return}
+      u.t.played=n(u.t.played)+1; if(!bu.dead)u.t.survived=n(u.t.survived)+1; const before=n(u.t.destroyed); u.t.destroyed=before+bu.kills;
+      if(!u.epic){u.xp=n(u.xp)+1+(Math.floor(u.t.destroyed/3)-Math.floor(before/3))+(mfg===u.id?3:0)} if(mfg===u.id)u.t.mfg=n(u.t.mfg)+1;
+      if(bu.dead&&bu.ooa===1)u.notes=(u.notes?u.notes+'\n':'')+`Failed Out of Action test after battle ${state.battles.length+1}: choose a Battle Scar or Devastating Blow.`;
+    });
+    const res=B.result==='tyr'?'W':B.result==='um'?'L':'';
+    state.battles.push({date:new Date().toISOString().slice(0,10),opponent:'Ultramarines',result:res,prey:0,preyBio:0,tyr:0,tyrBio:0,infestBio:0,killedAll:B.units.um.every(u=>u.dead),notes:`${B.setup.primary||''} (${vpTot(B,'tyr').tot}–${vpTot(B,'um').tot})`,bio:{},rp:{}});
+  } else {
+    umState().units.forEach(u=>{const bu=B.units.um.find(x=>x.uid===u.id);if(!bu)return;u.xp=n(u.xp)+1+(mfg===u.id?3:0)+Math.floor(bu.kills/3)});
+  }
+  B.applied[side]=true; save(); blog(`added the results to their crusade`,side); bCommit();
+}
+
+const RENDER={'home':pHome,'ultramarines':pUltramarines,'battle':pBattle,'introduction':pIntroduction,'crusade-rules':pCrusadeRules,'battle-tally':pBattleTally,'agendas':pAgendas,'order-of-battle':pOrderOfBattle,'crusade-cards':pCrusadeCards,'updated-datasheets':pUpdatedDatasheets,'battle-honours':pBattleHonours,'battle-traits':pBattleTraits,'crusade-relics':pCrusadeRelics,'battle-scars':pBattleScars};
 
 /* =========================================================
    RENDER + ROUTING
    ========================================================= */
 const main=document.getElementById('main');
-function current(){const h=(location.hash||'').slice(1);return RENDER[h]?h:'introduction'}
+function current(){const h=(location.hash||'').slice(1);return RENDER[h]?h:'home'}
 function renderNav(){
   const cur=current();
-  document.getElementById('tabs').innerHTML=PAGES.map(([k,l])=>`<a href="#${k}" ${k===cur?'aria-current="page"':''}>${l}</a>`).join('');
+  const isTyr=PAGES.some(p=>p[0]===cur);
+  document.getElementById('sections').innerHTML=[['home','Home'],['introduction','Tyranids'],['ultramarines','Ultramarines'],['battle','Let’s Battle']].map(([k,l])=>`<a href="#${k}" class="${(k==='introduction'&&isTyr)||k===cur?'on':''}">${l}</a>`).join('');
+  document.getElementById('tabs').innerHTML=isTyr?PAGES.map(([k,l])=>`<a href="#${k}" ${k===cur?'aria-current="page"':''}>${l}</a>`).join(''):'';
+  document.getElementById('status').style.display=isTyr?'':'none';
   const c=calc();
   document.getElementById('status').innerHTML=`
     <div><b>${c.rp}</b><span>RP</span></div>
@@ -2140,7 +2572,11 @@ main.addEventListener('dragend',()=>{if(dsDrag){dsDrag=null;render()}});
 main.addEventListener('toggle',e=>{if(e.target.matches&&e.target.matches('.badgebox')){state.settings.badgesOpen=e.target.open;save()}},true);
 main.addEventListener('toggle',e=>{if(e.target.matches&&e.target.matches('.dsrow')){state.settings.dsOpen=state.settings.dsOpen||{};state.settings.dsOpen[e.target.dataset.dsid]=e.target.open;save()}},true);
 main.addEventListener('change',e=>{
-  const el=e.target; const path=el.dataset.bind; if(!path)return;
+  const el=e.target;
+  if(el.dataset.atk){const k=el.dataset.atk;let v=el.type==='checkbox'?el.checked:(el.type==='number'?Number(el.value):el.value);ATK[k]=v;if(k==='unit'&&BATTLE){const u=BATTLE.units[ATK.side].find(x=>x.uid===v);ATK.weapon=0;ATK.models=u?u.left:1}if(k==='weapon')ATK.weapon=Number(v);render();return}
+  if(el.dataset.actionChk==='bShock'&&BATTLE){const u=BATTLE.units[el.dataset.side][+el.dataset.i];u.shocked=el.checked;blog(`${u.name} ${el.checked?'is Battle-shocked':'is no longer Battle-shocked'}`,el.dataset.side);bCommit();return}
+  if(el.dataset.bind&&el.dataset.bind.startsWith('__b.')&&BATTLE){let v=el.dataset.type==='num'?n(el.value):el.value;const ks=el.dataset.bind.slice(4).split('.');let o=BATTLE;for(let i=0;i<ks.length-1;i++){if(o[ks[i]]==null)o[ks[i]]={};o=o[ks[i]]}o[ks[ks.length-1]]=v;bCommit();return}
+  const path=el.dataset.bind; if(!path)return;
   let v;
   if(el.dataset.type==='bool') v=el.checked;
   else if(el.dataset.type==='num') v=n(el.value);
@@ -2163,6 +2599,13 @@ document.addEventListener('click',e=>{
   const a=b.dataset.action;
   if(a==='stratFilter'){state.settings.stratFilter=b.dataset.val;save();render();return}
   if(a==='dsMove'){e.preventDefault();const ids=[...main.querySelectorAll('.dsrow')].map(d=>d.dataset.dsid);const i=ids.indexOf(b.dataset.id),j=i+Number(b.dataset.val);if(i<0||j<0||j>=ids.length)return;[ids[i],ids[j]]=[ids[j],ids[i]];setDsOrder(ids);render();const nb=main.querySelector(`[data-action="dsMove"][data-id="${b.dataset.id}"][data-val="${b.dataset.val}"]`);if(nb)nb.focus();return}
+  if(a==='bJoin'){bJoin((document.getElementById('bCode')||{}).value||'');render();return}
+  if(a==='bRandom'){const el=document.getElementById('bCode');if(el)el.value=Array.from({length:5},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random()*32)]).join('');return}
+  if(a==='bHotseat'){bHotseat();return}
+  if(a==='bLeave'){bLeave();return}
+  if(a.startsWith('b')&&/^b[A-Z]/.test(a)&&bAction(a,b))return;
+  if(a==='umAdd'){const ds=document.getElementById('umAddDs').value;const nm=document.getElementById('umAddName').value.trim()||ds;const md=Math.max(1,n(document.getElementById('umAddModels').value));umState().units.push({id:'m'+Date.now(),name:nm,ds,models:md,pts:UM_DS[ds].pts,xp:0,honours:'',scars:'',lists:umState().lists.map(()=>false)});save();render();return}
+  if(a==='umDel'){const i=Number(b.dataset.i);const u=umState().units[i];if(confirm(`Remove ${u.name}?`)){umState().units.splice(i,1);save();render()}return}
   if(a==='depPhase'){depState().phase=b.dataset.val;save();document.querySelectorAll('[data-action="depPhase"]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.val===b.dataset.val)));const sg=depSel&&document.querySelector(`#depsvg .tok[data-uid="${depSel.uid}"][data-mi="${depSel.mi}"]`);drawRanges(sg||null);return}
   if(a==='depRot'){depRotate(Number(b.dataset.val));return}
   if(a==='depMode'){depState().mode=b.dataset.val;save();render();return}
@@ -2241,6 +2684,7 @@ document.getElementById('importFile').addEventListener('change',e=>{
 });
 
 render();
+netInit();
 </script>
 </body>
 </html>
