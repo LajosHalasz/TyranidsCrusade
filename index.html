@@ -257,7 +257,9 @@ th{font-family:var(--head);font-weight:700;font-size:.95rem;background:var(--sur
 .listsum b{font-family:var(--head);font-size:1.4rem}
 
 /* crusade cards */
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:18px}
+.cards{display:flex;gap:18px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-padding-left:4px;padding:4px 4px 16px;align-items:flex-start;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+.cards>.ccard{flex:0 0 380px;scroll-snap-align:start}
+.cardnav{display:flex;gap:6px;margin-left:auto}
 .ccard{background:var(--paper);color:var(--paper-ink);border:3px solid var(--paper-line);clip-path:polygon(0 0,100% 0,100% calc(100% - 34px),calc(100% - 34px) 100%,0 100%);padding:12px;font-family:var(--head);display:flex;flex-direction:column;gap:8px}
 .ccard .top{display:grid;grid-template-columns:minmax(0,1fr) 66px 66px;border:2px solid var(--paper-line);background:var(--paper-cell)}
 .ccard .top>div{padding:4px 8px;min-width:0}
@@ -309,7 +311,109 @@ th{font-family:var(--head);font-weight:700;font-size:.95rem;background:var(--sur
 .hrow input{width:100%}
 .cardfilter{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
 
+
+/* updated datasheets */
+.dsrow{background:var(--surface);border:1px solid var(--line);border-radius:8px;margin:0 0 8px}
+.dsrow[open]{border-color:var(--chitin)}
+.dsrow summary{display:grid;grid-template-columns:auto minmax(180px,1.2fr) auto minmax(0,2fr) auto auto;gap:12px;align-items:center;padding:10px 14px;cursor:pointer;list-style:none}
+.dsgrip{cursor:grab;font-size:1.3rem;color:var(--muted);line-height:1;user-select:none}
+.dsrow.dragging{opacity:.45}
+.dsrow.drop-before{box-shadow:0 -3px 0 var(--chitin)}
+.dsrow.drop-after{box-shadow:0 3px 0 var(--chitin)}
+.dsname{display:flex;align-items:center;gap:8px}
+.rankmini svg{height:34px;width:auto;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
+.dsmove{display:flex;flex-direction:column;gap:2px}
+.dsmove button{padding:0 7px;font-size:.7rem;line-height:1.5}
+.dsrow summary::-webkit-details-marker{display:none}
+.dsn{display:flex;flex-direction:column;line-height:1.2}
+.dsn b{font-family:var(--head);font-size:1.15rem}
+.statline{display:flex;gap:4px;flex-wrap:wrap}
+.stat{border:1px solid var(--line-strong);border-radius:4px;min-width:42px;text-align:center;padding:1px 4px;background:var(--bg)}
+.stat span{display:block;font-family:var(--head);font-size:.68rem;color:var(--muted)}
+.stat b{font-family:var(--head);font-size:1.05rem}
+.stat.inv{border-style:dashed}
+.modv,.stat.modv{color:var(--synapse);font-weight:800;background:color-mix(in srgb,var(--synapse) 14%,transparent)}
+td.modv{font-weight:800}
+.modv-key{color:var(--synapse);font-weight:700;background:color-mix(in srgb,var(--synapse) 14%,transparent);padding:0 4px;border-radius:3px}
+.dsbody{padding:4px 14px 14px;border-top:1px dashed var(--line)}
+.wtab{margin-top:10px}
+.wtab td,.wtab th{padding:5px 8px}
+.wkw{font-family:var(--head);font-size:.8rem;color:var(--chitin)}
+.crusadebox{border-left:3px solid var(--synapse);padding-left:12px}
+.dsbody h4{margin:0 0 6px}
+@media (max-width:860px){.dsrow summary{grid-template-columns:auto minmax(0,1fr) auto;gap:8px}.dsrow summary>.dsmove{order:1}.dsrow summary>.dskw,.dsrow summary>.statline,.dsrow summary>.dsbadges{order:2;grid-column:1/-1}}
+
+#depsvg .odl{stroke:var(--ink);stroke-width:.07;stroke-dasharray:.35 .3;opacity:.55;pointer-events:none}
+#depsvg .obj .odt{pointer-events:none;font-family:var(--head);font-weight:800;font-size:1.05px;fill:var(--ink);paint-order:stroke;stroke:var(--paper);stroke-width:.3px}
+#depsvg .obj .onum{font-family:var(--head);font-weight:800;font-size:.9px;fill:var(--paper);pointer-events:none}
+#depsvg .aura .af{opacity:.13}
+#depsvg .aura .af ellipse{stroke:none}
+#depsvg .aura .ao ellipse{fill:none;stroke-width:.09;opacity:.45}
+#depsvg .aura.dash .ao ellipse{stroke-dasharray:.5 .35}
+#depsvg .alabel{font-family:var(--head);font-weight:800;font-size:.9px;paint-order:stroke;stroke:var(--paper);stroke-width:.25px}
+#depsvg .infx{fill:#d32f2f;fill-opacity:.12;stroke:#d32f2f;stroke-opacity:.16;stroke-width:18;stroke-linejoin:round}
+#depsvg .inflbl{font-family:var(--head);font-weight:800;font-size:1px;fill:#c62828;paint-order:stroke;stroke:var(--paper);stroke-width:.25px}
+.phasebar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:0 0 12px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.phasebar button{font-size:1.05rem;padding:6px 16px}
+.phasebar button[aria-pressed="true"]{background:var(--chitin);color:var(--chitin-ink);border-color:var(--chitin)}
+#depsvg .ring.thin{stroke-width:.1}
+/* deployment planner */
+#depsvg .ruin{fill:#6d6a63;fill-opacity:.38;stroke:#4e4b45;stroke-width:.12}
+#depsvg .wall{fill:none;stroke:#3a3833;stroke-width:.55;stroke-linecap:square}
+#depsvg .crater{fill:#7a6248;fill-opacity:.3;stroke:#5d4a36;stroke-width:.1;stroke-dasharray:.3 .2}
+#depsvg .terrain{pointer-events:none}
+#depsvg .ring{fill:none;stroke-width:.18;opacity:.95}
+#depsvg .ring.melta{stroke-width:.14}
+#depsvg .ringlbl{font-family:var(--head);font-weight:800;font-size:.95px;paint-order:stroke;stroke:var(--paper);stroke-width:.25px}
+#depsvg .tok.incoh circle,#depsvg .tok.incoh ellipse{fill:#d32f2f;fill-opacity:.95;stroke:#ffeb3b;stroke-width:.15}
+#depsvg .tok.badpos circle,#depsvg .tok.badpos ellipse{stroke:#d32f2f;stroke-width:.25;stroke-dasharray:.3 .2}
+#depsvg .tok.sel circle,#depsvg .tok.sel ellipse{stroke:var(--ink);stroke-width:.18;stroke-dasharray:.35 .2}
+#depsvg .zl{font-family:var(--head);font-weight:800;font-size:1.6px;opacity:.55;pointer-events:none}
+#depsvg .zla{fill:var(--bio)}#depsvg .zlb{fill:var(--blood)}
+
+.deploy{margin-top:22px}
+.depctl{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-end}
+.depctl label{display:flex;flex-direction:column;font-family:var(--head);font-size:.9rem;gap:2px}
+.depwrap{display:grid;grid-template-columns:minmax(0,560px) minmax(220px,1fr);gap:18px;margin-top:12px;align-items:start}
+.depboard svg{width:100%;height:auto;display:block;touch-action:none;user-select:none}
+#depsvg .table{fill:var(--paper);stroke:var(--paper-line);stroke-width:.25}
+#depsvg .g{stroke:var(--line-strong);stroke-width:.05;opacity:.5}
+#depsvg .mid{stroke:var(--paper-line);stroke-width:.08;stroke-dasharray:.6 .4;opacity:.7}
+#depsvg .za{fill:color-mix(in srgb,var(--bio) 22%,transparent);stroke:var(--bio);stroke-width:.15}
+#depsvg .zb{fill:color-mix(in srgb,var(--blood) 16%,transparent);stroke:var(--blood);stroke-width:.15}
+#depsvg .tray{fill:var(--surface-2);stroke:var(--line-strong);stroke-width:.1;stroke-dasharray:.4 .3}
+#depsvg .edge{font-family:var(--head);font-size:1.05px;fill:var(--muted)}
+#depsvg .read{font-family:var(--head);font-size:1.1px;fill:var(--ink);font-weight:700}
+#depsvg .tok{cursor:grab}
+#depsvg .tok circle,#depsvg .tok ellipse{fill:var(--tc);fill-opacity:.85;stroke:var(--paper);stroke-width:.08}
+#depsvg .tok.dragging{cursor:grabbing}
+#depsvg .tok.dragging circle,#depsvg .tok.dragging ellipse{stroke:var(--ink);stroke-width:.15}
+#depsvg .tok:focus-visible circle,#depsvg .tok:focus-visible ellipse{stroke:var(--focus);stroke-width:.2}
+#depsvg .tl{font-family:var(--head);font-weight:800;font-size:1px;fill:#fff;pointer-events:none}
+#depsvg .obj{cursor:default}
+#depsvg g:focus{outline:none}
+#depsvg .odz{stroke:var(--bio);stroke-width:.12;stroke-dasharray:.25 .2;pointer-events:none}
+#depsvg .obj .odzt{pointer-events:none;font-family:var(--head);font-weight:800;font-size:1.05px;fill:var(--bio);paint-order:stroke;stroke:var(--paper);stroke-width:.3px}
+#depsvg .ob{fill:var(--ink);stroke:var(--paper);stroke-width:.1}
+#depsvg .orange{fill:none;stroke:var(--ink);stroke-width:.08;stroke-dasharray:.4 .3;opacity:.7}
+#depsvg .obj text{font-family:var(--head);font-weight:800;font-size:.9px;fill:var(--paper);pointer-events:none}
+.deplegend{list-style:none;margin:0 0 14px;padding:0;display:flex;flex-direction:column;gap:6px;counter-reset:dl}
+.deplegend li{display:flex;gap:8px;align-items:flex-start;counter-increment:dl}
+.deplegend i{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;color:#fff;font-style:normal;font-family:var(--head);font-weight:800;font-size:.8rem}
+.deplegend i::before{content:counter(dl)}
+.presetsave{display:flex;gap:6px;margin-bottom:8px}
+.presetsave input{flex:1;min-width:0}
+.presets{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.presets li{display:flex;justify-content:space-between;gap:8px;align-items:center;border:1px solid var(--line);border-radius:6px;padding:6px 8px;background:var(--bg)}
+@media (max-width:980px){.depwrap{grid-template-columns:1fr}}
 /* mobile */
+.halfrow td{background:color-mix(in srgb,var(--blood) 7%,transparent);font-size:.92rem;border-top:0}
+.halflbl{display:block;padding-left:14px;border-left:2px solid var(--blood);font-family:var(--head);font-size:.88rem;color:var(--muted)}
+.meltad{color:var(--blood);font-weight:800}
+.kwt{border-bottom:1px dotted currentColor;cursor:help}
+.kwt:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
+#kwtip{position:fixed;z-index:60;display:none;max-width:300px;background:var(--ink);color:var(--bg);padding:8px 11px;border-radius:6px;font-family:var(--body);font-size:.88rem;line-height:1.35;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+#kwtip b{display:block;font-family:var(--head);font-size:.95rem;margin-bottom:2px}
 @media (max-width:860px){
   .app{grid-template-columns:minmax(0,1fr);background:var(--bg)}
   .rail{position:sticky;top:env(safe-area-inset-top,0px);height:auto;z-index:20;flex-direction:column;gap:8px;padding:10px 10px 8px;border-right:0;border-bottom:1px solid var(--line)}
@@ -321,7 +425,7 @@ th{font-family:var(--head);font-weight:700;font-size:.95rem;background:var(--sur
   nav.tabs a{white-space:nowrap;border-radius:16px;border-left:0;padding:5px 12px;font-size:.98rem;background:var(--surface-2)}
   .rail-tools{display:none}
   main{padding-top:20px}
-  .cards{grid-template-columns:1fr}
+  .cards>.ccard{flex-basis:86vw}
   .dials{gap:6px}.dial{width:70px;height:70px;padding:5px;gap:2px;border-width:2px}.dial b{font-size:1.7rem}.dial span{font-size:.56rem;max-width:58px;letter-spacing:0}
 }
 @media (prefers-reduced-motion:no-preference){
@@ -358,6 +462,7 @@ const PAGES = [
   ['agendas','Agendas'],
   ['order-of-battle','Order of Battle'],
   ['crusade-cards','Crusade Cards'],
+  ['updated-datasheets','Updated Datasheets'],
   ['battle-honours','Battle Honours'],
   ['battle-traits','Battle Traits'],
   ['crusade-relics','Crusade Relics'],
@@ -620,8 +725,8 @@ const DEFAULT_STATE = {
   ],
   lists:[{name:'Giant victory'},{name:'List 2'},{name:'List 3'}],
   units:[
-    {id:'u1',name:'The Synaptic Tyrant',props:['mic'],ds:'Norn Emissary',models:1,pts:260,xp:17,cpAdj:0,character:true,epic:false,warlord:false,titanic:false,
-      type:'Monster, Character, Psyker, Synapse',equip:'Psychic tendril (neuroparasite, neuroblast, neurolance)\nMonstrous scything talons\nMonstrous rending claws',enh:'',
+    {id:'u1',name:'The Synaptic Tyrant',props:['mic'],ds:'Norn Emissary',models:1,pts:260,xp:17,cpAdj:0,character:false,epic:false,warlord:false,titanic:false,
+      type:'Monster, Psyker, Synapse',equip:'Psychic tendril (neuroparasite, neuroblast, neurolance)\nMonstrous scything talons\nMonstrous rending claws',enh:'',
       honours:[H('BT','Psychic Aberration','Synapse trait'),H('WM','Neuroblast: +1 Strength, +1 AP','Brutal, Armour Piercing')],scars:['Battle-weary','Mark of Shame'],
       t:{played:4,skipped:0,survived:1,destroyed:4,mfg:2,prey:3,spores:0,killedAll:0},notes:'',lists:[true,true,false]},
     {id:'u2',name:'The Hive Queen',ds:'Neurotyrant',models:1,pts:105,xp:14,cpAdj:0,character:true,epic:false,warlord:true,titanic:false,
@@ -669,11 +774,11 @@ const DEFAULT_STATE = {
       honours:[H('WM','Psychic overload: +1 Attack, +1 AP','Heirloom, Armour Piercing')],scars:[],
       t:{played:1,skipped:3,survived:1,destroyed:1,mfg:1,prey:0,spores:0,killedAll:1},notes:'',lists:[false,true,true]},
     {id:'u13',name:'Neuro-Chan',art:'neurochan',ds:'Neurolictor',models:1,pts:70,xp:8,cpAdj:0,character:false,epic:false,warlord:false,titanic:false,
-      type:'Infantry, Vanguard Invader',equip:'Piercing claws and talons [Precision]',enh:'',
+      type:'Infantry, Vanguard Invader, Synapse',equip:'Piercing claws and talons [Precision]',enh:'',
       honours:[H('WM','Claws and talons: +1 Attack, +1 Damage','Heirloom, Master-worked')],scars:[],
       t:{played:1,skipped:3,survived:1,destroyed:2,mfg:0,prey:2,spores:0,killedAll:1},notes:'',lists:[false,true,true]},
     {id:'u14',name:'Parasite',ds:'Parasite of Mortrex',models:1,pts:80,xp:0,cpAdj:0,character:true,epic:false,warlord:false,titanic:false,
-      type:'Infantry, Character, Fly',equip:'',enh:'',
+      type:'Infantry, Character, Fly, Synapse',equip:'',enh:'',
       honours:[],scars:[],
       t:{played:0,skipped:4,survived:0,destroyed:0,mfg:0,prey:0,spores:0,killedAll:0},notes:'',lists:[false,false,true]},
   ],
@@ -704,7 +809,8 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){if(
 function wahaUrl(ds){return 'https://wahapedia.ru/wh40k10ed/factions/tyranids/'+String(ds).trim().replace(/[’']/g,'-').replace(/\s+/g,'-')}
 /* v1 -> v2: one Weapon Modification honour = two modifications on the same weapon */
 function migrate(s){
-  (s.units||[]).forEach(u=>{if(u.ds==='Parasite of Mordrex')u.ds='Parasite of Mortrex';if(u.id==='u1'&&!u.props)u.props=['mic'];if(u.id==='u4'&&!u.art)u.art='chan';if(u.id==='u13'&&!u.art)u.art='neurochan'});
+  (s.units||[]).forEach(u=>{if(u.ds==='Parasite of Mordrex')u.ds='Parasite of Mortrex';if(u.ds==='Norn Emissary'&&!u.normFix){u.character=false;u.type=(u.type||'').split(',').map(x=>x.trim()).filter(x=>x&&x.toLowerCase()!=='character').join(', ');u.normFix=true}
+    if(u.id==='u1'&&!u.props)u.props=['mic'];if(u.id==='u4'&&!u.art)u.art='chan';if(u.id==='u13'&&!u.art)u.art='neurochan';if(u.id==='u13'&&!/synapse/i.test(u.type||''))u.type=(u.type?u.type+', ':'')+'Synapse';if(u.id==='u14'&&!/synapse/i.test(u.type||''))u.type=(u.type?u.type+', ':'')+'Synapse'});
   if(s.v===1){
     s.units.forEach(u=>{
       const out=[], byWeapon={};
@@ -1029,7 +1135,7 @@ function pOrderOfBattle(){
   const slots=[];
   for(let i=0;i<Math.max(24,units.length+ (units.length%2)) ;i++) slots.push(units[i]||null);
   const half=Math.ceil(slots.length/2);
-  const slotHtml=(u)=>u?`<div class="slot${u.character?' char':''}${u.epic?' epic':''}"${u.character?` title="${u.epic?'Epic Hero':'Character'}"`:''}><div><span class="nm">${esc(u.name)}${hasKw(u,'Synapse')?'<span class="syn-kw">Synapse</span>':''}</span><span class="ds">${esc(u.ds)}${u.models>1?`, ${u.models} models`:''}${u.warlord?', Warlord':''}</span></div><div>${u.pts}</div><div>${u.epic?'N/A':unitCP(u)}</div></div>`
+  const slotHtml=(u)=>u?`<div class="slot${u.character?' char':''}${u.epic?' epic':''}"${u.character?` title="${u.epic?'Epic Hero':'Character'}"`:''}><div><span class="nm">${esc(u.name)}${hasKw(u,'Synapse')&&!u.scars.some(sc=>/lobe impairment/i.test(sc))?'<span class="syn-kw">Synapse</span>':''}</span><span class="ds">${esc(u.ds)}${u.models>1?`, ${u.models} models`:''}${u.warlord?', Warlord':''}</span></div><div>${u.pts}</div><div>${u.epic?'N/A':unitCP(u)}</div></div>`
     :`<div class="slot empty"><div><button type="button" data-action="focusAdd">Add unit</button></div><div></div><div></div></div>`;
   const col=(arr)=>`<div class="oob-col"><div class="oob-head"><span>Unit name</span><span>Points value</span><span>Crusade points</span></div>${arr.map(slotHtml).join('')}</div>`;
   const stageTxt=c.stage>=3?'Devoured':STAGE_NAMES[c.stage];
@@ -1137,8 +1243,9 @@ function pCrusadeCards(){
   const units=state.units.map((u,i)=>[u,i]).filter(([u])=>f==='all'||(u.lists&&u.lists[Number(f)]));
   return pageHead('Crusade Cards','One card per unit on your Order of Battle. Select Edit on a card to update it after a battle.')+`
   <div class="cardfilter"><span class="small">Show</span>
-    <div class="filter">${[['all','All units'],...lists.map((L,i)=>[String(i),L.name])].map(([k,l])=>`<button type="button" data-action="cardsFilter" data-val="${k}" aria-pressed="${f===k}">${esc(l)}</button>`).join('')}</div></div>
-  <div class="cards">${units.map(([u,i])=>editing===u.id?cardEdit(u,i):cardView(u,i)).join('')}</div>`;
+    <div class="filter">${[['all','All units'],...lists.map((L,i)=>[String(i),L.name])].map(([k,l])=>`<button type="button" data-action="cardsFilter" data-val="${k}" aria-pressed="${f===k}">${esc(l)}</button>`).join('')}</div>
+    <div class="cardnav"><button type="button" data-action="cardScroll" data-val="-1" aria-label="Previous card">‹ Previous</button><button type="button" data-action="cardScroll" data-val="1" aria-label="Next card">Next ›</button></div></div>
+  <div class="cards" data-keep-scroll="cards" tabindex="0" aria-label="Crusade cards, scroll sideways">${units.map(([u,i])=>editing===u.id?cardEdit(u,i):cardView(u,i)).join('')}</div>`;
 }
 /* Custom per-unit art */
 const CHAN = {
@@ -1216,7 +1323,7 @@ function cardView(u,i){
     <div class="mid">
       <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
         <div class="cell"><b>${esc(u.ds)}</b>, ${u.models} model${u.models>1?'s':''}<span class="lbl">Unit type</span><p class="small">${esc(u.type)}${u.warlord?`${u.type?', ':''}<span class="warlord-kw">Warlord</span>`:''}</p><a class="walink" href="${esc(wahaUrl(u.ds))}" target="_blank" rel="noopener">Datasheet on Wahapedia</a></div>
-        <div class="cell"><span class="lbl">Equipment</span>${u.equip?`<ul>${u.equip.split('\n').filter(Boolean).map(l=>`<li>${esc(l)}</li>`).join('')}</ul>`:'<p style="opacity:.6">Not recorded</p>'}</div>
+        <div class="cell"><span class="lbl">Equipment</span>${u.equip?`<ul>${u.equip.split('\n').filter(Boolean).map(l=>`<li>${equipHtml(l)}</li>`).join('')}</ul>`:'<p style="opacity:.6">Not recorded</p>'}</div>
         <div class="cell"><span class="lbl">Enhancements and upgrades</span><p>${esc(u.enh)||'<span style="opacity:.6">None</span>'}</p></div>
       </div>
       <div class="xpcol"><div class="xpdial"><div><b>${u.epic?'N/A':u.xp}</b><span>XP</span></div></div>
@@ -1354,7 +1461,647 @@ function pBattleScars(){
   </div>`;
 }
 
-const RENDER={'introduction':pIntroduction,'crusade-rules':pCrusadeRules,'battle-tally':pBattleTally,'agendas':pAgendas,'order-of-battle':pOrderOfBattle,'crusade-cards':pCrusadeCards,'battle-honours':pBattleHonours,'battle-traits':pBattleTraits,'crusade-relics':pCrusadeRelics,'battle-scars':pBattleScars};
+/* =========================================================
+   UPDATED DATASHEETS (base stats from Wahapedia, 10th ed.; abilities paraphrased)
+   ========================================================= */
+const W=(name,range,A,SK,S,AP,D,kw,key)=>({name,range,A,SK,S,AP,D,kw:kw||'',key:key||null});
+const DS = {
+  'Norn Emissary':{M:10,T:11,Sv:'2+',W:16,Ld:'7+',OC:5,inv:'4+',core:'Deadly Demise D6',faction:['Shadow in the Warp','Synapse'],
+    ranged:[W('Psychic Tendril – neuroparasite','18"','2','2+','8','-2','D3','Precision, Psychic'),W('Psychic Tendril – neuroblast','18"','2D6','2+','6','-2','1','Blast, Psychic'),W('Psychic Tendril – neurolance','18"','2','2+','12','-3','D6','Melta 2, Psychic')],
+    melee:[W('Monstrous scything talons','Melee','6','2+','9','-2','3'),W('Monstrous rending claws','Melee','4','2+','7','-2','2','Extra Attacks')],
+    abilities:[['Singular Purpose','At the start of the first battle round pick one: an enemy unit (re-roll Hit and Wound rolls against it for the battle), or an objective (while in range: Feel No Pain 5+ and OC 15).'],['Unnatural Resilience','Feel No Pain 4+ against mortal wounds.'],['Damaged (1–5 wounds)','-1 to Hit rolls.']]},
+  'Neurotyrant':{M:6,T:8,Sv:'4+',W:9,Ld:'7+',OC:3,inv:'4+',core:'Leader',faction:['Synapse','Shadow in the Warp'],
+    ranged:[W('Psychic scream','18"','2D6','N/A','5','-1','2','Ignores Cover, Psychic, Torrent')],
+    melee:[W('Neurotyrant claws and lashes','Melee','6','3+','5','0','1')],
+    abilities:[['Node Lash (Psychic)','While leading a unit, +1 to Hit for that unit; also +1 to Wound against Battle-shocked targets.'],['Psychic Terror (Psychic)','When you unleash Shadow in the Warp, enemy tests get an extra -1.'],['Neuroloids','Command phase: up to two friendly Tyranids units within 18" count as within Synapse Range until your next Command phase.'],['Leader','Can lead Neurogaunts, Tyrant Guard or Zoanthropes.']]},
+  'Zoanthropes':{M:5,T:5,Sv:'5+',W:3,Ld:'7+',OC:1,inv:'4+',core:'',faction:['Shadow in the Warp','Synapse'],
+    ranged:[W('Warp Blast – witchfire','24"','D3','3+','7','-2','D3','Blast, Psychic'),W('Warp Blast – focused witchfire','24"','1','3+','12','-3','D6+1','Lethal Hits, Psychic')],
+    melee:[W('Chitinous claws and teeth','Melee','2','5+','3','0','1')],
+    abilities:[['Spirit Leech (Aura, Psychic)','With a Neurothrope: an enemy unit within 6" that fails a Battle-shock test suffers D3 mortal wounds and one model here regains up to D3 wounds.'],['Warp Field (Aura, Psychic)','Friendly Tyranids units within 6" have a 6+ invulnerable save.']]},
+  'Deathleaper':{M:8,T:6,Sv:'3+',W:7,Ld:'7+',OC:1,inv:'4+',core:'Fights First, Infiltrators, Lone Operative, Stealth',faction:['Synapse'],
+    ranged:[],melee:[W('Lictor claws and talons','Melee','6','2+','7','-2','2','Precision')],
+    abilities:[['Feeder Tendrils','Gain 1CP each time this model destroys an enemy Character model.'],['Fear of the Unseen (Aura)','Enemy units within 6" get -1 Leadership; if below Starting Strength they must take a Battle-shock test in their Command phase.'],['Hunter Organism','Cannot be your Warlord.']]},
+  'Von Ryan’s Leapers':{unverified:true,M:10,T:5,Sv:'4+',W:3,Ld:'8+',OC:1,inv:'',core:'Infiltrators, Stealth',faction:['Synapse'],
+    ranged:[],melee:[W('Leaper’s talons','Melee','6','3+','5','-1','1')],
+    abilities:[['Datasheet abilities','Not verified here – check the Wahapedia link.']]},
+  'Pyrovores':{unverified:true,M:5,T:5,Sv:'4+',W:3,Ld:'8+',OC:1,inv:'',core:'Deadly Demise 1',faction:['Synapse'],
+    ranged:[W('Flamespurt','12"','D6','N/A','5','-1','1','Ignores Cover, Torrent')],melee:[W('Chitinous claws and teeth','Melee','1','4+','4','0','1')],
+    abilities:[['Datasheet abilities','Not verified here – check the Wahapedia link.']]},
+  'Exocrine':{M:8,T:10,Sv:'3+',W:14,Ld:'8+',OC:4,inv:'',core:'Deadly Demise D3',faction:['Synapse'],
+    ranged:[W('Bio-plasmic cannon','36"','D6+3','3+','9','-3','3','Blast, Heavy')],melee:[W('Powerful limbs','Melee','3','3+','7','0','2')],
+    abilities:[['Symbiotic Targeting','After shooting, pick one enemy unit it hit: friendly Tyranids re-roll Hit rolls of 1 against it this phase.'],['Damaged (1–5 wounds)','-1 to Hit rolls.']]},
+  'Screamer-Killer':{M:8,T:9,Sv:'2+',W:10,Ld:'8+',OC:3,inv:'',core:'Deadly Demise 1',faction:['Synapse'],
+    ranged:[W('Bio-plasmic scream','18"','D6+3','4+','8','-2','1','Assault, Blast')],melee:[W('Screamer-Killer talons','Melee','10','3+','10','-2','3')],
+    abilities:[['Death Scream','After shooting, one unit hit must take a Battle-shock test at -1.']]},
+  'Termagants':{M:6,T:3,Sv:'5+',W:1,Ld:'8+',OC:2,inv:'',core:'',faction:['Synapse'],
+    ranged:[W('Fleshborer','18"','1','4+','5','0','1','Assault',null,'fleshborer'),W('Termagant spinefists','12"','2','4+','3','0','1','Assault, Pistol, Twin-linked'),W('Spike rifle','24"','1','4+','4','-1','1','Heavy'),W('Termagant devourer','18"','2','4+','4','0','1'),W('Shardlauncher','18"','D3','4+','5','0','1','Blast, Heavy'),W('Strangleweb','18"','D6','N/A','2','0','1','Assault, Devastating Wounds, Torrent')],
+    melee:[W('Chitinous claws and teeth','Melee','1','4+','3','0','1')],
+    abilities:[['Skulking Horrors','Once per turn, when an enemy unit ends a move within 9" (and this unit is not in Engagement Range), make a Normal move of up to D6".']]},
+  'Hormagaunts':{M:10,T:3,Sv:'5+',W:1,Ld:'8+',OC:2,inv:'',core:'',faction:['Synapse'],
+    ranged:[],melee:[W('Hormagaunt talons','Melee','3','4+','3','-1','1')],
+    abilities:[['Bounding Leap','Can declare a charge in a turn in which it Advanced.']]},
+  'Maleceptor':{M:8,T:11,Sv:'3+',W:14,Ld:'7+',OC:4,inv:'4+',core:'Deadly Demise D3',faction:['Shadow in the Warp','Synapse'],
+    ranged:[W('Psychic overload','18"','D6+3','3+','10','-2','3','Blast, Psychic')],
+    melee:[W('Massive scything talons – strike','Melee','3','3+','9','-2','D6+1'),W('Massive scything talons – sweep','Melee','6','3+','7','-1','2')],
+    abilities:[['Encephalic Diffusion (Aura, Psychic)','Enemy units within 6": -1 to Hit; also -1 to Wound if Below Half-strength.'],['Damaged (1–5 wounds)','-1 to Hit rolls.']]},
+  'Neurolictor':{M:8,T:5,Sv:'4+',W:7,Ld:'7+',OC:1,inv:'4+',core:'Infiltrators, Lone Operative, Stealth',faction:['Shadow in the Warp','Synapse'],
+    ranged:[],melee:[W('Piercing claws and talons','Melee','6','2+','6','-2','1','Precision')],
+    abilities:[['Feeder Tendrils','Gain 1CP each time this model destroys an enemy Character model.'],['Neural Disruption','Your Command phase: one enemy unit within 12" must take a Battle-shock test.'],['Psychological Saboteur (Aura)','Battle-shocked enemy units within 12": -1 to their Hit rolls, and your Tyranids get +1 to Wound against them.']]},
+  'Parasite of Mortrex':{M:12,T:5,Sv:'4+',W:5,Ld:'8+',OC:1,inv:'',core:'Deep Strike, Lone Operative, Stealth',faction:['Synapse'],
+    ranged:[],melee:[W('Barbed ovipositor','Melee','1','2+','3','-2','3','Anti-Infantry 3+, Extra Attacks'),W('Clawed limbs','Melee','6','2+','5','-1','1')],
+    abilities:[['Parasitic Infection','Infantry models killed by the ovipositor can spawn a new Ripper Swarms unit of D3 models within 3".'],['It Itches!','Start of the Fight phase: one enemy unit in Engagement Range must take a Battle-shock test.']]},
+};
+DS['Termagants'].ranged[0].key='fleshborer';
+DS['Zoanthropes'].auras=[{name:'Warp Field (6+ invuln) / Spirit Leech',r:6}];
+DS['Deathleaper'].auras=[{name:'Fear of the Unseen',r:6}];
+DS['Maleceptor'].auras=[{name:'Encephalic Diffusion',r:6}];
+DS['Neurolictor'].auras=[{name:'Psychological Saboteur',r:12}];
+DS['Neurotyrant'].auras=[{name:'Neuroloids (ability range)',r:18,dash:true}];
+const AURA_COLORS=['#00897b','#6a1b9a','#8d6e63','#ad1457','#558b2f'];
+function unitAuras(u){
+  const out=[]; const d=DS[u.ds]||{};
+  const lobe=u.scars.some(sc=>/lobe impairment/i.test(sc));
+  if(hasKw(u,'Synapse')&&!lobe){const crown=state.units.some(x=>x.honours.some(h=>h.type==='CR'&&/norn crown/i.test(h.name)));out.push({name:'Synapse range',r:crown?9:6,syn:true})}
+  (d.auras||[]).forEach(a=>out.push(Object.assign({},a)));
+  return out;
+}
+function drawAuras(){
+  const svg=document.getElementById('depsvg'); if(!svg) return; const layer=svg.getElementById('auralayer'); if(!layer) return;
+  const D=depState(); const byU={}; svg.querySelectorAll('.tok').forEach(g=>{const G=tokGeom(g);if(!inTray(G))(byU[g.dataset.uid]=byU[g.dataset.uid]||[]).push(G)});
+  let html=''; let ci=0;
+  state.units.forEach(u=>{
+    const geos=byU[u.id]; if(!geos) return; const sel=depSel&&depSel.uid===u.id;
+    unitAuras(u).forEach(a=>{
+      const show=sel||(a.syn?D.allSyn:D.allAuras); if(!show) return;
+      const col=a.syn?'var(--syn)':AURA_COLORS[(ci++)%AURA_COLORS.length];
+      const shapes=geos.map(G=>`<ellipse cx="${G.x}" cy="${G.y}" rx="${G.a+a.r}" ry="${G.b+a.r}" transform="rotate(${G.r} ${G.x} ${G.y})"/>`).join('');
+      const top=Math.min(...geos.map(G=>G.y-Math.max(G.a,G.b)-a.r)); const cx=geos.reduce((s,G)=>s+G.x,0)/geos.length;
+      html+=`<g class="aura${a.dash?' dash':''}" style="fill:${col};stroke:${col}"><g class="af">${shapes}</g>${geos.length===1?`<g class="ao">${shapes}</g>`:''}<text class="alabel" x="${cx<12?0.5:cx>32?43.5:cx}" y="${Math.max(1.2,top+1.2)}" text-anchor="${cx<12?'start':cx>32?'end':'middle'}" style="fill:${col}">${esc(u.name)}: ${esc(a.name)} ${a.r}"</text></g>`;
+    });
+  });
+  layer.innerHTML=html;
+}DS['Termagants'].ranged[1].key='spinefists';DS['Termagants'].ranged[2].key='spike rifle';DS['Termagants'].ranged[3].key='devourer';DS['Termagants'].ranged[4].key='shardlauncher';DS['Termagants'].ranged[5].key='strangleweb';
+
+function bumpExpr(v,by){ // add to a value like 3, D3, D6+1, 2D6
+  v=String(v); if(v==='N/A'||v==='Melee') return v;
+  if(/^-?\d+$/.test(v)) return String(Number(v)+by);
+  const m=v.match(/^(\d*D\d)(?:\+(\d+))?$/); if(m){const k=Number(m[2]||0)+by;return k?`${m[1]}+${k}`:m[1]}
+  return v+'+'+by;
+}
+function bumpAP(v,by){const n=Number(v)||0;return String(n-by)}
+function bumpSkill(v,by){if(v==='N/A')return v;const n=parseInt(v);return Math.max(2,n-by)+'+'}
+function abilityText(name){
+  const all=[...TRAITS_SYNAPSE,...TRAITS_TYRANIDS,...SCARS_GENERIC,...SCARS_TYRANIDS,...SCARS_SYNAPSE];
+  const f=all.find(t=>t[0].toLowerCase()===String(name).toLowerCase()); if(f) return f[1];
+  for(const r of RELICS){const it=r.items.find(i=>i[0].toLowerCase()===String(name).toLowerCase()); if(it) return it[1];}
+  return '';
+}
+function buildSheet(u){
+  const base=DS[u.ds]; if(!base) return null;
+  const s=JSON.parse(JSON.stringify(base));
+  const mods={}; const mark=(k,b)=>{mods[k]=b};
+  s.kw=(u.type||'').split(',').map(x=>x.trim()).filter(Boolean);
+  const eq=(u.equip||'').toLowerCase();
+  const pick=list=>list.filter(w=>!w.key||!eq||eq.includes(w.key));
+  s.ranged=pick(s.ranged).map(w=>Object.assign({},w,{b:Object.assign({},w)}));
+  s.melee=pick(s.melee).map(w=>Object.assign({},w,{b:Object.assign({},w)}));
+  s.crusade=[]; s.b={M:s.M,T:s.T,OC:s.OC};
+  const all=[...s.ranged,...s.melee];
+  u.honours.forEach(h=>{
+    if(h.type==='WM'){
+      const k=h.name.indexOf(':'); let key=(k>0?h.name.slice(0,k):h.name).replace(/\(.*?\)/g,'').trim().toLowerCase();
+      const modsTxt=(k>0?h.name.slice(k+1):'').toLowerCase();
+      const targets=all.filter(w=>w.name.toLowerCase().includes(key));
+      const tg=targets.length?targets:[];
+      tg.forEach(w=>{
+        modsTxt.split(',').forEach(m=>{m=m.trim();
+          const n=Number((m.match(/\+(\d+)/)||[])[1]||1);
+          if(/strength|\bs\b/.test(m)) w.S=bumpExpr(w.S,n);
+          else if(/\bap\b/.test(m)) w.AP=bumpAP(w.AP,n);
+          else if(/damage|\bd\b/.test(m)) w.D=bumpExpr(w.D,n);
+          else if(/attack|\ba\b/.test(m)) w.A=bumpExpr(w.A,n);
+          else if(/\bbs\b|\bws\b|skill/.test(m)) w.SK=bumpSkill(w.SK,n);
+        });
+      });
+      s.crusade.push(['Weapon Modification',`${h.name}${tg.length?'':' (weapon not found on this datasheet)'}`]);
+    } else if(h.type==='BT'){
+      const nm=h.name;
+      if(/armoured biomorph/i.test(nm)) s.T=s.T+1;
+      if(/strength born of hunger/i.test(nm)) s.melee.forEach(w=>w.S=bumpExpr(w.S,1));
+      if(/enhanced senses/i.test(nm)) s.ranged.forEach(w=>{if(!/ignores cover/i.test(w.kw)) w.kw=(w.kw?w.kw+', ':'')+'Ignores Cover'});
+      s.crusade.push(['Battle Trait: '+nm,abilityText(nm)||h.detail||'']);
+    } else if(h.type==='CR'){
+      s.crusade.push(['Crusade Relic: '+h.name,abilityText(h.name)||h.detail||'']);
+    }
+  });
+  u.scars.forEach(sc=>{
+    if(/crippling damage/i.test(sc)) s.M=s.M-1;
+    if(/fatigued/i.test(sc)) s.OC=Math.max(0,s.OC-1);
+    if(/lobe impairment/i.test(sc)){s.faction=s.faction.filter(f=>f!=='Synapse');s.lostSynapse=true}
+    s.crusade.push(['Battle Scar: '+sc,abilityText(sc)]);
+  });
+  if(hasKw(u,'Synapse')&&!s.lostSynapse){
+    s.melee.forEach(w=>w.S=bumpExpr(w.S,1));
+    s.crusade.unshift(['Synapse (applied)','This unit is always within its own Synapse Range, so its melee weapons get +1 Strength. Already added to the melee profiles above.']);
+  }
+  if(u.enh) s.crusade.push(['Enhancement',u.enh]);
+  return s;
+}
+const cell=(v,b,cls='')=>{const ch=String(v)!==String(b);return `<td class="num ${cls} ${ch?'modv':''}" ${ch?`title="Datasheet: ${esc(b)}"`:''}>${esc(v)}</td>`};
+function meltaRow(w){
+  const m=String(w.kw||'').match(/melta\s+(\d+)/i); if(!m) return '';
+  const x=Number(m[1]); const r=parseFloat(w.range); const half=isFinite(r)?(r/2)+'"':'half range';
+  return `<tr class="halfrow"><td><span class="halflbl">Within half range (${esc(half)}): <span class="kwt" tabindex="0" data-tip="${esc(kwTipFor('Melta '+x)[1])}" data-tip-title="Melta ${x}">Melta ${x}</span></span></td><td class="num">${esc(half)}</td><td class="num">${esc(w.A)}</td><td class="num">${esc(w.SK)}</td><td class="num">${esc(w.S)}</td><td class="num">${esc(w.AP)}</td><td class="num meltad" title="${esc(w.D)} +${x} from Melta ${x}">${esc(bumpExpr(w.D,x))}</td></tr>`;
+}
+function weaponTable(list,ranged){
+  if(!list.length) return '';
+  return `<div class="scroll-x"><table class="wtab"><thead><tr><th>${ranged?'Ranged weapons':'Melee weapons'}</th><th class="num">Range</th><th class="num">A</th><th class="num">${ranged?'BS':'WS'}</th><th class="num">S</th><th class="num">AP</th><th class="num">D</th></tr></thead><tbody>
+  ${list.map(w=>`<tr><td><b>${esc(w.name)}</b>${w.kw?`<br><span class="wkw">[${kwHtml(w.kw)}]</span>`:''}${w.kw!==w.b.kw?'':''}</td>${cell(w.range,w.b.range)}${cell(w.A,w.b.A)}${cell(w.SK,w.b.SK)}${cell(w.S,w.b.S)}${cell(w.AP,w.b.AP)}${cell(w.D,w.b.D)}</tr>${meltaRow(w)}`).join('')}</tbody></table></div>`;
+}
+function pUpdatedDatasheets(){
+  const li=Math.min(n(state.settings.dsList),state.lists.length-1);
+  let units=state.units.filter(u=>u.lists&&u.lists[li]);
+  const ord=((state.settings.dsOrder||{})[li])||[];
+  units.sort((a,b)=>{const ia=ord.indexOf(a.id),ib=ord.indexOf(b.id);return (ia<0?1e9:ia)-(ib<0?1e9:ib)});
+  const moveBtns=u=>`<span class="dsmove"><button type="button" class="ghost" data-action="dsMove" data-id="${u.id}" data-val="-1" aria-label="Move ${esc(u.name)} up" title="Move up">▲</button><button type="button" class="ghost" data-action="dsMove" data-id="${u.id}" data-val="1" aria-label="Move ${esc(u.name)} down" title="Move down">▼</button></span>`;
+  const grip='<span class="dsgrip" title="Drag to reorder" aria-hidden="true">⠿</span>';
+  const pts=units.reduce((a,u)=>a+n(u.pts),0);
+  const rows=units.map(u=>{
+    const s=buildSheet(u); const r=rankOf(u);
+    const kw=`${u.warlord?'<span class="warlord-kw">Warlord</span> ':''}${hasKw(u,'Synapse')&&!(s&&s.lostSynapse)?'<span class="syn-kw" style="margin-left:0">Synapse</span>':''}`;
+    if(!s) return `<details class="dsrow" draggable="true" data-dsid="${u.id}"><summary>${grip}<span class="dsn"><b>${esc(u.name)}</b><span class="small muted">${esc(u.ds)}</span></span><span class="small muted" style="grid-column:span 3">No datasheet stored for this unit yet. <a href="${esc(wahaUrl(u.ds))}" target="_blank" rel="noopener">Open on Wahapedia</a></span>${moveBtns(u)}</summary></details>`;
+    const st=(k,lbl)=>{const v=s[k],b=k in s.b?s.b[k]:v;const ch=String(v)!==String(b);return `<div class="stat ${ch?'modv':''}" ${ch?`title="Datasheet: ${b}"`:''}><span>${lbl}</span><b>${k==='M'?v+'"':v}</b></div>`};
+    const tBase=DS[u.ds].T;
+    return `<details class="dsrow" draggable="true" ${state.settings.dsOpen&&state.settings.dsOpen[u.id]?'open':''} data-dsid="${u.id}">
+      <summary>${grip}
+        <span class="dsn"><span class="dsname"><b>${esc(u.name)}</b>${rankBanner(u)?`<span class="rankmini">${rankBanner(u)}</span>`:''}</span><span class="small muted">${esc(u.ds)}, ${u.models} model${u.models>1?'s':''}, ${u.pts} pts${r!==null&&r>0?`, ${RANKS[r][0]}`:''}</span></span>
+        <span class="dskw">${kw}</span>
+        <span class="statline">${st('M','M')}<div class="stat ${s.T!==tBase?'modv':''}" ${s.T!==tBase?`title="Datasheet: ${tBase}"`:''}><span>T</span><b>${s.T}</b></div><div class="stat"><span>Sv</span><b>${s.Sv}</b></div><div class="stat"><span>W</span><b>${s.W}</b></div><div class="stat"><span>Ld</span><b>${s.Ld}</b></div>${st('OC','OC')}${s.inv?`<div class="stat inv"><span>Inv</span><b>${s.inv}</b></div>`:''}</span>
+        <span class="dsbadges">${u.honours.length?`<span class="tag bt">${u.honours.length} honour${u.honours.length>1?'s':''}</span>`:''}${u.scars.length?`<span class="tag scar">${u.scars.length} scar${u.scars.length>1?'s':''}</span>`:''}</span>${moveBtns(u)}
+      </summary>
+      <div class="dsbody">
+        ${s.unverified?'<p class="warn small">Base profile not verified against Wahapedia here. Check the link below before relying on it.</p>':''}
+        ${weaponTable(s.ranged,true)}${weaponTable(s.melee,false)}
+        <div class="grid2" style="margin-top:12px">
+          <div><h4>Abilities</h4>
+            ${s.core?`<p class="small"><b>Core:</b> ${kwHtml(s.core)}</p>`:''}
+            <p class="small"><b>Faction:</b> ${kwHtml(s.faction.join(', '))||'–'}${s.lostSynapse?' <span class="warn">(Synapse lost: Lobe Impairment)</span>':''}</p>
+            ${s.abilities.map(a=>`<p class="small"><b>${esc(a[0])}:</b> ${esc(a[1])}</p>`).join('')}
+          </div>
+          <div class="crusadebox"><h4>Crusade upgrades and scars</h4>
+            ${s.crusade.length?s.crusade.map(a=>`<p class="small"><b>${esc(a[0])}</b>${a[1]?`: ${a[1]}`:''}</p>`).join(''):'<p class="small muted">None yet.</p>'}
+          </div>
+        </div>
+        <p class="small muted">Keywords: ${esc(s.kw.join(', '))}${u.warlord?', <span class="warlord-kw">Warlord</span>':''}. <a href="${esc(wahaUrl(u.ds))}" target="_blank" rel="noopener">Datasheet on Wahapedia</a></p>
+      </div>
+    </details>`;
+  }).join('');
+  return pageHead('Updated Datasheets','Pick a 1000-point army list. Each unit’s datasheet is shown with its Battle Honours and Battle Scars already applied.')+`
+  <div class="cardfilter"><span class="small">Army list</span><div class="filter">${state.lists.map((L,i)=>`<button type="button" data-action="dsList" data-val="${i}" aria-pressed="${i===li}">${esc(L.name)}</button>`).join('')}</div>
+    <span class="small muted">${units.length} units, ${pts} pts</span>
+    <span style="margin-left:auto;display:flex;gap:6px"><button type="button" class="ghost" data-action="dsAll" data-val="1">Open all</button><button type="button" class="ghost" data-action="dsAll" data-val="0">Close all</button></span></div>
+  <p class="small"><span class="modv-key">Highlighted values</span> differ from the printed datasheet because of Crusade upgrades or scars. Hover a value to see the original.</p>
+  ${units.length?rows:'<div class="panel">This list is empty. Tick units for it on the Order of Battle page.</div>'}
+  <p class="note">Base profiles are from Wahapedia (10th edition); ability texts are short summaries. Detachment rules, Synapse range and stratagems are not applied here.</p>
+  ${deployHtml(li,units)}`;
+}
+/* ---------- keyword tooltips (short summaries of the core rules) ---------- */
+const KW_TIPS = [
+  [/^assault$/i,'Assault','Can shoot even if its unit Advanced this turn (then only Assault weapons can be used).'],
+  [/^heavy$/i,'Heavy','+1 to Hit if its unit Remained Stationary this turn.'],
+  [/^pistol$/i,'Pistol','Can shoot while its unit is in Engagement Range, but only at units it is engaged with. A non-Monster, non-Vehicle model shooting Pistols can’t use its other ranged weapons.'],
+  [/^rapid fire (\S+)$/i,'Rapid Fire X','Makes X extra attacks when the target is within half range.'],
+  [/^blast$/i,'Blast','+1 attack for every 5 models in the target unit. Cannot target a unit within Engagement Range of your own units.'],
+  [/^torrent$/i,'Torrent','Automatically hits: no Hit roll is made.'],
+  [/^ignores cover$/i,'Ignores Cover','The target cannot have the Benefit of Cover against these attacks.'],
+  [/^precision$/i,'Precision','When it wounds an Attached unit, you can allocate the attack to a visible Character in that unit.'],
+  [/^psychic$/i,'Psychic','A Psychic weapon or ability: wounds it causes count as a Psychic Attack.'],
+  [/^melta (\S+)$/i,'Melta X','+X Damage when the target is within half range.'],
+  [/^lethal hits$/i,'Lethal Hits','A Critical Hit (unmodified 6) automatically wounds.'],
+  [/^sustained hits (\S+)$/i,'Sustained Hits X','A Critical Hit scores X additional hits.'],
+  [/^devastating wounds$/i,'Devastating Wounds','A Critical Wound inflicts mortal wounds equal to the Damage, and no saving throw can be made.'],
+  [/^twin-linked$/i,'Twin-linked','You can re-roll the Wound roll.'],
+  [/^extra attacks$/i,'Extra Attacks','Attacks with this weapon in addition to one other melee weapon. Its Attacks can only be changed by rules that name it.'],
+  [/^anti-(.+?) (\d\+)$/i,'Anti-KEYWORD X+','Against a target with that keyword, an unmodified Wound roll of X+ is a Critical Wound.'],
+  [/^lance$/i,'Lance','+1 to Wound if the bearer’s unit made a Charge move this turn.'],
+  [/^indirect fire$/i,'Indirect Fire','Can target units that are not visible; if the target is not visible, -1 to Hit and it has the Benefit of Cover.'],
+  [/^hazardous$/i,'Hazardous','After the unit shoots or fights, roll a D6 per Hazardous weapon used: on a 1, a bearer suffers 3 mortal wounds.'],
+  [/^deadly demise (\S+)$/i,'Deadly Demise X','When this model is destroyed, roll a D6: on a 6, each unit within 6" suffers X mortal wounds.'],
+  [/^leader$/i,'Leader','Before the battle this Character can join one of its Bodyguard units to form an Attached unit.'],
+  [/^fights first$/i,'Fights First','Fights in the Fights First step of the Fight phase, before other units.'],
+  [/^infiltrators$/i,'Infiltrators','Can deploy anywhere more than 9" from the enemy deployment zone and all enemy models.'],
+  [/^lone operative$/i,'Lone Operative','Unless part of an Attached unit, can only be targeted by ranged attacks from within 12".'],
+  [/^stealth$/i,'Stealth','-1 to Hit for ranged attacks targeting this unit (if every model has it).'],
+  [/^deep strike$/i,'Deep Strike','Can start in Reserves and arrive in your Reinforcements step more than 9" from all enemy models.'],
+  [/^scouts (\S+)$/i,'Scouts X','Before the first turn, can make a Normal move of up to X", ending more than 9" from enemies.'],
+  [/^feel no pain (\S+)$/i,'Feel No Pain X','Each time a model would lose a wound, roll a D6: on X or more that wound is not lost.'],
+  [/^synapse$/i,'Synapse','Your Tyranids units within 6" of a Synapse model are in Synapse Range: they take Battle-shock tests on 3D6 and get +1 Strength in melee.'],
+  [/^shadow in the warp$/i,'Shadow in the Warp','Once per battle, in either Command phase: every enemy unit takes a Battle-shock test, at -1 if within 6" of one of your Synapse units.'],
+];
+function kwTipFor(t){t=t.trim();for(const [re,title,tip] of KW_TIPS){if(re.test(t)) return [title,tip];}return null}
+function kwHtml(list){
+  return String(list||'').split(',').map(x=>x.trim()).filter(Boolean).map(t=>{const k=kwTipFor(t);return k?`<span class="kwt" tabindex="0" data-tip="${esc(k[1])}" data-tip-title="${esc(t)}">${esc(t)}</span>`:esc(t)}).join(', ');
+}
+function equipHtml(line){
+  const m=String(line).match(/^(.*?)\[(.*)\](.*)$/);
+  return m?`${esc(m[1])}[${kwHtml(m[2])}]${esc(m[3])}`:esc(line);
+}
+(function(){
+  const tip=document.createElement('div');tip.id='kwtip';tip.setAttribute('role','tooltip');document.body.appendChild(tip);
+  let cur=null;
+  const show=el=>{cur=el;tip.innerHTML=`<b>${el.dataset.tipTitle}</b>${el.dataset.tip}`;tip.style.display='block';
+    const r=el.getBoundingClientRect();const w=tip.offsetWidth,h=tip.offsetHeight;
+    let x=Math.min(Math.max(8,r.left+r.width/2-w/2),innerWidth-w-8);let y=r.bottom+8;if(y+h>innerHeight-8)y=r.top-h-8;
+    tip.style.left=x+'px';tip.style.top=y+'px';};
+  const hide=()=>{cur=null;tip.style.display='none'};
+  document.addEventListener('mouseover',e=>{const el=e.target.closest&&e.target.closest('[data-tip]');if(el&&el!==cur)show(el);else if(!el&&cur)hide()});
+  document.addEventListener('focusin',e=>{const el=e.target.closest&&e.target.closest('[data-tip]');if(el)show(el)});
+  document.addEventListener('focusout',hide);
+  document.addEventListener('scroll',hide,true);
+})();
+
+/* =========================================================
+   DEPLOYMENT PLANNER (44" x 60" table, portrait view)
+   ========================================================= */
+const BASES = {'Norn Emissary':100,'Neurotyrant':50,'Zoanthropes':40,'Deathleaper':60,'Exocrine':[120,92],'Screamer-Killer':90,'Termagants':28.5,'Hormagaunts':28.5,'Maleceptor':[120,92],'Neurolictor':50,'Parasite of Mortrex':40,'Pyrovores':50,'Von Ryan’s Leapers':40,'Hive Tyrant':60,'Winged Hive Tyrant':60,'Carnifexes':[105,70],'Lictor':50,'Genestealers':32,'Gargoyles':32,'Ripper Swarms':40,'Tyrant Guard':50,'Hive Guard':50,'Biovores':80,'Venomthropes':50,'Raveners':40,'Neurogaunts':25,'Barbgaunts':40};
+const BASES_APPROX = ['Pyrovores','Von Ryan’s Leapers'];
+// layouts in landscape coordinates (60 wide, 44 deep); A = your zone. Converted to portrait (x=Y, y=60-X)
+const LAYOUTS = {
+  hammer:{name:'Hammer and Anvil',src:'Leviathan',A:[[[0,0],[18,0],[18,44],[0,44]]],B:[[[42,0],[60,0],[60,44],[42,44]]],obj:[[30,22],[9,22],[51,22],[30,8],[30,36]]},
+  dawn:{name:'Dawn of War',src:'Leviathan (10")',A:[[[0,34],[60,34],[60,44],[0,44]]],B:[[[0,0],[60,0],[60,10],[0,10]]],obj:[[30,22],[30,40],[30,4],[10,22],[50,22]]},
+  dawn12:{name:'Dawn of War',src:'Pariah Nexus (12")',A:[[[0,32],[60,32],[60,44],[0,44]]],B:[[[0,0],[60,0],[60,12],[0,12]]],obj:[[30,22],[30,40],[30,4],[10,22],[50,22]]},
+  search:{name:'Search and Destroy',src:'Leviathan',A:'searchA',B:'searchB',obj:[[30,22],[10,34],[50,10],[10,10],[50,34]]},
+  crucible:{name:'Crucible of Battle',src:'Leviathan',approx:true,A:[[[0,0],[0,44],[30,44]]],B:[[[60,44],[60,0],[30,0]]],obj:[[30,22],[8,30],[52,14],[24,12],[36,32]]},
+  sweeping:{name:'Sweeping Engagement',src:'Leviathan',approx:true,A:[[[0,22],[0,44],[60,44]]],B:[[[60,22],[60,0],[0,0]]],obj:[[30,22],[15,38],[45,6],[15,15],[45,29]]},
+  sweeping2:{name:'Sweeping Engagement',src:'Pariah Nexus (8"/14")',A:[[[0,30],[30,30],[30,36],[60,36],[60,44],[0,44]]],B:[[[60,14],[30,14],[30,8],[0,8],[0,0],[60,0]]],obj:[[30,22],[15,38],[45,6],[15,15],[45,29]]},
+  tipping:{name:'Tipping Point',src:'Pariah Nexus',approx:true,A:[[[0,0],[12,0],[12,22],[20,22],[20,44],[0,44]]],B:[[[60,44],[48,44],[48,22],[40,22],[40,0],[60,0]]],obj:[[30,22],[8,30],[52,14],[24,12],[36,32]]},
+};
+function circlePoly(cx,cy,r,a0,a1,n){const p=[];for(let i=0;i<=n;i++){const a=a0+(a1-a0)*i/n;p.push([cx+r*Math.cos(a),cy+r*Math.sin(a)])}return p}
+function searchZone(which){ // table quarter minus 9" radius around centre (landscape)
+  if(which==='A') return [[[0,22],[21,22],...circlePoly(30,22,9,Math.PI,Math.PI/2,12).slice(0),[30,31],[30,44],[0,44]].filter((p,i,arr)=>true)];
+  return [[[60,22],[39,22],...circlePoly(30,22,9,0,-Math.PI/2,12),[30,13],[30,0],[60,0]]];
+}
+const toP=([X,Y],flip)=>{let x=Y,y=60-X;if(flip){x=44-x;y=60-y}return [x,y]};
+function zonePolys(layout,which,flip){
+  const L=LAYOUTS[layout]; let z=L[which];
+  if(z==='searchA') z=searchZone('A'); if(z==='searchB') z=searchZone('B');
+  return z.map(poly=>poly.map(p=>toP(p,flip)));
+}
+function baseSize(ds){const b=BASES[ds]||32;return Array.isArray(b)?[b[0]/25.4,b[1]/25.4]:[b/25.4,b/25.4]}
+const UNIT_COLORS=['#7b2ba6','#1d6fa8','#2c7a5e','#b5651d','#a11c24','#5a6b1d','#8a4aa1','#00838f','#c2185b','#6d4c41','#455a64','#9e7c0c','#3949ab','#ad1457'];
+function depState(){
+  state.deploy=state.deploy||{layout:'hammer',flip:false,mode:'model',pos:{},obj:{},range:false};
+  if(!state.deploy.attach) state.deploy.attach={u2:'u3'};
+  return state.deploy;
+}
+const LEADS={'Neurotyrant':['Neurogaunts','Tyrant Guard','Zoanthropes'],'Broodlord':['Genestealers'],'Hive Tyrant':['Tyrant Guard'],'The Swarmlord':['Tyrant Guard'],'Old One Eye':['Carnifexes'],'Tyranid Prime with Lash Whip':['Hormagaunts','Termagants','Tyranid Warriors with Melee Bio-weapons','Tyranid Warriors with Ranged Bio-weapons'],'Winged Tyranid Prime':['Gargoyles','Tyranid Warriors with Melee Bio-weapons','Tyranid Warriors with Ranged Bio-weapons'],'Malanthrope':['Venomthropes']};
+function attachedGroup(uid){ // returns the uids moving/cohering together
+  const A=depState().attach||{};
+  if(A[uid]) return [uid,A[uid]];
+  const leader=Object.keys(A).find(k=>A[k]===uid); return leader?[leader,uid]:[uid];
+}
+function attachUi(u,units){
+  const D=depState(); const A=D.attach||{}; const can=LEADS[u.ds];
+  const leader=Object.keys(A).find(k=>A[k]===u.id); const lu=leader&&units.find(x=>x.id===leader);
+  if(lu) return `<br><span class="tag cr" style="margin-top:3px">Led by ${esc(lu.name)}</span>`;
+  if(!can) return '';
+  const taken=Object.entries(A).filter(([k])=>k!==u.id).map(([,v])=>v);
+  const opts=units.filter(x=>can.includes(x.ds)&&!taken.includes(x.id));
+  if(!opts.length) return `<br><span class="small muted">Leader: no eligible Bodyguard unit in this list</span>`;
+  return `<br><label class="small" style="display:inline-flex;gap:5px;align-items:center;margin-top:3px">Leads <select data-bind="deploy.attach.${u.id}"><option value="">not attached</option>${opts.map(x=>`<option value="${x.id}" ${A[u.id]===x.id?'selected':''}>${esc(x.name)}</option>`).join('')}</select></label>`;
+}
+function unitPositions(li,u,idx){
+  const D=depState(); const key=li+':'+u.id;
+  if(D.pos[key]&&D.pos[key].length===u.models) return D.pos[key];
+  return null;
+}
+function defaultTray(li,units){ // place models in the tray below the table
+  const out={}; let x=1, y=64.2, rowH=0;
+  units.forEach(u=>{
+    const [w,h]=baseSize(u.ds); const arr=[];
+    for(let m=0;m<u.models;m++){
+      if(x+w>43){x=1;y+=rowH+0.4;rowH=0}
+      arr.push([x+w/2,y+h/2,0]); x+=w+0.25; rowH=Math.max(rowH,h);
+    }
+    x+=0.8; out[u.id]=arr;
+  });
+  return {out,height:y+rowH-60+2};
+}
+/* ---------- terrain layouts (approximate footprints, landscape coords; mirrored through the centre) ---------- */
+const TERRAIN = {
+  none:{name:'No terrain'},
+  lev1:{name:'Layout 1',half:[['ruin',18,15,12,6,0],['ruin',7,7,10,5,90],['ruin',12,31,10,5,0],['ruin',30,5,6,4,0],['ruin',4,20,6,4,90],['crater',24,26,5]]},
+  lev2:{name:'Layout 2',half:[['ruin',22,12,12,6,45],['ruin',8,24,10,5,0],['ruin',14,4,6,4,0],['ruin',4,38,6,4,0],['ruin',28,32,10,5,90],['crater',10,14,5]]},
+  lev3:{name:'Layout 3',half:[['ruin',16,22,12,6,90],['ruin',26,10,10,5,0],['ruin',6,10,6,4,45],['ruin',8,36,10,5,0],['ruin',28,36,6,4,0],['crater',4,26,5]]},
+  lev4:{name:'Layout 4',half:[['ruin',20,18,12,6,-30],['ruin',6,6,10,5,0],['ruin',10,26,6,4,90],['ruin',26,4,10,5,0],['ruin',16,38,10,5,0],['crater',28,28,4]]},
+};
+function terrainSvg(key,flip){
+  const T=TERRAIN[key]; if(!T||!T.half) return '';
+  const all=[...T.half,...T.half.map(t=>[t[0],60-t[1],44-t[2],t[3],t[4],t[5]])];
+  return `<g class="terrain" aria-hidden="true">${all.map(t=>{
+    let [x,y]=toP([t[1],t[2]],flip);
+    if(t[0]==='crater') return `<circle class="crater" cx="${x}" cy="${y}" r="${t[3]/2}"/>`;
+    const w=t[3],h=t[4],r=(t[5]||0)-90+(flip?180:0);
+    return `<g transform="translate(${x} ${y}) rotate(${r})"><rect class="ruin" x="${-w/2}" y="${-h/2}" width="${w}" height="${h}"/><path class="wall" d="M${-w/2} ${h/2} V${-h/2} H${w/2*0.4}"/></g>`;
+  }).join('')}</g>`;
+}
+/* ---------- weapon range rings for the selected model ---------- */
+const RANGE_COLORS=['#ef6c00','#0288d1','#2e7d32','#8e24aa','#c62828','#00897b'];
+function drawRanges(g){
+  const svg=document.getElementById('depsvg'); if(!svg) return; const layer=svg.getElementById('rangelayer'); if(!layer) return; layer.innerHTML='';
+  if(!g) return; const u=state.units.find(x=>x.id===g.dataset.uid); if(!u) return; const s=buildSheet(u); if(!s) return;
+  const G=tokGeom(g); if(inTray(G)) return;
+  const ph=depState().phase||'shooting'; const M=+s.M||0;
+  const canAdv=!u.scars.some(x=>/crippling damage/i.test(x));
+  const advCharge=/bounding leap/i.test(JSON.stringify(s.abilities));
+  const rings=[];
+  if(ph==='movement'){
+    rings.push({R:M,col:'#1565c0',label:`Move ${M}"`});
+    if(canAdv){rings.push({R:M+3.5,col:'#1565c0',label:`Advance, average ${M+3.5}"`,dash:'0.2 0.3',thin:true});rings.push({R:M+6,col:'#1565c0',label:`Advance up to ${M+6}" (M + D6)`,dash:'0.6 0.35'})}
+    else rings.push({R:M,col:'#c62828',label:'Cannot Advance (Crippling Damage)',dash:'0.2 0.3',thin:true});
+  } else if(ph==='charge'){
+    rings.push({R:7,col:'#c62828',label:'Charge, average 7"',dash:'0.2 0.3',thin:true});
+    rings.push({R:12,col:'#c62828',label:'Charge up to 12" (2D6)'});
+    rings.push({R:M+12,col:'#6a1b9a',label:`Move + charge, up to ${M+12}"`,dash:'0.6 0.35'});
+    if(advCharge&&canAdv) rings.push({R:M+18,col:'#ad1457',label:`Advance + charge (Bounding Leap), up to ${M+18}"`,dash:'0.9 0.4'});
+  } else {
+    const groups={}; s.ranged.forEach(w=>{const R=parseFloat(w.range);if(!isFinite(R))return;(groups[R]=groups[R]||[]).push(w)});
+    let ci=0;
+    Object.entries(groups).sort((a,b)=>b[0]-a[0]).forEach(([R,ws])=>{
+      const col=RANGE_COLORS[(ci++)%RANGE_COLORS.length]; R=+R;
+      const names=[...new Set(ws.map(w=>w.name.replace(/ – .*$/,'')))].join(', ');
+      rings.push({R,col,label:`${names} ${R}"`});
+      ws.forEach(w=>{const m=String(w.kw).match(/melta\s+(\d+)/i);if(m)rings.push({R:R/2,col,label:`${w.name.replace(/^.* – /,'')} Melta ${m[1]}: ${R/2}" (+${m[1]} D)`,dash:'0.6 0.35'})});
+    });
+    const ranges=s.ranged.map(w=>parseFloat(w.range)).filter(isFinite);
+    if(ranges.length){
+      const maxR=Math.max(...ranges);
+      rings.push({R:M+maxR,col:'#455a64',label:`Move + shoot, up to ${M+maxR}"`,dash:'0.2 0.3',thin:true});
+      const ass=s.ranged.filter(w=>/assault/i.test(w.kw)).map(w=>parseFloat(w.range)).filter(isFinite);
+      if(ass.length&&canAdv){const aR=Math.max(...ass);rings.push({R:M+6+aR,col:'#00695c',label:`Advance + Assault weapon, up to ${M+6+aR}"`,dash:'0.6 0.35',thin:true})}
+    } else rings.push({R:0.01,col:'#455a64',label:'No ranged weapons',thin:true});
+  }
+  layer.innerHTML=rings.map(r=>{const rx=G.a+r.R,ry=G.b+r.R;
+    return `<g transform="translate(${G.x} ${G.y}) rotate(${G.r})"><ellipse class="ring${r.thin?' thin':''}" rx="${rx}" ry="${ry}" style="stroke:${r.col}${r.dash?`;stroke-dasharray:${r.dash}`:''}"/></g><text class="ringlbl" x="${G.x}" y="${Math.max(1.1,G.y-Math.max(rx,ry)-0.35)}" text-anchor="middle" style="fill:${r.col}">${esc(r.label)}</text>`;
+  }).join('');
+  const lbls=[...layer.querySelectorAll('.ringlbl')].sort((a,b)=>+a.getAttribute('y')-+b.getAttribute('y'));
+  for(let i=1;i<lbls.length;i++){const py=+lbls[i-1].getAttribute('y'),y=+lbls[i].getAttribute('y');if(y-py<1.1)lbls[i].setAttribute('y',(py+1.1).toFixed(2))}
+}
+function zoneLabel(polys,txt,cls){if(!polys.length)return '';const pts=polys[0];let x=0,y=0;pts.forEach(p=>{x+=p[0];y+=p[1]});x/=pts.length;y/=pts.length;return `<text class="zl ${cls}" x="${x.toFixed(2)}" y="${y.toFixed(2)}" text-anchor="middle">${txt}</text>`}
+function deployHtml(li,units){
+  const D=depState(); const L=LAYOUTS[D.layout]||LAYOUTS.hammer;
+  const tray=defaultTray(li,units); const trayH=Math.max(8,tray.height);
+  const objs=L.obj.map(p=>toP(p,false));
+  const poly=(pts,cls)=>`<polygon class="${cls}" points="${pts.map(p=>p.map(v=>v.toFixed(2)).join(',')).join(' ')}"/>`;
+  const grid=[];for(let x=6;x<44;x+=6)grid.push(`<line x1="${x}" y1="0" x2="${x}" y2="60" class="g"/>`);for(let y=6;y<60;y+=6)grid.push(`<line x1="0" y1="${y}" x2="44" y2="${y}" class="g"/>`);
+  const toks=units.map((u,ui)=>{
+    const col=UNIT_COLORS[ui%UNIT_COLORS.length]; const [w,h]=baseSize(u.ds);
+    const pos=unitPositions(li,u)||tray.out[u.id];
+    return pos.map((p,mi)=>{const rot=p[2]||0;
+      const shape=Math.abs(w-h)<0.01?`<circle r="${(w/2).toFixed(3)}"/>`:`<ellipse rx="${(w/2).toFixed(3)}" ry="${(h/2).toFixed(3)}"/>`;
+      return `<g class="tok" data-uid="${u.id}" data-mi="${mi}" data-w="${w.toFixed(4)}" data-h="${h.toFixed(4)}" data-tip-title="${esc(u.name)}" data-tip="${esc(u.ds)}, model ${mi+1} of ${u.models}${Math.abs(w-h)>0.01?'. Oval base: double-click or press R to turn it.':''}" transform="translate(${p[0].toFixed(3)} ${p[1].toFixed(3)}) rotate(${rot})" style="--tc:${col}" tabindex="0" aria-label="${esc(u.name)} model ${mi+1}">${shape}${mi===0?`<text class="tl" y="0.35" text-anchor="middle">${ui+1}</text>`:''}</g>`}).join('');
+  }).join('');
+  const objHtml=objs.map((p,i)=>`<g class="obj" data-oi="${i}" transform="translate(${p[0].toFixed(3)} ${p[1].toFixed(3)})" role="img" aria-label="Objective ${i+1}"><line class="odl" x1="0" y1="0" x2="0" y2="0"/><text class="odt" x="0.95" y="0"></text><line class="odz" x1="0" y1="0" x2="0" y2="0"/><text class="odzt" x="-0.95" y="0" text-anchor="end"></text>${D.range?'<circle class="orange" r="3.787"/>':''}<circle class="ob" r="0.787"/><text class="onum" y="0.32" text-anchor="middle">${i+1}</text></g>`).join('');
+  const pres=(state.deployPresets||[]);
+  const layoutOpts=Object.entries(LAYOUTS).map(([k,l])=>`<option value="${k}" ${k===D.layout?'selected':''}>${l.name}, ${l.src}${l.approx?' (approx.)':''}</option>`).join('');
+  return `<section class="panel deploy" id="deploy">
+    <div class="page-head" style="border:0;margin:0 0 10px;padding:0"><div><h2 style="margin:0">Deployment planner</h2><p class="small muted" style="margin:0">44" × 60" table, viewed upright. Drag the bases from the tray onto the table; double-click an oval base to turn it.</p></div></div>
+    <div class="phasebar" role="group" aria-label="Phase shown for the selected model"><span class="small">Phase</span>${[['movement','Movement'],['shooting','Shooting'],['charge','Charge']].map(([k,l])=>`<button type="button" data-action="depPhase" data-val="${k}" aria-pressed="${(D.phase||'shooting')===k}">${l}</button>`).join('')}<span class="small muted">Click a model on the table to see its movement, weapon or charge ranges.</span></div>
+    <div class="depctl">
+      <label>Deployment <select data-bind="deploy.layout">${layoutOpts}</select></label>
+      <label>Terrain layout <select data-bind="deploy.terrain">${Object.entries(TERRAIN).map(([k,t])=>`<option value="${k}" ${k===(D.terrain||'none')?'selected':''}>${t.name}</option>`).join('')}</select></label>
+      <label style="flex-direction:row;align-items:center;gap:6px">${chk('deploy.flip',D.flip)} Swap sides</label>
+      <label style="flex-direction:row;align-items:center;gap:6px">${chk('deploy.range',D.range)} Show 3" objective range</label>
+      <label style="flex-direction:row;align-items:center;gap:6px">${chk('deploy.allAuras',D.allAuras)} Show all auras</label>
+      <label style="flex-direction:row;align-items:center;gap:6px">${chk('deploy.allSyn',D.allSyn)} Show all Synapse ranges</label>
+      <span class="filter" role="group" aria-label="Drag mode"><button type="button" data-action="depMode" data-val="model" aria-pressed="${D.mode!=='unit'}">Move one model</button><button type="button" data-action="depMode" data-val="unit" aria-pressed="${D.mode==='unit'}">Move whole unit</button></span>
+      <button type="button" class="ghost" data-action="depResetUnits">Send all back to tray</button>
+      
+      <span class="filter" role="group" aria-label="Rotate selected oval base"><button type="button" data-action="depRot" data-val="-15" title="Rotate selected oval base 15° anticlockwise">↺ 15°</button><button type="button" data-action="depRot" data-val="15" title="Rotate selected oval base 15° clockwise">↻ 15°</button><button type="button" data-action="depRot" data-val="90">90°</button></span>
+    </div>
+    <p id="depmsg" class="small" aria-live="polite" style="min-height:1.4em;margin:6px 0 0"></p>
+    <div style="display:none">
+    </div>
+    ${L.approx?'<p class="small warn" style="margin:6px 0">This deployment shape is approximate. Check it against your mission card.</p>':''}
+    ${(D.terrain&&D.terrain!=='none')?'<p class="small muted" style="margin:6px 0">Terrain footprints are a planning aid in the spirit of the GW layouts, not official measurements. Ruins are drawn as footprints with their solid walls marked. Only Infantry (and Beasts or Swarms) can be placed inside a ruin footprint.</p>':''}
+    <div class="depwrap">
+      <div class="depboard"><svg id="depsvg" viewBox="-0.6 -2.2 45.2 ${(62.8+trayH).toFixed(1)}" role="img" aria-label="Deployment map">
+        <rect class="table" x="0" y="0" width="44" height="60"/>
+        ${grid.join('')}
+        <line x1="0" y1="30" x2="44" y2="30" class="mid"/><line x1="22" y1="0" x2="22" y2="60" class="mid"/>
+        ${zonePolys(D.layout,'B',D.flip).map(p=>poly(p,'zb')).join('')}
+        ${zonePolys(D.layout,'A',D.flip).map(p=>poly(p,'za')).join('')}
+        ${zoneLabel(zonePolys(D.layout,'A',D.flip),'Defender (you)','zla')}${zoneLabel(zonePolys(D.layout,'B',D.flip),'Attacker','zlb')}
+        ${terrainSvg(D.terrain||'none',D.flip)}
+        <text class="edge" x="22" y="-0.6" text-anchor="middle">${D.flip?'Your table edge':'Opponent’s table edge'}</text>
+        <text class="edge" x="22" y="61.6" text-anchor="middle">${D.flip?'Opponent’s table edge':'Your table edge'}</text>
+        <rect class="tray" x="0" y="62.2" width="44" height="${(trayH-0.4).toFixed(1)}" rx="0.6"/>
+        <text class="edge" x="0.6" y="63.4">Tray (not deployed)</text>
+        ${objHtml}
+        <clipPath id="tableclip"><rect x="0" y="0" width="44" height="60"/></clipPath><g id="inflayer" pointer-events="none" clip-path="url(#tableclip)"></g><g id="auralayer" pointer-events="none" clip-path="url(#tableclip)"></g><g id="rangelayer" pointer-events="none" clip-path="url(#tableclip)"></g>
+        ${toks}
+        <text id="depread" class="read" x="43.4" y="-0.6" text-anchor="end"></text>
+      </svg></div>
+      <div class="depside">
+        <h4>Units</h4>
+        <p class="small muted" style="margin:0 0 8px">Attached units are checked for coherency as one unit. In “Move whole unit” mode the leader and its bodyguard move together; in “Move one model” mode every model moves on its own.</p>
+        <ol class="deplegend">${units.map((u,ui)=>{const b=BASES[u.ds];const bs=Array.isArray(b)?`${b[0]}×${b[1]}mm`:`${b||32}mm`;return `<li><i style="background:${UNIT_COLORS[ui%UNIT_COLORS.length]}"></i><span><b>${esc(u.name)}</b><br><span class="small muted">${u.models}× ${bs}${BASES_APPROX.includes(u.ds)||!b?' (base size unverified)':''}</span>${nativeInfiltrate(u)?'<br><span class="tag bt" style="margin-top:3px">Infiltrators</span>':(hasKw(u,'Endless Multitude')?`<br><label class="small" style="display:inline-flex;gap:5px;align-items:center;margin-top:3px">${chk('deploy.infest.'+u.id,(D.infest||{})[u.id])} Infiltrators (Infestation)</label>`:'')}${attachUi(u,units)}</span></li>`}).join('')}</ol>
+        <h4>Presets</h4>
+        <div class="presetsave"><input type="text" id="presetName" placeholder="Preset name" aria-label="Preset name"><button type="button" class="primary" data-action="depSave">Save preset</button></div>
+        ${pres.length?`<ul class="presets">${pres.map((p,i)=>`<li><span><b>${esc(p.name)}</b><br><span class="small muted">${esc((LAYOUTS[p.layout]||{}).name||p.layout)}, ${esc((state.lists[p.li]||{}).name||'list')}</span></span><span><button type="button" data-action="depLoad" data-i="${i}">Load</button> <button type="button" class="danger" data-action="depDel" data-i="${i}" aria-label="Delete preset ${esc(p.name)}">×</button></span></li>`).join('')}</ul>`:'<p class="small muted">No presets yet. Arrange your army and save it here.</p>'}
+      </div>
+    </div>
+  </section>`;
+}
+// dragging, validity and coherency
+let depDrag=null, depSel=null;
+function svgPt(svg,e){const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(svg.getScreenCTM().inverse())}
+function readTf(g){const m=(g.getAttribute('transform')||'').match(/translate\(([-\d.]+) ([-\d.]+)\)(?: rotate\(([-\d.]+)\))?/);return m?[+m[1],+m[2],+(m[3]||0)]:[0,0,0]}
+function setTf(g,x,y,r){g.setAttribute('transform',`translate(${x.toFixed(3)} ${y.toFixed(3)})${g.classList.contains('tok')?` rotate(${r||0})`:''}`)}
+function depCollect(){ // store all token & objective positions from the DOM
+  const D=depState(); const li=Math.min(n(state.settings.dsList),state.lists.length-1);
+  const byU={}; main.querySelectorAll('#depsvg .tok').forEach(g=>{const u=g.dataset.uid;(byU[u]=byU[u]||[])[+g.dataset.mi]=readTf(g)});
+  Object.entries(byU).forEach(([u,arr])=>D.pos[li+':'+u]=arr);
+  D.obj[D.layout]=[...main.querySelectorAll('#depsvg .obj')].map(g=>{const t=readTf(g);return [t[0],t[1]]});
+  save();
+}
+function inPoly(x,y,poly){let c=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const [xi,yi]=poly[i],[xj,yj]=poly[j];if(((yi>y)!==(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi)+xi))c=!c}return c}
+function tokGeom(g){const t=readTf(g);return {x:t[0],y:t[1],r:t[2],a:+g.dataset.w/2,b:+g.dataset.h/2}}
+function inTray(G){return G.y-G.b>=62.2-0.01}
+function baseInZone(G){
+  const D=depState(); const polys=zonePolys(D.layout,'A',D.flip); const rr=G.r*Math.PI/180;
+  const pts=[]; for(let k=0;k<24;k++){const t=k/24*2*Math.PI;const lx=G.a*Math.cos(t),ly=G.b*Math.sin(t);pts.push([G.x+lx*Math.cos(rr)-ly*Math.sin(rr),G.y+lx*Math.sin(rr)+ly*Math.cos(rr)])}
+  return polys.some(poly=>pts.every(p=>inPoly(p[0],p[1],poly)));
+}
+function nearestOnPolys(x,y,polys){let best=null;polys.forEach(poly=>{for(let i=0;i<poly.length;i++){const [ax,ay]=poly[i],[bx,by]=poly[(i+1)%poly.length];const dx=bx-ax,dy=by-ay,L2=dx*dx+dy*dy;let t=L2?((x-ax)*dx+(y-ay)*dy)/L2:0;t=Math.max(0,Math.min(1,t));const px=ax+t*dx,py=ay+t*dy,d=Math.hypot(x-px,y-py);if(!best||d<best.d)best={x:px,y:py,d}}});return best}
+function objDistUpdate(){
+  const D=depState(); const flip=!!D.flip; const zone=zonePolys(D.layout,'A',flip);
+  document.querySelectorAll('#depsvg .obj').forEach(g=>{
+    const t=readTf(g); const d=flip?t[1]:60-t[1]; const dy=flip?-t[1]:60-t[1];
+    const line=g.querySelector('.odl'), txt=g.querySelector('.odt'); if(!line||!txt) return;
+    line.setAttribute('y1',flip?-0.8:0.8); line.setAttribute('y2',dy);
+    txt.textContent=`${Math.round(d*10)/10}"`; txt.setAttribute('y',(dy/2+0.35).toFixed(2));
+    const zl=g.querySelector('.odz'), zt=g.querySelector('.odzt');
+    const inZone=zone.some(p=>inPoly(t[0],t[1],p)); const nb=nearestOnPolys(t[0],t[1],zone);
+    let dzTxt='';
+    if(inZone){zl.style.display='none';zt.textContent='in your DZ';zt.setAttribute('x','-0.95');zt.setAttribute('y','-1.1');dzTxt='inside your deployment zone'}
+    else if(nb){const lx=nb.x-t[0],ly=nb.y-t[1],len=Math.hypot(lx,ly)||1;zl.style.display='';zl.setAttribute('x1',(lx/len*0.8).toFixed(3));zl.setAttribute('y1',(ly/len*0.8).toFixed(3));zl.setAttribute('x2',lx.toFixed(3));zl.setAttribute('y2',ly.toFixed(3));
+      const v=Math.round(nb.d*10)/10; zt.textContent=`DZ ${v}"`; zt.setAttribute('x',(lx/2-0.6).toFixed(2)); zt.setAttribute('y',(ly/2+0.35).toFixed(2)); dzTxt=`${v} inches from your deployment zone`}
+    g.setAttribute('aria-label',`Objective ${+g.dataset.oi+1}, ${Math.round(d*10)/10} inches from your table edge, ${dzTxt}`);
+  });
+}
+function overlapsAny(g){const G=tokGeom(g);if(inTray(G))return false;return [...document.querySelectorAll('#depsvg .tok')].some(o=>{if(o===g)return false;const O=tokGeom(o);if(inTray(O))return false;return edgeDist(G,O)<-0.02})}
+function nativeInfiltrate(u){const d=DS[u.ds];return !!(d&&/infiltrators/i.test(d.core||''))}
+function unitInfiltrates(uid){const u=state.units.find(x=>x.id===uid);if(!u)return false;return nativeInfiltrate(u)||!!((depState().infest||{})[uid])}
+function basePts(G,n){const rr=G.r*Math.PI/180,pts=[];for(let k=0;k<(n||24);k++){const t=k/(n||24)*2*Math.PI;const lx=G.a*Math.cos(t),ly=G.b*Math.sin(t);pts.push([G.x+lx*Math.cos(rr)-ly*Math.sin(rr),G.y+lx*Math.sin(rr)+ly*Math.cos(rr)])}return pts}
+function infiltrateOk(G){const D=depState();const enemy=zonePolys(D.layout,'B',D.flip);return basePts(G).every(([x,y])=>x>=0&&x<=44&&y>=0&&y<=60&&!enemy.some(p=>inPoly(x,y,p))&&nearestOnPolys(x,y,enemy).d>9)}
+function ruinRects(){
+  const D=depState(); const T=TERRAIN[D.terrain||'none']; if(!T||!T.half) return [];
+  const all=[...T.half,...T.half.map(t=>[t[0],60-t[1],44-t[2],t[3],t[4],t[5]])];
+  return all.filter(t=>t[0]==='ruin').map(t=>{const [x,y]=toP([t[1],t[2]],D.flip);return {x,y,w:t[3],h:t[4],rot:((t[5]||0)-90+(D.flip?180:0))*Math.PI/180}});
+}
+function canEnterRuins(uid){const u=state.units.find(x=>x.id===uid);return !!u&&(hasKw(u,'Infantry')||hasKw(u,'Beast')||hasKw(u,'Swarm'))}
+function inRuinBlocked(g,G){
+  if(canEnterRuins(g.dataset.uid)) return false;
+  const rects=ruinRects(); if(!rects.length) return false;
+  const pts=[[G.x,G.y],...basePts(G,24)]; const rr=G.r*Math.PI/180;
+  return rects.some(R=>{
+    const inR=([px,py])=>{const dx=px-R.x,dy=py-R.y;const lx=dx*Math.cos(-R.rot)-dy*Math.sin(-R.rot),ly=dx*Math.sin(-R.rot)+dy*Math.cos(-R.rot);return Math.abs(lx)<=R.w/2&&Math.abs(ly)<=R.h/2};
+    if(pts.some(inR)) return true;
+    const corners=[[-1,-1],[1,-1],[1,1],[-1,1]].map(([sx,sy])=>{const lx=sx*R.w/2,ly=sy*R.h/2;return [R.x+lx*Math.cos(R.rot)-ly*Math.sin(R.rot),R.y+lx*Math.sin(R.rot)+ly*Math.cos(R.rot)]});
+    return corners.some(([px,py])=>{const dx=px-G.x,dy=py-G.y;const lx=dx*Math.cos(-rr)-dy*Math.sin(-rr),ly=dx*Math.sin(-rr)+dy*Math.cos(-rr);return (lx*lx)/(G.a*G.a)+(ly*ly)/(G.b*G.b)<=1});
+  });
+}
+function placeReason(g){const G=tokGeom(g);if(inTray(G))return '';if(overlapsAny(g))return 'overlap';if(inRuinBlocked(g,G))return 'ruin';if(G.y+G.b<=60&&baseInZone(G))return '';if(unitInfiltrates(g.dataset.uid)&&infiltrateOk(G))return '';return unitInfiltrates(g.dataset.uid)?'infil':'zone'}
+const PLACE_MSG={overlap:'Bases cannot overlap: move the model to a free spot.',ruin:'Only Infantry (and Beasts or Swarms) can be set up inside a ruin. Monsters must stay outside the footprint.',infil:'Infiltrators: set up wholly on the table and more than 9" from the enemy deployment zone, or inside your own zone.',zone:'Models can only be placed wholly inside your deployment zone (or back in the tray).'};
+function placeOk(g){return placeReason(g)===''}
+function drawInf(g){const svg=document.getElementById('depsvg');if(!svg)return;const layer=svg.getElementById('inflayer');if(!layer)return;layer.innerHTML='';if(!g||!unitInfiltrates(g.dataset.uid))return;const D=depState();
+  layer.innerHTML=zonePolys(D.layout,'B',D.flip).map(p=>`<polygon class="infx" points="${p.map(q=>q.join(',')).join(' ')}"/>`).join('')+`<text class="inflbl" x="22" y="${D.flip?58.6:1.8}" text-anchor="middle">Infiltrators: stay more than 9" from the enemy deployment zone</text>`}
+function radiusDir(G,ang){const phi=ang-G.r*Math.PI/180;const a=G.a,b=G.b;return a*b/Math.sqrt((b*Math.cos(phi))**2+(a*Math.sin(phi))**2)}
+function edgeDist(A,B){const dx=B.x-A.x,dy=B.y-A.y;const d=Math.hypot(dx,dy);const ang=Math.atan2(dy,dx);return d-radiusDir(A,ang)-radiusDir(B,ang+Math.PI)}
+function placeZoneLabels(){
+  const svg=document.getElementById('depsvg'); if(!svg||!svg.getScreenCTM()) return; const D=depState();
+  const inv=svg.getScreenCTM().inverse(); const pt=svg.createSVGPoint();
+  const toSvg=(x,y)=>{pt.x=x;pt.y=y;const p=pt.matrixTransform(inv);return [p.x,p.y]};
+  const boxes=[...svg.querySelectorAll('.tok, .obj .ob, .obj .odt, .obj .odzt, .obj .odl, .obj .odz, .terrain rect, .terrain circle')].map(el=>{const r=el.getBoundingClientRect();if(!r.width&&!r.height)return null;const a=toSvg(r.left,r.top),b=toSvg(r.right,r.bottom);return [Math.min(a[0],b[0]),Math.min(a[1],b[1]),Math.max(a[0],b[0]),Math.max(a[1],b[1])]}).filter(Boolean);
+  [['zla','A'],['zlb','B']].forEach(([cls,which])=>{
+    const t=svg.querySelector('.zl.'+cls); if(!t) return; const polys=zonePolys(D.layout,which,D.flip); if(!polys.length) return;
+    const poly=polys[0]; let cx=0,cy=0; poly.forEach(p=>{cx+=p[0];cy+=p[1]}); cx/=poly.length; cy/=poly.length;
+    t.setAttribute('x',cx); t.setAttribute('y',cy); const bb=t.getBBox(); const w=bb.width+0.6, h=bb.height+0.3; const asc=cy-bb.y;
+    const free=(x,y)=>{const x0=x-w/2,x1=x+w/2,y0=y-asc-0.15,y1=y0+h;
+      if(![[x0,y0],[x1,y0],[x1,y1],[x0,y1],[x,y0],[x,y1]].every(([px,py])=>polys.some(p=>inPoly(px,py,p))))return false;
+      return !boxes.some(b=>b[0]<x1&&b[2]>x0&&b[1]<y1&&b[3]>y0)};
+    if(free(cx,cy)) return;
+    let best=null;
+    for(let y=0.5;y<=60;y+=0.75)for(let x=0.5;x<=43.5;x+=0.75){if(!free(x,y))continue;const d=(x-cx)**2+(y-cy)**2;if(!best||d<best.d)best={x,y,d}}
+    if(best){t.setAttribute('x',best.x.toFixed(2));t.setAttribute('y',best.y.toFixed(2))}
+  });
+}
+function depCoherency(){
+  const svg=document.getElementById('depsvg'); if(!svg) return;
+  const byU={}; svg.querySelectorAll('.tok').forEach(g=>{g.classList.remove('incoh','badpos');const key=attachedGroup(g.dataset.uid).join('+');(byU[key]=byU[key]||[]).push(g)});
+  let bad=0;
+  Object.values(byU).forEach(gs=>{
+    const on=gs.filter(g=>!inTray(tokGeom(g))); if(on.length<2) return;
+    const need=gs.length>=7?2:1; const geo=on.map(tokGeom);
+    on.forEach((g,i)=>{let k=0;geo.forEach((o,j)=>{if(i!==j&&edgeDist(geo[i],o)<=2.0001)k++});if(k<need){g.classList.add('incoh');bad++}});
+  });
+  svg.querySelectorAll('.tok').forEach(g=>{if(!placeOk(g))g.classList.add('badpos')});
+  objDistUpdate(); drawAuras(); placeZoneLabels();
+  const msg=document.getElementById('depmsg'); if(msg) msg.textContent=bad?`${bad} model${bad>1?'s are':' is'} out of unit coherency (shown in red).`:'';
+}
+function depFlash(t){const m=document.getElementById('depmsg');if(m){m.textContent=t;m.classList.add('warn');setTimeout(()=>{m.classList.remove('warn');depCoherency()},2500)}}
+function depSelect(g){document.querySelectorAll('#depsvg .tok.sel').forEach(x=>x.classList.remove('sel'));depSel=g?{uid:g.dataset.uid,mi:g.dataset.mi}:null;if(g)g.classList.add('sel');drawRanges(g);drawAuras();drawInf(g)}
+function depRotate(deg){
+  if(!depSel) return depFlash('Select an oval base first (click it).');
+  const g=document.querySelector(`#depsvg .tok[data-uid="${depSel.uid}"][data-mi="${depSel.mi}"]`); if(!g) return;
+  if(g.dataset.w===g.dataset.h) return depFlash('Round bases do not need rotating.');
+  const t=readTf(g); setTf(g,t[0],t[1],((t[2]+deg)%360+360)%360);
+  if(!placeOk(g)){const why=placeReason(g);setTf(g,t[0],t[1],t[2]);return depFlash(why==='overlap'?'That rotation would make the base overlap another model.':why==='ruin'?'That rotation would push the base into a ruin, which only Infantry can enter.':'That rotation would push the base outside your deployment zone.')}
+  depCollect(); depCoherency(); drawRanges(g);
+}
+/* auto-deploy a whole unit (or attached unit) in coherency when its first model leaves the tray */
+function cohOk(gs){const geo=gs.map(tokGeom);const need=gs.length>=7?2:1;return geo.every((G,i)=>geo.filter((o,j)=>j!==i&&edgeDist(G,o)<=2.0001).length>=need)}
+function autoPlaceGroup(gs,cx,cy,lead){
+  const orig=gs.map(g=>readTf(g)); const n=gs.length;
+  const cell=Math.max(...gs.map(g=>Math.max(+g.dataset.w,+g.dataset.h)))+0.45;
+  const order=[lead,...gs.filter(g=>g!==lead)];
+  const colsOpts=[];for(let c=Math.max(2,Math.ceil(Math.sqrt(n)));c<=Math.min(n,8);c++)colsOpts.push(c);
+  if(n===2) colsOpts.unshift(2);
+  const tryAt=(cols,ox,oy)=>{
+    const rows=Math.ceil(n/cols);
+    order.forEach((g,i)=>{const c=i%cols,r=Math.floor(i/cols);const inRow=r===rows-1?n-cols*(rows-1):cols;const x0=cx+ox-(inRow-1)*cell/2;setTf(g,x0+c*cell,cy+oy-(rows-1)*cell/2+r*cell,0)});
+    return order.every(g=>{const G=tokGeom(g);return !inTray(G)&&placeOk(g)})&&cohOk(order);
+  };
+  for(let rad=0;rad<=18;rad+=0.5){
+    const steps=rad===0?1:Math.max(8,Math.round(rad*5));
+    for(let k=0;k<steps;k++){const a=k/steps*2*Math.PI;const ox=rad*Math.cos(a),oy=rad*Math.sin(a);
+      for(const cols of colsOpts){ if(tryAt(cols,ox,oy)) return true; }
+    }
+  }
+  gs.forEach((g,i)=>setTf(g,orig[i][0],orig[i][1],orig[i][2])); return false;
+}
+const MAIN=document.getElementById('main');
+MAIN.addEventListener('pointerdown',e=>{
+  const g=e.target.closest&&e.target.closest('#depsvg .tok'); if(!g){ if(e.target.closest&&e.target.closest('#depsvg')) depSelect(null); return; }
+  const svg=g.ownerSVGElement; const p=svgPt(svg,e); e.preventDefault();
+  const D0=depState(); const onTable=x=>!inTray(tokGeom(x));
+  let group=[g];
+  if(g.classList.contains('tok')){
+    const uids=attachedGroup(g.dataset.uid); const attached=uids.length>1;
+    if(D0.mode==='unit'){
+      const sel=uids.map(id=>`.tok[data-uid="${id}"]`).join(',');
+      group=[...svg.querySelectorAll(sel)].filter(x=>x===g||(D0.mode==='unit'&&x.dataset.uid===g.dataset.uid)||(onTable(g)?onTable(x):x.dataset.uid===g.dataset.uid));
+    }
+  }
+  depDrag={svg,start:p,items:group.map(x=>({g:x,t:readTf(x)})),id:e.pointerId,moved:false,first:g};
+  group.forEach(x=>x.classList.add('dragging')); drawInf(g); g.setPointerCapture&&g.setPointerCapture(e.pointerId);
+  const tip=document.getElementById('kwtip'); if(tip) tip.style.display='none';
+});
+MAIN.addEventListener('pointermove',e=>{
+  if(!depDrag) return; const p=svgPt(depDrag.svg,e); const dx=p.x-depDrag.start.x, dy=p.y-depDrag.start.y;
+  if(!depDrag.moved&&Math.abs(dx)+Math.abs(dy)>0.05){depDrag.moved=true;drawRanges(null)}
+  depDrag.items.forEach(it=>setTf(it.g,it.t[0]+dx,it.t[1]+dy,it.t[2]));
+  const tip=document.getElementById('kwtip'); if(tip) tip.style.display='none';
+  depCoherency();
+  const f=depDrag.items[0]; const t=readTf(f.g); const rd=depDrag.svg.getElementById('depread');
+  if(rd) rd.textContent=t[1]<=60?`${t[0].toFixed(1)}" from left, ${(60-t[1]).toFixed(1)}" from your edge`:'In tray';
+});
+const depEnd=()=>{
+  if(!depDrag) return; const d=depDrag; depDrag=null;
+  d.items.forEach(it=>it.g.classList.remove('dragging'));
+  const rd=d.svg.getElementById('depread'); if(rd) rd.textContent='';
+  if(!d.moved){ if(d.first.classList.contains('tok')) depSelect(d.first); return; }
+  const tokens=d.items.filter(it=>it.g.classList.contains('tok'));
+  // first model of a multi-model unit dragged out of the tray: deploy the whole (attached) unit in coherency
+  if(tokens.length>=1&&tokens.every(it=>it.t[1]>62)&&d.first.classList.contains('tok')){
+    const g=d.first, startInTray=true;
+    if(startInTray&&!inTray(tokGeom(g))){
+      const uids=attachedGroup(g.dataset.uid);
+      const all=[...d.svg.querySelectorAll(uids.map(id=>`.tok[data-uid="${id}"]`).join(','))];
+      const moving=new Set(tokens.map(it=>it.g)); const others=all.filter(x=>x!==g);
+      if(others.length&&others.every(x=>moving.has(x)||inTray(tokGeom(x)))){
+        const G=tokGeom(g);
+        if(autoPlaceGroup(all,G.x,G.y,g)){depSelect(g);depCollect();depCoherency();return depFlash(`Whole unit deployed in coherency (${all.length} models). Drag single models to fine-tune.`)}
+        d.items.forEach(it=>setTf(it.g,it.t[0],it.t[1],it.t[2])); depCoherency();
+        return depFlash('The whole unit does not fit there in coherency. Try a more open spot in your deployment zone.');
+      }
+    }
+  }
+  if(tokens.length && !tokens.every(it=>placeOk(it.g))){
+    const why=tokens.map(it=>placeReason(it.g)).find(Boolean)||'zone';
+    d.items.forEach(it=>setTf(it.g,it.t[0],it.t[1],it.t[2])); depCoherency();
+    return depFlash(PLACE_MSG[why]);
+  }
+  if(d.first.classList.contains('tok')) depSelect(d.first);
+  depCollect(); depCoherency();
+};
+MAIN.addEventListener('pointerup',depEnd); MAIN.addEventListener('pointercancel',depEnd);
+MAIN.addEventListener('dblclick',e=>{const g=e.target.closest&&e.target.closest('#depsvg .tok');if(!g)return;depSelect(g);depRotate(90)});
+MAIN.addEventListener('keydown',e=>{const g=e.target.closest&&e.target.closest('#depsvg .tok');if(!g)return;if(e.key==='r'||e.key==='R'){e.preventDefault();depSelect(g);depRotate(e.shiftKey?-15:15)}});
+
+
+const RENDER={'introduction':pIntroduction,'crusade-rules':pCrusadeRules,'battle-tally':pBattleTally,'agendas':pAgendas,'order-of-battle':pOrderOfBattle,'crusade-cards':pCrusadeCards,'updated-datasheets':pUpdatedDatasheets,'battle-honours':pBattleHonours,'battle-traits':pBattleTraits,'crusade-relics':pCrusadeRelics,'battle-scars':pBattleScars};
 
 /* =========================================================
    RENDER + ROUTING
@@ -1377,13 +2124,21 @@ function render(keepFocus){
   main.querySelectorAll('[data-keep-scroll]').forEach(el=>scrolls[el.dataset.keepScroll]=el.scrollLeft);
   const active=document.activeElement; const ab=active&&active.dataset?active.dataset.bind:null;
   main.innerHTML=RENDER[current()]();
+  if(document.getElementById('depsvg')) depCoherency();
   main.querySelectorAll('[data-keep-scroll]').forEach(el=>{if(scrolls[el.dataset.keepScroll]!=null)el.scrollLeft=scrolls[el.dataset.keepScroll]});
   renderNav();
   if(keepFocus&&ab){const el=main.querySelector(`[data-bind="${ab}"]`);if(el&&el.type!=='radio')el.focus()}
 }
 window.addEventListener('hashchange',()=>{editing=null;render();window.scrollTo(0,0)});
 
+function setDsOrder(ids){const li=Math.min(n(state.settings.dsList),state.lists.length-1);state.settings.dsOrder=state.settings.dsOrder||{};state.settings.dsOrder[li]=ids;save()}
+let dsDrag=null;
+main.addEventListener('dragstart',e=>{const d=e.target.closest&&e.target.closest('.dsrow');if(!d)return;dsDrag=d.dataset.dsid;e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setData('text/plain',dsDrag)}catch(_){}d.classList.add('dragging')});
+main.addEventListener('dragover',e=>{if(!dsDrag)return;const d=e.target.closest&&e.target.closest('.dsrow');if(!d)return;e.preventDefault();main.querySelectorAll('.drop-before,.drop-after').forEach(x=>x.classList.remove('drop-before','drop-after'));if(d.dataset.dsid===dsDrag)return;const r=d.getBoundingClientRect();d.classList.add(e.clientY>r.top+r.height/2?'drop-after':'drop-before')});
+main.addEventListener('drop',e=>{if(!dsDrag)return;const d=e.target.closest&&e.target.closest('.dsrow');e.preventDefault();if(d&&d.dataset.dsid!==dsDrag){const after=d.classList.contains('drop-after');const ids=[...main.querySelectorAll('.dsrow')].map(x=>x.dataset.dsid).filter(x=>x!==dsDrag);let k=ids.indexOf(d.dataset.dsid);if(after)k++;ids.splice(k,0,dsDrag);setDsOrder(ids)}dsDrag=null;render()});
+main.addEventListener('dragend',()=>{if(dsDrag){dsDrag=null;render()}});
 main.addEventListener('toggle',e=>{if(e.target.matches&&e.target.matches('.badgebox')){state.settings.badgesOpen=e.target.open;save()}},true);
+main.addEventListener('toggle',e=>{if(e.target.matches&&e.target.matches('.dsrow')){state.settings.dsOpen=state.settings.dsOpen||{};state.settings.dsOpen[e.target.dataset.dsid]=e.target.open;save()}},true);
 main.addEventListener('change',e=>{
   const el=e.target; const path=el.dataset.bind; if(!path)return;
   let v;
@@ -1407,6 +2162,20 @@ document.addEventListener('click',e=>{
   const b=e.target.closest('[data-action]'); if(!b)return;
   const a=b.dataset.action;
   if(a==='stratFilter'){state.settings.stratFilter=b.dataset.val;save();render();return}
+  if(a==='dsMove'){e.preventDefault();const ids=[...main.querySelectorAll('.dsrow')].map(d=>d.dataset.dsid);const i=ids.indexOf(b.dataset.id),j=i+Number(b.dataset.val);if(i<0||j<0||j>=ids.length)return;[ids[i],ids[j]]=[ids[j],ids[i]];setDsOrder(ids);render();const nb=main.querySelector(`[data-action="dsMove"][data-id="${b.dataset.id}"][data-val="${b.dataset.val}"]`);if(nb)nb.focus();return}
+  if(a==='depPhase'){depState().phase=b.dataset.val;save();document.querySelectorAll('[data-action="depPhase"]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.val===b.dataset.val)));const sg=depSel&&document.querySelector(`#depsvg .tok[data-uid="${depSel.uid}"][data-mi="${depSel.mi}"]`);drawRanges(sg||null);return}
+  if(a==='depRot'){depRotate(Number(b.dataset.val));return}
+  if(a==='depMode'){depState().mode=b.dataset.val;save();render();return}
+  if(a==='depResetUnits'){const D=depState();const li=Math.min(n(state.settings.dsList),state.lists.length-1);Object.keys(D.pos).forEach(k=>{if(k.startsWith(li+':'))delete D.pos[k]});save();render();return}
+  if(a==='depResetObj'){const D=depState();delete D.obj[D.layout];save();render();return}
+  if(a==='depSave'){const D=depState();const li=Math.min(n(state.settings.dsList),state.lists.length-1);const nm=(document.getElementById('presetName').value||'').trim()||`${(LAYOUTS[D.layout]||{}).name} ${new Date().toLocaleDateString()}`;
+    const pos={};Object.entries(D.pos).forEach(([k,v])=>{if(k.startsWith(li+':'))pos[k]=JSON.parse(JSON.stringify(v))});
+    state.deployPresets=state.deployPresets||[];state.deployPresets.push({name:nm,li,layout:D.layout,terrain:D.terrain||'none',flip:!!D.flip,pos,obj:D.obj[D.layout]?JSON.parse(JSON.stringify(D.obj[D.layout])):null});save();render();return}
+  if(a==='depLoad'){const p=(state.deployPresets||[])[Number(b.dataset.i)];if(!p)return;const D=depState();D.layout=p.layout;D.flip=p.flip;D.terrain=p.terrain||'none';Object.keys(D.pos).forEach(k=>{if(k.startsWith(p.li+':'))delete D.pos[k]});Object.assign(D.pos,JSON.parse(JSON.stringify(p.pos)));if(p.obj)D.obj[p.layout]=JSON.parse(JSON.stringify(p.obj));else delete D.obj[p.layout];state.settings.dsList=p.li;save();render();return}
+  if(a==='depDel'){const i=Number(b.dataset.i);const p=state.deployPresets[i];if(p&&confirm(`Delete preset “${p.name}”?`)){state.deployPresets.splice(i,1);save();render()}return}
+  if(a==='dsList'){state.settings.dsList=Number(b.dataset.val);save();render();return}
+  if(a==='dsAll'){const open=b.dataset.val==='1';state.settings.dsOpen=state.settings.dsOpen||{};state.units.forEach(u=>state.settings.dsOpen[u.id]=open);save();render();return}
+  if(a==='cardScroll'){const c=main.querySelector('.cards');if(c){const card=c.querySelector('.ccard');const step=card?card.getBoundingClientRect().width+18:380;c.scrollBy({left:step*Number(b.dataset.val),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})}return}
   if(a==='cardsFilter'){state.settings.cardsFilter=b.dataset.val;save();render();return}
   if(a==='addBattle'){state.battles.push({date:new Date().toISOString().slice(0,10),opponent:'',result:'W',prey:0,preyBio:0,tyr:0,tyrBio:0,infestBio:0,killedAll:false,notes:'',bio:{},rp:{}});save();render();
     const sc=main.querySelector('[data-keep-scroll]');if(sc)sc.scrollLeft=sc.scrollWidth;return}
