@@ -452,6 +452,47 @@ b.tyr{color:var(--chitin)}b.um{color:var(--syn)}
 .blog li{padding:3px 0;border-bottom:1px dashed var(--line)}
 .endpanel{text-align:center}.endpanel .big{font-family:var(--head);font-size:1.6rem}
 @media (max-width:860px){.sections{flex-direction:row;overflow-x:auto}.sections a{white-space:nowrap}.bstatus{grid-template-columns:1fr}.bscores{grid-template-columns:1fr}}
+
+.vtwrap{display:grid;grid-template-columns:minmax(0,440px) 1fr;gap:16px;align-items:start}
+.vtable{width:100%;height:auto;display:block}
+.vtable .table{fill:var(--paper);stroke:var(--paper-line);stroke-width:.25}
+.vtable .g{stroke:var(--line-strong);stroke-width:.05;opacity:.5}
+.vtable .ztyr{fill:color-mix(in srgb,var(--chitin) 18%,transparent);stroke:var(--chitin);stroke-width:.15}
+.vtable .zum{fill:color-mix(in srgb,var(--syn) 16%,transparent);stroke:var(--syn);stroke-width:.15}
+.vtable .orng{fill:none;stroke:var(--ink);stroke-width:.07;stroke-dasharray:.35 .3;opacity:.5}
+.vtable .ob{fill:var(--ink);stroke:var(--paper);stroke-width:.1}.vtable .ob.tyr{fill:var(--chitin)}.vtable .ob.um{fill:var(--syn)}
+.vtable g>text{font-family:var(--head);font-weight:800;font-size:.85px;fill:var(--paper);pointer-events:none}
+.vtable .edge{font-family:var(--head);font-size:1.05px;fill:var(--muted)}
+.vtok{cursor:pointer}.vtok circle{stroke:var(--paper);stroke-width:.12;fill-opacity:.85}
+.vtok.tyr circle{fill:var(--chitin)}.vtok.um circle{fill:var(--syn)}
+.vtable .vtok text{font-family:var(--head);font-weight:800;font-size:1px;fill:#fff;pointer-events:none}
+.vtok.sel circle{stroke:#ffb300;stroke-width:.3}
+.vtok.shock circle{stroke-dasharray:.4 .25;stroke:#c62828;stroke-width:.25}
+.vtok.dead{opacity:.18}
+.vtok .hpbg{fill:#000;opacity:.35}.vtok .hp{fill:#43a047}
+.key{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:-1px}.key.tyr{background:var(--chitin)}.key.um{background:var(--syn)}
+@media (max-width:860px){.vtwrap{grid-template-columns:1fr}}
+
+.replay.ready .rtok{transition:transform .7s ease}
+.rtok .hpt{font-size:.8px!important;fill:var(--ink)!important;paint-order:stroke;stroke:var(--paper);stroke-width:.2px}
+.rpcap{min-height:4.5em;margin-bottom:8px}.rpcap ul{margin:4px 0 0;padding-left:18px}
+.rpctl{margin:6px 0}
+.rpunits{margin-top:10px;display:flex;flex-direction:column;gap:6px;font-size:.85rem}
+.rpu{display:inline-block;border:1px solid var(--line);border-radius:10px;padding:0 6px;margin:2px 0}.rpu.dead{opacity:.45;text-decoration:line-through}
+#rpdetails summary{cursor:pointer;font-family:var(--head)}
+
+.vtable .vtok .hit{fill:transparent!important;stroke:none!important}
+.vtable .vtok .mb{stroke:var(--paper);stroke-width:.07}
+.vtable .vtok.tyr .mb{fill:var(--chitin)}.vtable .vtok.um .mb{fill:var(--syn)}
+.vtable .vtok.sel .hit{stroke:#ffb300!important;stroke-width:.25!important;stroke-dasharray:.4 .3}
+.vtable .vtok.shock .mb{stroke:#c62828;stroke-width:.15}
+.vtable .vtok text.vl{font-size:.85px;fill:var(--ink);paint-order:stroke;stroke:var(--paper);stroke-width:.22px}
+
+.vtable .ruin{fill:#6d6a63;fill-opacity:.38;stroke:#4e4b45;stroke-width:.12}
+.vtable .wall{fill:none;stroke:#3a3833;stroke-width:.55;stroke-linecap:square}
+.vtable .crater{fill:#7a6248;fill-opacity:.3;stroke:#5d4a36;stroke-width:.1;stroke-dasharray:.3 .2}
+.vtable .terrain{pointer-events:none}
+.vtable .vtok .mb.chr{stroke:#ffd54f;stroke-width:.18}
 /* mobile */
 .halfrow td{background:color-mix(in srgb,var(--blood) 7%,transparent);font-size:.92rem;border-top:0}
 .halflbl{display:block;padding-left:14px;border-left:2px solid var(--blood);font-family:var(--head);font-size:.88rem;color:var(--muted)}
@@ -1651,6 +1692,7 @@ function buildSheet(u){
     s.melee.forEach(w=>w.S=bumpExpr(w.S,1));
     s.crusade.unshift(['Synapse (applied)','This unit is always within its own Synapse Range, so its melee weapons get +1 Strength. Already added to the melee profiles above.']);
   }
+  if(PLAYSTYLE[u.ds]) s.crusade.push(['Playstyle ('+PLAYSTYLE[u.ds].role+')',PLAYSTYLE[u.ds].tip]);
   if(u.enh) s.crusade.push(['Enhancement',u.enh]);
   return s;
 }
@@ -2153,32 +2195,34 @@ MAIN.addEventListener('keydown',e=>{const g=e.target.closest&&e.target.closest('
    ========================================================= */
 // ---------- Ultramarines datasheets (profiles from memory: verify on Wahapedia) ----------
 const UM_DS = {
-  'Captain':{M:6,T:4,Sv:'3+',W:5,Ld:'6+',OC:1,inv:'4+',kw:'Infantry, Character, Imperium, Tacticus, Captain',base:40,pts:80,
-    ranged:[W('Bolt pistol','12"','1','2+','4','0','1','Pistol'),W('Master-crafted bolt rifle','24"','2','2+','4','-1','2','Assault, Heavy')],melee:[W('Master-crafted power weapon','Melee','6','2+','5','-2','2')]},
-  'Lieutenant':{M:6,T:4,Sv:'3+',W:4,Ld:'6+',OC:1,inv:'',kw:'Infantry, Character, Imperium, Tacticus, Lieutenant',base:40,pts:65,
-    ranged:[W('Master-crafted bolt rifle','24"','2','2+','4','-1','2','Assault, Heavy')],melee:[W('Close combat weapon','Melee','5','2+','4','0','1')]},
-  'Intercessor Squad':{M:6,T:4,Sv:'3+',W:2,Ld:'6+',OC:2,inv:'',kw:'Infantry, Battleline, Imperium, Tacticus, Grenades',base:32,pts:80,
-    ranged:[W('Bolt rifle','24"','2','3+','4','-1','1','Assault, Heavy')],melee:[W('Close combat weapon','Melee','3','3+','4','0','1')]},
-  'Assault Intercessor Squad':{M:6,T:4,Sv:'3+',W:2,Ld:'6+',OC:2,inv:'',kw:'Infantry, Battleline, Imperium, Tacticus, Grenades',base:32,pts:75,
-    ranged:[W('Heavy bolt pistol','18"','1','3+','4','-1','1','Pistol')],melee:[W('Astartes chainsword','Melee','4','3+','4','-1','1')]},
-  'Hellblaster Squad':{M:6,T:4,Sv:'3+',W:2,Ld:'6+',OC:1,inv:'',kw:'Infantry, Imperium, Hellblaster Squad',base:32,pts:110,
+  'Apothecary':{M:6,T:4,Sv:'3+',W:4,Ld:'6+',OC:1,inv:'',kw:'Infantry, Character, Grenades, Imperium, Tacticus, Apothecary',base:40,pts:50,
+    ranged:[W('Absolvor bolt pistol','18"','1','3+','5','-1','2','Pistol'),W('Reductor pistol','3"','1','3+','4','-4','2','Pistol')],melee:[W('Close combat weapon','Melee','4','3+','4','0','1')]},
+  'Assault Intercessor Squad':{M:6,T:4,Sv:'3+',W:2,Ld:'6+',OC:2,inv:'',kw:'Infantry, Battleline, Grenades, Imperium, Tacticus, Assault Intercessor Squad',base:32,pts:150,
+    ranged:[Object.assign(W('Heavy bolt pistol','18"','1','3+','4','-1','1','Pistol'),{n:8}),Object.assign(W('Plasma pistol – standard','12"','1','3+','7','-2','1','Pistol'),{n:2}),Object.assign(W('Plasma pistol – supercharge','12"','1','3+','8','-3','2','Hazardous, Pistol'),{n:2})],
+    melee:[W('Astartes chainsword','Melee','4','3+','4','-1','1')]},
+  'Eliminator Squad':{M:6,T:4,Sv:'3+',W:2,Ld:'6+',OC:1,inv:'',kw:'Infantry, Grenades, Imperium, Phobos, Eliminator Squad',base:40,pts:85,core:'Infiltrators, Stealth',
+    ranged:[Object.assign(W('Bolt sniper rifle','36"','1','3+','5','-2','3','Heavy, Precision'),{n:1}),Object.assign(W('Las fusil','36"','1','3+','9','-3','D6','Heavy'),{n:1}),Object.assign(W('Instigator bolt carbine','24"','1','3+','4','-2','2','Precision'),{n:1})],
+    melee:[W('Close combat weapon','Melee','3','3+','4','0','1')]},
+  'Heavy Intercessor Squad':{M:5,T:6,Sv:'3+',W:3,Ld:'6+',OC:2,inv:'',kw:'Infantry, Battleline, Grenades, Imperium, Gravis, Heavy Intercessor Squad',base:40,pts:100,
+    ranged:[Object.assign(W('Heavy bolt rifle','30"','2','3+','5','-1','2','Assault, Heavy'),{n:4}),Object.assign(W('Heavy bolter','36"','3','3+','5','-1','2','Assault, Heavy, Sustained Hits 1'),{n:1})],
+    melee:[W('Close combat weapon','Melee','3','3+','4','0','1')]},
+  'Hellblaster Squad':{M:6,T:4,Sv:'3+',W:2,Ld:'6+',OC:1,inv:'',kw:'Infantry, Grenades, Imperium, Tacticus, Hellblaster Squad',base:32,pts:110,
     ranged:[W('Plasma incinerator – standard','24"','2','3+','7','-2','1','Assault, Heavy'),W('Plasma incinerator – supercharge','24"','2','3+','8','-3','2','Assault, Hazardous, Heavy')],melee:[W('Close combat weapon','Melee','3','3+','4','0','1')]},
-  'Infernus Squad':{M:6,T:4,Sv:'3+',W:2,Ld:'6+',OC:1,inv:'',kw:'Infantry, Imperium, Infernus Squad',base:32,pts:90,
-    ranged:[W('Pyreblaster','12"','D6','N/A','5','-1','1','Ignores Cover, Torrent')],melee:[W('Close combat weapon','Melee','3','3+','4','0','1')]},
-  'Terminator Squad':{M:5,T:5,Sv:'2+',W:3,Ld:'6+',OC:1,inv:'4+',kw:'Infantry, Imperium, Terminator, Terminator Squad',base:40,pts:170,
-    ranged:[W('Storm bolter','24"','2','3+','4','0','1','Rapid Fire 2')],melee:[W('Power fist','Melee','3','3+','8','-2','2')]},
-  'Eradicator Squad':{M:5,T:6,Sv:'3+',W:3,Ld:'6+',OC:1,inv:'',kw:'Infantry, Imperium, Gravis, Eradicator Squad',base:40,pts:95,
-    ranged:[W('Melta rifle','18"','1','3+','9','-4','D6','Heavy, Melta 2')],melee:[W('Close combat weapon','Melee','3','3+','4','0','1')]},
   'Redemptor Dreadnought':{M:8,T:10,Sv:'2+',W:12,Ld:'6+',OC:4,inv:'',kw:'Vehicle, Walker, Imperium, Redemptor Dreadnought',base:90,pts:210,
-    ranged:[W('Macro plasma incinerator – standard','36"','D6+1','3+','8','-3','2','Blast'),W('Heavy onslaught gatling cannon','30"','12','3+','6','-1','1','Devastating Wounds'),W('Twin fragstorm grenade launcher','18"','D6','3+','4','0','1','Blast, Twin-linked')],melee:[W('Redemptor fist','Melee','5','3+','12','-2','3')]},
+    ranged:[W('Macro plasma incinerator – standard','36"','D6+1','3+','8','-3','2','Blast'),W('Macro plasma incinerator – supercharge','36"','D6+1','3+','9','-4','3','Blast, Hazardous'),W('Heavy onslaught gatling cannon','30"','12','3+','6','-1','1','Devastating Wounds'),W('Twin fragstorm grenade launcher','18"','D6','3+','4','0','1','Blast, Twin-linked')],melee:[W('Redemptor fist','Melee','5','3+','12','-2','3')]},
+  'Librarian':{M:6,T:4,Sv:'3+',W:4,Ld:'6+',OC:1,inv:'4+',kw:'Infantry, Character, Grenades, Psyker, Imperium, Tacticus, Librarian',base:40,pts:65,
+    ranged:[W('Bolt pistol','12"','1','3+','4','0','1','Pistol'),W('Smite – witchfire','24"','D6','3+','5','-1','D3','Psychic'),W('Smite – focused witchfire','24"','D6','3+','6','-2','D3','Devastating Wounds, Hazardous, Psychic')],melee:[W('Force weapon','Melee','4','3+','6','-1','D3','Psychic')]},
+  'Vindicator':{M:9,T:11,Sv:'2+',W:11,Ld:'6+',OC:3,inv:'',kw:'Vehicle, Smoke, Imperium, Vindicator',base:120,baseWH:[130,75],pts:185,
+    ranged:[W('Demolisher cannon','24"','D6+3','3+','14','-3','D6','Blast'),W('Storm bolter','24"','2','3+','4','0','1','Rapid Fire 2')],melee:[W('Armoured tracks','Melee','3','4+','6','0','1')]},
 };
+const UM_UNVERIFIED=['Hellblaster Squad','Redemptor Dreadnought','Vindicator'];
 function umWahaUrl(ds){return 'https://wahapedia.ru/wh40k10ed/factions/space-marines/'+String(ds).replace(/\s+/g,'-')}
 function umDefault(){
-  const mk=(id,name,ds,models,lists)=>({id,name,ds,models,pts:UM_DS[ds].pts,xp:0,honours:'',scars:'',lists});
-  return {lists:[{name:'Strike Force Alpha'},{name:'List 2'},{name:'List 3'}],
-    units:[mk('m1','Captain Severus','Captain',1,[true,true,false]),mk('m2','Lieutenant Calvo','Lieutenant',1,[true,false,true]),mk('m3','Squad Aurelius','Intercessor Squad',5,[true,true,true]),mk('m4','Squad Varro','Intercessor Squad',5,[true,false,true]),mk('m5','Squad Drusus','Assault Intercessor Squad',5,[true,true,false]),mk('m6','Squad Ignis','Infernus Squad',5,[false,true,false]),mk('m7','Squad Pyrus','Hellblaster Squad',5,[true,false,true]),mk('m8','Brother Castor','Redemptor Dreadnought',1,[true,true,true]),mk('m9','Squad Tarchon','Terminator Squad',5,[false,true,true])]};
+  const mk=(id,name,ds,models,attachTo)=>({id,name,ds,models,pts:UM_DS[ds].pts,xp:0,honours:'',scars:'',lists:[true,false,false],attachTo:attachTo||''});
+  return {v:3,lists:[{name:'Strike Force'},{name:'List 2'},{name:'List 3'}],
+    units:[mk('m1','Apothecary','Apothecary',1,'m2'),mk('m2','Assault Intercessors','Assault Intercessor Squad',10),mk('m3','Eliminators','Eliminator Squad',3),mk('m4','Heavy Intercessors','Heavy Intercessor Squad',5),mk('m5','Hellblasters','Hellblaster Squad',5),mk('m6','Redemptor Dreadnought','Redemptor Dreadnought',1),mk('m7','Librarian','Librarian',1,'m2'),mk('m8','Vindicator','Vindicator',1)]};
 }
-function umState(){if(!state.um)state.um=umDefault();return state.um}
+function umState(){if(!state.um||state.um.v<2)state.um=umDefault();if(state.um.v===2){const d=umDefault();state.um.units.forEach(u=>{const m=d.units.find(x=>x.id===u.id);u.attachTo=(m&&m.attachTo)||''});state.um.v=3}return state.um}
 function umSheet(u){const d=UM_DS[u.ds];if(!d)return null;return {M:d.M,T:d.T,Sv:d.Sv,W:d.W,Ld:d.Ld,OC:d.OC,inv:d.inv,kw:d.kw.split(',').map(s=>s.trim()),ranged:d.ranged.map(w=>Object.assign({},w)),melee:d.melee.map(w=>Object.assign({},w))}}
 
 function pHome(){
@@ -2199,16 +2243,18 @@ function pUltramarines(){
     <td><select data-bind="um.units.${i}.ds">${Object.keys(UM_DS).map(k=>`<option ${k===u.ds?'selected':''}>${k}</option>`).join('')}</select><br><a class="small" href="${esc(umWahaUrl(u.ds))}" target="_blank" rel="noopener">Wahapedia</a></td>
     <td class="num">${inp(`um.units.${i}.models`,u.models,'num','min="1"')}</td>
     <td class="num">${inp(`um.units.${i}.pts`,u.pts,'num','min="0"')}</td>
-    <td class="small">M${d.M}" T${d.T} Sv${d.Sv} W${d.W}${d.inv?` ${d.inv}++`:''}</td>
+    <td class="small">M${d.M}" T${d.T} Sv${d.Sv} W${d.W}${d.inv?` ${d.inv}+ inv`:''}<br><span class="muted">${(d.ranged||[]).filter(w=>!/supercharge|focused/.test(w.name)).map(w=>esc(w.name.replace(/ – .*/,''))+(w.n?` ×${w.n}`:'')).join(', ')}</span></td>
+    <td>${/character/i.test(d.kw||'')?`<select data-bind="um.units.${i}.attachTo"><option value="">not attached</option>${um.units.filter(x=>x!==u&&!/character/i.test((UM_DS[x.ds]||{}).kw||'')).map(x=>`<option value="${x.id}" ${u.attachTo===x.id?'selected':''}>${esc(x.name)}</option>`).join('')}</select>`:(um.units.filter(x=>x.attachTo===u.id).length?`<span class="small">Led by ${um.units.filter(x=>x.attachTo===u.id).map(x=>esc(x.name)).join(', ')}</span>`:'')}</td>
     <td class="num">${inp(`um.units.${i}.xp`,u.xp,'num','min="0"')}</td>
     ${um.lists.map((L,li)=>`<td class="listcol">${chk(`um.units.${i}.lists.${li}`,u.lists&&u.lists[li])}</td>`).join('')}
     <td><button type="button" class="danger small" data-action="umDel" data-i="${i}" style="padding:2px 8px">Remove</button></td></tr>`}).join('');
   const sums=um.lists.map((L,li)=>{const us=um.units.filter(u=>u.lists&&u.lists[li]);const p=us.reduce((a,u)=>a+n(u.pts),0);return `<div><input type="text" data-bind="um.lists.${li}.name" value="${esc(L.name)}" style="font-family:var(--head);font-weight:700;width:100%"><br><b>${p}</b> pts, ${us.length} units<br>${p>1000?`<span class="warn small">${p-1000} pts over 1000</span>`:'<span class="ok small">Fits Incursion (1000 pts)</span>'}</div>`}).join('');
   return pageHead('Ultramarines','The opposing crusade force. Pick units for each 1000-point list; the Let’s Battle page uses these lists.')+`
   <div class="listsum">${sums}</div>
-  <div class="scroll-x panel" style="padding:0"><table class="roster"><thead><tr><th>Unit name</th><th>Datasheet</th><th class="num">Models</th><th class="num">Points</th><th>Profile</th><th class="num">XP</th>${um.lists.map(L=>`<th class="listcol">${esc(L.name)}</th>`).join('')}<th></th></tr></thead><tbody>${rows}</tbody></table></div>
+  <div class="scroll-x panel" style="padding:0"><table class="roster"><thead><tr><th>Unit name</th><th>Datasheet</th><th class="num">Models</th><th class="num">Points</th><th>Profile</th><th>Attached</th><th class="num">XP</th>${um.lists.map(L=>`<th class="listcol">${esc(L.name)}</th>`).join('')}<th></th></tr></thead><tbody>${rows}</tbody></table></div>
+  <section class="panel"><h3>How to play each unit</h3>${[...new Set(um.units.map(u=>u.ds))].map(ds=>PLAYSTYLE[ds]?`<p><b>${esc(ds)}</b> <span class="tag bt">${PLAYSTYLE[ds].role}</span><br><span class="small">${esc(PLAYSTYLE[ds].tip)}</span></p>`:'').join('')}</section>
   <div class="panel"><h3>Add a unit</h3><div class="addform"><label>Datasheet<select id="umAddDs">${Object.keys(UM_DS).map(k=>`<option>${k}</option>`).join('')}</select></label><label>Name<input type="text" id="umAddName" placeholder="e.g. Squad Cato"></label><label>Models<input type="number" id="umAddModels" value="5" min="1"></label><button type="button" class="primary" data-action="umAdd">Add</button></div></div>
-  <p class="note">Ultramarines profiles are typed in from memory as a starting point and are not verified. Check each datasheet on Wahapedia before relying on it in a battle.</p>`;
+  <p class="note">Profiles follow the 10th edition datasheets on Wahapedia. Hellblaster, Redemptor and Vindicator points are not checked against the latest points list. Weapon counts per squad: Assault Intercessors 8 heavy bolt pistols and 2 plasma pistols; Eliminators one bolt sniper rifle, one las fusil and one instigator bolt carbine; Heavy Intercessors 4 heavy bolt rifles and 1 heavy bolter.</p>`;
 }
 
 // ---------- Leviathan mission data ----------
@@ -2234,19 +2280,20 @@ async function netInit(){
 }
 function newBattle(code){
   return {v:1,code,rev:0,created:Date.now(),players:{tyr:null,um:null},
-    setup:{tyrList:0,umList:0,primary:null,rule:null,deploy:null,attRoll:{},attacker:null,firstRoll:{},first:null,secMode:{tyr:'tactical',um:'tactical'},fixed:{tyr:[],um:[]},agendas:{tyr:'',um:''},locked:{tyr:false,um:false}},
+    setup:{tyrList:0,umList:0,primary:null,rule:null,deploy:null,attRoll:{},attacker:null,firstRoll:{},first:null,secMode:{tyr:'tactical',um:'tactical'},fixed:{tyr:[],um:[]},agendas:{tyr:'',um:''},locked:{tyr:false,um:false},ai:{tyr:false,um:false},terrain:'lev1'},
     stage:'setup',round:1,active:null,step:0,cp:{tyr:0,um:0},
     vp:{tyr:{pri:[0,0,0,0,0],sec:[0,0,0,0,0]},um:{pri:[0,0,0,0,0],sec:[0,0,0,0,0]}},
     sec:{tyr:{deck:[],hand:[],done:[]},um:{deck:[],hand:[],done:[]}},
     units:{tyr:[],um:[]},log:[],result:null,applied:{tyr:false,um:false}};
 }
-function blog(txt,who){BATTLE.log.unshift({t:Date.now(),who:who||'',txt});if(BATTLE.log.length>80)BATTLE.log.length=80}
-function mySide(){if(NET.code&&NET.me&&BATTLE&&BATTLE.players){if(BATTLE.players.tyr&&BATTLE.players.tyr.id===NET.me)return 'tyr';if(BATTLE.players.um&&BATTLE.players.um.id===NET.me)return 'um';return null}return 'both'}
-function canAct(side){const m=mySide();return m==='both'||m===side}
+function blog(txt,who){BATTLE.logTotal=(BATTLE.logTotal||0)+1;BATTLE.log.unshift({t:Date.now(),who:who||'',txt});if(BATTLE.log.length>80)BATTLE.log.length=80}
+function mySide(){if(NET.code&&BATTLE&&BATTLE.players){const P=BATTLE.players;if(NET.me){if(P.tyr&&P.tyr.id===NET.me)return 'tyr';if(P.um&&P.um.id===NET.me)return 'um'}
+  if(P.um&&!P.tyr)return 'tyr'; if(P.tyr&&!P.um)return 'um'; if(!P.tyr&&!P.um)return null; return NET.me?null:'both'}return 'both'}
+function canAct(side){const m=mySide();return m==='both'||m===side||!!(BATTLE&&BATTLE.setup&&BATTLE.setup.ai&&BATTLE.setup.ai[side])}
 let bSaving=false,bPending=false;
 async function bCommit(){
   BATTLE.rev=(BATTLE.rev||0)+1;
-  if(NET.code&&NET.ref){ if(bSaving){bPending=true;render();return} bSaving=true; try{await NET.ref.set(JSON.parse(JSON.stringify(BATTLE)))}catch(e){NET.status='Could not save to the shared game ('+(e&&e.code||'error')+'). You may only have view access.'} bSaving=false; if(bPending){bPending=false;return bCommit()} }
+  if(NET.code&&NET.ref){ if(bSaving){bPending=true;render();return} bSaving=true; try{await Promise.race([NET.ref.set(JSON.parse(JSON.stringify(BATTLE))),new Promise((_,rej)=>setTimeout(()=>rej({code:'timeout'}),15000))]);NET.status='Saved.'}catch(e){NET.status='Could not save to the shared game ('+(e&&e.code||'error')+'). If a permission prompt appeared, allow it; otherwise you may only have view access.'} bSaving=false; if(bPending){bPending=false;return bCommit()} }
   else { state.battleLocal=BATTLE; save(); }
   render();
 }
@@ -2266,12 +2313,20 @@ function bHotseat(){BATTLE=state.battleLocal||newBattle('LOCAL');NET.code=null;r
 
 // ---------- army snapshots ----------
 function snapTyr(li){
+  const A=depState().attach||{};const att={};Object.entries(A).forEach(([k,v])=>{if(v)att[k]=v});
+  return mergeAttached(snapTyrRaw(li),att);
+}
+function snapTyrRaw(li){
   return state.units.filter(u=>u.lists&&u.lists[li]).map(u=>{const s=buildSheet(u);if(!s)return null;
-    return {uid:u.id,name:u.name,ds:u.ds,models:u.models,left:u.models,W:+s.W,wl:+s.W,T:+s.T,Sv:s.Sv,inv:s.inv||'',fnp:'',M:s.M,OC:s.OC,kw:[...s.kw,...(u.warlord?['Warlord']:[])],ranged:s.ranged.map(w=>({name:w.name,range:w.range,A:w.A,SK:w.SK,S:w.S,AP:w.AP,D:w.D,kw:w.kw})),melee:s.melee.map(w=>({name:w.name,range:w.range,A:w.A,SK:w.SK,S:w.S,AP:w.AP,D:w.D,kw:w.kw})),shocked:false,dead:false,kills:0}}).filter(Boolean);
+    return {uid:u.id,name:u.name,ds:u.ds,models:u.models,left:u.models,W:+s.W,wl:+s.W,T:+s.T,Sv:s.Sv,inv:s.inv||'',fnp:'',M:s.M,OC:s.OC,Ld:s.Ld,kw:[...s.kw,...(u.warlord?['Warlord']:[])],ranged:s.ranged.map(w=>({name:w.name,range:w.range,A:w.A,SK:w.SK,S:w.S,AP:w.AP,D:w.D,kw:w.kw})),melee:s.melee.map(w=>({name:w.name,range:w.range,A:w.A,SK:w.SK,S:w.S,AP:w.AP,D:w.D,kw:w.kw})),shocked:false,dead:false,kills:0}}).filter(Boolean);
 }
 function snapUm(li){
+  const att={};umState().units.forEach(u=>{if(u.attachTo)att[u.id]=u.attachTo});
+  return mergeAttached(snapUmRaw(li),att);
+}
+function snapUmRaw(li){
   return umState().units.filter(u=>u.lists&&u.lists[li]).map(u=>{const s=umSheet(u);if(!s)return null;
-    return {uid:u.id,name:u.name,ds:u.ds,models:+u.models,left:+u.models,W:s.W,wl:s.W,T:s.T,Sv:s.Sv,inv:s.inv||'',fnp:'',M:s.M,OC:s.OC,kw:s.kw,ranged:s.ranged,melee:s.melee,shocked:false,dead:false,kills:0}}).filter(Boolean);
+    return {uid:u.id,name:u.name,ds:u.ds,models:+u.models,left:+u.models,W:s.W,wl:s.W,T:s.T,Sv:s.Sv,inv:s.inv||'',fnp:'',M:s.M,OC:s.OC,Ld:s.Ld,kw:s.kw,ranged:s.ranged,melee:s.melee,shocked:false,dead:false,kills:0}}).filter(Boolean);
 }
 
 // ---------- attack resolution ----------
@@ -2315,13 +2370,337 @@ function resolveAttack(o){
   for(let i=0;i<devW;i++)out.mortal+=dmg();
   return out;
 }
+/* ---------- virtual table, auto deployment and autocombat (HP pool) ---------- */
+function unitBaseIn(u){const b=BASES[u.ds]||(UM_DS[u.ds]&&UM_DS[u.ds].base)||32;return (Array.isArray(b)?Math.max(b[0],b[1]):b)/25.4}
+function baseDims(u){let b=BASES[u.ds]||(UM_DS[u.ds]&&(UM_DS[u.ds].baseWH||UM_DS[u.ds].base))||32;if(!Array.isArray(b))b=[b,b];return [b[0]/25.4,b[1]/25.4]}
+function mDims(u,i){return (u.md&&u.md[i])||baseDims(u)}
+function mWounds(u,i){return (u.mW&&u.mW[i])||u.W}
+// formation: index 0 is the outermost model (removed first), characters sit in the middle and are removed last
+function makeFormation(u){
+  const n=u.models; let w=0,h=0; for(let i=0;i<n;i++){const d=mDims(u,i);w=Math.max(w,d[0]);h=Math.max(h,d[1])}
+  const cols=n<=1?1:Math.min(n,Math.max(2,Math.ceil(Math.sqrt(n*1.5))));const rows=Math.ceil(n/cols);const sx=w+0.45,sy=h+0.45;const pos=[];
+  for(let i=0;i<n;i++){const c=i%cols,r=Math.floor(i/cols);const inRow=r===rows-1?n-cols*(rows-1):cols;pos.push([+((c-(inRow-1)/2)*sx).toFixed(2),+((r-(rows-1)/2)*sy).toFixed(2)])}
+  pos.sort((a,b)=>Math.hypot(b[0],b[1])-Math.hypot(a[0],a[1]));
+  return pos;
+}
+function aliveFromHp(u,hp){let h=hp,a=0;for(let i=u.models-1;i>=0;i--){if(h>0){a++;h-=mWounds(u,i)}}return a}
+function fmRadius(u){const k=u.dead?u.models:Math.max(1,u.left||u.models);let m=0;for(let i=u.models-k;i<u.models;i++){const d=mDims(u,i);m=Math.max(m,Math.hypot(u.fm[i][0],u.fm[i][1])+Math.max(d[0],d[1])/2)}return +m.toFixed(2)}
+function ensureUnit(u){
+  if(u.hpMax==null){let t=0;for(let i=0;i<u.models;i++)t+=mWounds(u,i);u.hpMax=t;u.hp=u.dead?0:(u.mW?t:Math.max(0,(u.left-1)*u.W+u.wl))}
+  if(!u.fm||u.fm.length!==u.models) u.fm=makeFormation(u);
+  u.r=fmRadius(u);
+  return u;
+}
+function modelsSvg(u,count,withMi){let out='';for(let i=Math.max(0,u.models-count);i<u.models;i++){const [x,y]=u.fm[i];const [w,h]=mDims(u,i);const chr=u.chars&&u.chars.includes(i)?' chr':'';
+  out+=Math.abs(w-h)<0.01?`<circle class="mb${chr}" ${withMi?`data-mi="${i}"`:''} cx="${x}" cy="${y}" r="${(w/2).toFixed(3)}"/>`:`<ellipse class="mb${chr}" ${withMi?`data-mi="${i}"`:''} cx="${x}" cy="${y}" rx="${(w/2).toFixed(3)}" ry="${(h/2).toFixed(3)}"/>`}return out}
+function poolDamage(u,dmg){ensureUnit(u);u.hp=Math.max(0,u.hp-dmg);u.left=aliveFromHp(u,u.hp);let later=0;for(let i=u.models-u.left+1;i<u.models;i++)later+=mWounds(u,i);u.wl=u.hp>0?u.hp-later:0;if(u.hp<=0){u.dead=true;u.left=0}u.r=fmRadius(u)}
+// attached units: leaders join their bodyguard as one unit
+function mergeAttached(units,attach,labelFor){
+  const out=units.filter(u=>!attach[u.uid]||!units.find(x=>x.uid===attach[u.uid]));
+  Object.entries(attach).forEach(([lid,bid])=>{
+    const L=units.find(x=>x.uid===lid), G=out.find(x=>x.uid===bid); if(!L||!G||L===G) return;
+    if(!G.md){G.md=Array.from({length:G.models},()=>baseDims(G));G.mW=Array.from({length:G.models},()=>G.W);G.chars=[];G.leaders=[]}
+    const ld=baseDims(L); G.md.push(ld); G.mW.push(L.W); G.chars.push(G.models); G.models+=1; G.left=G.models;
+    G.leaders.push({name:L.name,ds:L.ds,W:L.W}); G.name=G.name+' + '+L.name;
+    const tag=x=>Object.assign({},x,{n:1,name:L.name+': '+x.name});
+    G.ranged=G.ranged.concat(L.ranged.map(tag)); G.melee=G.melee.concat(L.melee.map(tag));
+    G.kw=[...new Set([...G.kw,'Character'])];
+    if(/librarian/i.test(L.ds)&&(!G.inv||parseInt(G.inv)>4)) G.inv='4+';
+    if(/apothecary/i.test(L.ds)) G.narthecium=true;
+    G.role=(PLAYSTYLE[G.ds]||{}).role;
+    if(parseInt(L.Ld)<parseInt(G.Ld)) G.Ld=L.Ld;
+    G.M=Math.min(+G.M,+L.M);
+  });
+  out.forEach(u=>{delete u.fm;delete u.hpMax});
+  return out;
+}
 function applyDamage(tgt,events,mortal,fnp){
-  const fnpN=parseInt(fnp)||7; let lost=0,ign=0; const before=tgt.left;
+  ensureUnit(tgt); const fnpN=parseInt(fnp)||7; let lost=0,ign=0; const before=tgt.left;
   const take=n=>{let real=0;for(let i=0;i<n;i++){if(d6()>=fnpN)ign++;else real++}return real};
-  events.forEach(d=>{if(tgt.left<=0)return;const r=take(d);lost+=r;if(r>=tgt.wl){tgt.left--;tgt.wl=tgt.W}else tgt.wl-=r});
-  let m=take(mortal);lost+=m;while(m>0&&tgt.left>0){if(m>=tgt.wl){m-=tgt.wl;tgt.left--;tgt.wl=tgt.W}else{tgt.wl-=m;m=0}}
-  if(tgt.left<=0){tgt.left=0;tgt.dead=true}
+  // HP pool: damage from one attack cannot exceed what is left on the model it hits; mortal wounds spill
+  events.forEach(d=>{if(tgt.hp<=0)return;const r=Math.min(take(d),tgt.wl||tgt.W);lost+=r;poolDamage(tgt,r)});
+  const m=take(mortal);lost+=Math.min(m,tgt.hp);poolDamage(tgt,m);
   return {lost,ign,slain:before-tgt.left};
+}
+function objPoints(B){const L=LAYOUTS[B.setup.deploy];return L?L.obj.map(p=>toP(p,false)):[]}
+const sideZone=(B,side)=>B.setup.attacker===side?'B':'A';
+function uDist(a,b){return Math.hypot(a.pos.x-b.pos.x,a.pos.y-b.pos.y)-a.r-b.r}
+function alive(B,side){return B.units[side].filter(u=>!u.dead&&u.pos)}
+function engagedWith(B,u,side){return alive(B,other(side)).filter(e=>uDist(u,e)<=1.01)}
+function autoDeploy(B){
+  ['tyr','um'].forEach(side=>{
+    const polys=zonePolys(B.setup.deploy,sideZone(B,side),false); const placed=[];
+    const cands=[];for(let y=0.5;y<60;y+=0.5)for(let x=0.5;x<44;x+=0.5)cands.push([x,y]);
+    let cx=0,cy=0,cnt=0;polys[0].forEach(p=>{cx+=p[0];cy+=p[1];cnt++});cx/=cnt;cy/=cnt;
+    const toward=sideZone(B,side)==='A'?-1:1; // front of the zone faces the centre line
+    const ys=polys[0].map(p=>p[1]);const frontY=sideZone(B,side)==='A'?Math.min(...ys)+4:Math.max(...ys)-4;const sc=c=>Math.hypot(c[0]-22,(c[1]-30)*1.0)*0.6+Math.hypot(c[0]-cx,c[1]-frontY)*0.4;cands.sort((a,b)=>sc(a)-sc(b));
+    const objs=objPoints(B); const bigFirst=(a,b)=>(canEnterRuinU(a)-canEnterRuinU(b))||(b.r-a.r);
+    B.units[side].map(ensureUnit).sort(bigFirst).forEach(u=>{
+      const ok=([x,y])=>{const pts=[];for(let k=0;k<12;k++){const t=k/12*2*Math.PI;pts.push([x+u.r*Math.cos(t),y+u.r*Math.sin(t)])}
+        return terrainOk(B,u,x,y)&&polys.some(p=>pts.every(q=>inPoly(q[0],q[1],p)))&&placed.every(o=>Math.hypot(o.pos.x-x,o.pos.y-y)>=o.r+u.r+1.6)};
+      let c=null;
+      if(!canEnterRuinU(u)&&bTerrain(B).ruins.length){
+        const good=[];for(const k of cands){if(good.length>=24)break;if(ok(k))good.push(k)}
+        let best=null;good.forEach((k,idx)=>{const save=u.pos;u.pos={x:k[0],y:k[1]};let bestLen=1e9;
+          objs.slice().sort((a,b)=>Math.hypot(a[0]-k[0],a[1]-k[1])-Math.hypot(b[0]-k[0],b[1]-k[1])).slice(0,2).forEach(([ox,oy])=>{const P=gridPath(B,u,ox,oy);if(P){const straight=Math.hypot(ox-k[0],oy-k[1]);bestLen=Math.min(bestLen,P.len+ (P.len-straight)*1.5)}});
+          u.pos=save;const score=bestLen+idx*0.15;if(!best||score<best.s)best={k,s:score}});
+        if(best)c=best.k;
+      }
+      c=c||cands.find(ok)||[cx,cy]; u.pos={x:+c[0].toFixed(2),y:+c[1].toFixed(2)}; placed.push(u);
+    });
+  });
+  blog('Both armies were deployed automatically');
+}
+function controllers(B){
+  return objPoints(B).map(([x,y])=>{const oc={tyr:0,um:0};['tyr','um'].forEach(s=>alive(B,s).forEach(u=>{if(Math.hypot(u.pos.x-x,u.pos.y-y)-u.r<=3&&!u.shocked)oc[s]+=u.OC*u.left}));return oc.tyr>oc.um?'tyr':oc.um>oc.tyr?'um':null});
+}
+function bestWeapon(ws,tgt){let best=null,bv=-1;ws.forEach(w=>{const a=String(w.A).includes('D')?3.5:+w.A||1;const v=a*(+parseInt(w.D)||2)*(woundTarget(w.S,tgt.T)<=4?1.4:0.8)*(1+Math.abs(+w.AP||0)*0.25);if(v>bv){bv=v;best=w}});return best}
+/* ---------- battlefield terrain: movement, line of sight, cover ---------- */
+function terrainShapes(key){
+  const T=TERRAIN[key]; if(!T||!T.half) return {ruins:[],craters:[]};
+  const all=[...T.half,...T.half.map(t=>[t[0],60-t[1],44-t[2],t[3],t[4],t[5]])];
+  const ruins=[],craters=[];
+  all.forEach(t=>{const [x,y]=toP([t[1],t[2]],false);if(t[0]==='ruin')ruins.push({x,y,w:t[3],h:t[4],rot:((t[5]||0)-90)*Math.PI/180});else craters.push({x,y,r:t[3]/2})});
+  return {ruins,craters};
+}
+const bTerrain=B=>terrainShapes((B.setup&&B.setup.terrain)||'none');
+function toLocal(R,x,y){const dx=x-R.x,dy=y-R.y,c=Math.cos(-R.rot),s=Math.sin(-R.rot);return [dx*c-dy*s,dx*s+dy*c]}
+function ptInRuin(R,x,y){const [lx,ly]=toLocal(R,x,y);return Math.abs(lx)<=R.w/2&&Math.abs(ly)<=R.h/2}
+function circleHitsRuin(R,x,y,r){const [lx,ly]=toLocal(R,x,y);const cx=Math.max(-R.w/2,Math.min(R.w/2,lx)),cy=Math.max(-R.h/2,Math.min(R.h/2,ly));return Math.hypot(lx-cx,ly-cy)<r}
+function segHitsRuin(R,ax,ay,bx,by){ // Liang-Barsky in the ruin's own frame
+  const [x0,y0]=toLocal(R,ax,ay),[x1,y1]=toLocal(R,bx,by);const dx=x1-x0,dy=y1-y0;let t0=0,t1=1;
+  const p=[-dx,dx,-dy,dy],q=[x0+R.w/2,R.w/2-x0,y0+R.h/2,R.h/2-y0];
+  for(let i=0;i<4;i++){if(Math.abs(p[i])<1e-9){if(q[i]<0)return false}else{const t=q[i]/p[i];if(p[i]<0){if(t>t1)return false;if(t>t0)t0=t}else{if(t<t0)return false;if(t<t1)t1=t}}}
+  return t1-t0>0.02;
+}
+const canEnterRuinU=u=>u.kw.some(k=>/^(infantry|beast|swarm)$/i.test(k));
+function modelPts(u){const k=Math.max(1,u.left||0);return u.fm.slice(0,k).map(([ox,oy])=>[u.pos.x+ox,u.pos.y+oy])}
+function sample(arr,n){if(arr.length<=n)return arr;const out=[];for(let i=0;i<n;i++)out.push(arr[Math.floor(i*arr.length/n)]);return out}
+function losInfo(B,a,t){
+  const {ruins,craters}=bTerrain(B); ensureUnit(a);ensureUnit(t);
+  const ap=sample(modelPts(a),6), tp=sample(modelPts(t),6);
+  let seen=0,total=0,inCover=false;
+  tp.forEach(([tx,ty])=>{let modelSeen=false;ap.forEach(([sx,sy])=>{total++;
+    const blocked=ruins.some(R=>!ptInRuin(R,sx,sy)&&!ptInRuin(R,tx,ty)&&segHitsRuin(R,sx,sy,tx,ty));
+    if(!blocked){seen++;modelSeen=true;if(ruins.some(R=>ptInRuin(R,tx,ty)&&!ptInRuin(R,sx,sy)))inCover=true}});
+  });
+  if(!ruins.length&&!craters.length) return {vis:true,cover:false,part:false};
+  const part=seen>0&&seen<total;
+  const crater=canEnterRuinU(t)&&tp.some(([x,y])=>craters.some(C=>Math.hypot(x-C.x,y-C.y)<=C.r));
+  return {vis:seen>0,cover:seen>0&&(inCover||part||crater),part};
+}
+function terrainOk(B,u,x,y){if(canEnterRuinU(u))return true;const {ruins}=bTerrain(B);return !ruins.some(R=>circleHitsRuin(R,x,y,u.r))}
+/* grid path-finding for units that cannot enter ruins */
+const GRID_CACHE={};
+function gridPath(B,u,tx,ty){
+  const W_=44,H_=60; const rr=u.r; const ck=(B.setup.terrain||'none')+':'+rr.toFixed(1); GRID_CACHE[ck]=GRID_CACHE[ck]||(()=>{const bl=new Uint8Array(W_*H_);const {ruins}=bTerrain(B);for(let j=0;j<H_;j++)for(let i=0;i<W_;i++){const x=i+0.5,y=j+0.5;if(x-rr<-0.2||x+rr>44.2||y-rr<-0.2||y+rr>60.2||ruins.some(R=>circleHitsRuin(R,x,y,rr)))bl[j*W_+i]=1}return bl})(); const blocked=GRID_CACHE[ck];
+  const cell=(x,y)=>[Math.max(0,Math.min(W_-1,Math.floor(x))),Math.max(0,Math.min(H_-1,Math.floor(y)))];
+  const [si,sj]=cell(u.pos.x,u.pos.y); let [gi,gj]=cell(tx,ty);
+  if(blocked[gj*W_+gi]){let best=null,bd=1e9;for(let j=0;j<H_;j++)for(let i=0;i<W_;i++)if(!blocked[j*W_+i]){const d=Math.hypot(i+0.5-tx,j+0.5-ty);if(d<bd){bd=d;best=[i,j]}}if(!best)return null;[gi,gj]=best}
+  const start=sj*W_+si, goal=gj*W_+gi; const g=new Float32Array(W_*H_).fill(1e9), from=new Int32Array(W_*H_).fill(-1), done=new Uint8Array(W_*H_);
+  g[start]=0; const hh=k=>{const i=k%W_,j=(k/W_)|0;const dx=Math.abs(i-gi),dy=Math.abs(j-gj);return Math.max(dx,dy)+0.414*Math.min(dx,dy)};
+  const heap=[];const push=(k,f)=>{heap.push([f,k]);let i=heap.length-1;while(i>0){const p=(i-1)>>1;if(heap[p][0]<=heap[i][0])break;[heap[p],heap[i]]=[heap[i],heap[p]];i=p}};
+  const pop=()=>{const top=heap[0];const last=heap.pop();if(heap.length){heap[0]=last;let i=0;for(;;){const l=2*i+1,r=l+1;let m=i;if(l<heap.length&&heap[l][0]<heap[m][0])m=l;if(r<heap.length&&heap[r][0]<heap[m][0])m=r;if(m===i)break;[heap[m],heap[i]]=[heap[i],heap[m]];i=m}}return top[1]};
+  push(start,hh(start)); const open={push:k=>push(k,g[k]+hh(k))};
+  while(heap.length){const cur=pop();if(cur===goal)break;if(done[cur])continue;done[cur]=1;
+    const ci=cur%W_,cj=(cur/W_)|0;
+    for(let dj=-1;dj<=1;dj++)for(let di=-1;di<=1;di++){if(!di&&!dj)continue;const ni=ci+di,nj=cj+dj;if(ni<0||nj<0||ni>=W_||nj>=H_)continue;const nk=nj*W_+ni;if(blocked[nk]&&nk!==goal)continue;if(di&&dj&&(blocked[cj*W_+ni]||blocked[nj*W_+ci]))continue;
+      const ng=g[cur]+(di&&dj?1.414:1);if(ng<g[nk]){g[nk]=ng;from[nk]=cur;open.push(nk)}}}
+  if(from[goal]<0&&goal!==start) return null;
+  const pts=[];for(let k=goal;k!==-1&&k!==start;k=from[k])pts.push([k%W_+0.5,((k/W_)|0)+0.5]);pts.reverse();pts.push([tx,ty]);
+  return {pts,len:g[goal]};
+}
+function moveToward(B,u,tx,ty,maxD,stopAt){
+  const d0=Math.hypot(tx-u.pos.x,ty-u.pos.y); if(d0<0.01) return 0;
+  const all=['tyr','um'].flatMap(s=>alive(B,s)).filter(o=>o!==u); const base=Math.atan2(ty-u.pos.y,tx-u.pos.x);
+  const free=(nx,ny)=>nx-u.r>=0&&nx+u.r<=44&&ny-u.r>=0&&ny+u.r<=60&&all.every(o=>Math.hypot(o.pos.x-nx,o.pos.y-ny)-o.r-u.r>=(B.units.tyr.includes(o)===B.units.tyr.includes(u)?0.3:1.05))&&terrainOk(B,u,nx,ny);
+  if(!canEnterRuinU(u)&&bTerrain(B).ruins.length){
+    const P=gridPath(B,u,tx,ty);
+    if(P&&P.pts.length){let px=u.pos.x,py=u.pos.y,budget=maxD,bestP=null;
+      for(const [qx,qy] of P.pts){const seg=Math.hypot(qx-px,qy-py);const steps=Math.max(1,Math.ceil(seg/0.5));
+        for(let k=1;k<=steps;k++){const t=Math.min(1,k/steps);const x=px+(qx-px)*t,y=py+(qy-py)*t;const used=maxD-budget+seg*t;if(used>maxD+0.01)break;
+          if(Math.hypot(tx-x,ty-y)<stopAt)break; if(free(x,y))bestP={x,y,used}}
+        budget-=seg; px=qx;py=qy; if(budget<=0||Math.hypot(tx-px,ty-py)<stopAt)break}
+      if(bestP&&Math.hypot(tx-bestP.x,ty-bestP.y)<d0-0.05){u.pos={x:+bestP.x.toFixed(2),y:+bestP.y.toFixed(2)};return bestP.used}
+    }
+  }
+  const pathOk=(ang,len)=>{for(let s=0.5;s<=len+0.01;s+=0.5){if(!terrainOk(B,u,u.pos.x+Math.cos(ang)*s,u.pos.y+Math.sin(ang)*s))return false}return true};
+  let best=null;
+  for(const off of [0,0.45,-0.45,0.9,-0.9,1.3,-1.3]){
+    const ang=base+off; let step=Math.min(maxD,Math.max(0,(off===0?d0:d0)-stopAt));
+    while(step>0){const nx=u.pos.x+Math.cos(ang)*step,ny=u.pos.y+Math.sin(ang)*step;
+      if(free(nx,ny)&&pathOk(ang,step)){const rem=Math.hypot(tx-nx,ty-ny);if(!best||rem<best.rem-0.01)best={nx,ny,rem,step};break}
+      step-=0.5}
+    if(best&&off===0) break;
+  }
+  if(!best||best.rem>=d0-0.05) return 0;
+  u.pos={x:+best.nx.toFixed(2),y:+best.ny.toFixed(2)}; return best.step;
+}
+function aiAttack(B,side,u,w,t,opts){
+  const res=resolveAttack(Object.assign({weapon:w,target:t,models:Math.max(1,Math.round((w.n||u.models)*u.left/u.models)),adapt:side==='tyr'?state.settings.adaptation:null,hitMod:0,woundMod:0},opts||{}));
+  const ap=applyDamage(t,res.dmgEvents,res.mortal,t.fnp); if(t.dead)u.kills++;
+  blog(`${u.name} ${opts&&opts.melee?'fought':'shot'} ${t.name} with ${w.name}: ${ap.lost} damage${ap.slain?`, ${ap.slain} model${ap.slain>1?'s':''} slain`:''}${t.dead?'. Destroyed!':''}`,side);
+}
+/* ---------- replay frames ---------- */
+function snapFrame(B,label){
+  if(!B.frames) B.frames=[];
+  const mark=B.logCount||0; const total=B.logTotal||0;
+  const ev=B.log.slice(0,Math.max(0,Math.min(8,(B.logTotal||0)-(B.lastFrameLog||0)))).map(l=>(l.who?SIDES[l.who]+': ':'')+l.txt).reverse();
+  B.lastFrameLog=B.logTotal||0;
+  B.frames.push({r:B.round,a:B.active,p:label,ev,u:['tyr','um'].map(s=>B.units[s].map(u=>{ensureUnit(u);return [u.pos?+u.pos.x.toFixed(1):null,u.pos?+u.pos.y.toFixed(1):null,u.hp]}))});
+  if(B.frames.length>140) B.frames.splice(1,1);
+}
+const REPLAY={i:0,playing:false,timer:null,speed:900};
+function replayHtml(B){
+  if(!B.frames||!B.frames.length) return '<p class="small muted">No replay recorded yet. Replays are recorded from the start of the battle.</p>';
+  const L=LAYOUTS[B.setup.deploy]; const zA=zonePolys(B.setup.deploy,'A',false), zB=zonePolys(B.setup.deploy,'B',false);
+  const defSide=B.setup.attacker?other(B.setup.attacker):'tyr';
+  const poly=(p,c)=>`<polygon class="${c}" points="${p.map(q=>q.map(v=>v.toFixed(2)).join(',')).join(' ')}"/>`;
+  const grid=[];for(let x=6;x<44;x+=6)grid.push(`<line x1="${x}" y1="0" x2="${x}" y2="60" class="g"/>`);for(let y=6;y<60;y+=6)grid.push(`<line x1="0" y1="${y}" x2="44" y2="${y}" class="g"/>`);
+  const toks=['tyr','um'].flatMap((s,si)=>B.units[s].map((u,ui)=>{ensureUnit(u);const ini=u.name.replace(/[“”"]/g,'').split(/\s+/).filter(Boolean).map(w=>w[0]).join('').slice(0,3);
+    return `<g class="vtok rtok ${s}" id="rp-${si}-${ui}" data-tip-title="${esc(u.name)}" data-tip="${esc(u.ds)}">${(()=>{const R=(()=>{const l=u.left;u.left=u.models;const r=fmRadius(u);u.left=l;return r})();return `${modelsSvg(u,u.models,true)}<text class="vl" y="${(-R-0.35).toFixed(2)}" text-anchor="middle">${esc(ini)}</text><rect class="hpbg" x="${-R}" y="${R+0.25}" width="${2*R}" height="0.45"/><rect class="hp" data-w="${2*R}" x="${-R}" y="${R+0.25}" width="${2*R}" height="0.45"/><text class="hpt" y="${R+1.6}" text-anchor="middle"></text>`})()}</g>`}));
+  return `<div class="vtwrap replay">
+    <div><svg class="vtable" id="replaysvg" viewBox="-0.6 -0.6 45.2 61.2" role="img" aria-label="Battle replay">
+      <rect class="table" x="0" y="0" width="44" height="60"/>${grid.join('')}
+      ${zA.map(p=>poly(p,defSide==='tyr'?'ztyr':'zum')).join('')}${zB.map(p=>poly(p,defSide==='tyr'?'zum':'ztyr')).join('')}
+      ${terrainSvg((B.setup&&B.setup.terrain)||'none',false)}
+      ${objPoints(B).map(([x,y],i)=>`<g transform="translate(${x} ${y})"><circle class="orng" r="3.79"/><circle class="ob" r="0.79"/><text y="0.3" text-anchor="middle">${i+1}</text></g>`).join('')}
+      ${toks.join('')}</svg></div>
+    <div>
+      <h3 style="margin-top:0">Replay</h3>
+      <div class="rpcap" id="rpcap" aria-live="polite"></div>
+      <div class="filter rpctl">
+        <button type="button" data-action="rpGo" data-val="first" aria-label="First frame">⏮</button>
+        <button type="button" data-action="rpGo" data-val="-1" aria-label="Previous step">◀</button>
+        <button type="button" class="primary" data-action="rpPlay" id="rpPlay">▶ Play</button>
+        <button type="button" data-action="rpGo" data-val="1" aria-label="Next step">▶</button>
+        <button type="button" data-action="rpGo" data-val="last" aria-label="Last frame">⏭</button>
+      </div>
+      <input type="range" id="rpSlider" min="0" max="${B.frames.length-1}" value="${Math.min(REPLAY.i,B.frames.length-1)}" style="width:100%" aria-label="Replay position">
+      <label class="small">Speed <select id="rpSpeed"><option value="1600">slow</option><option value="900" selected>normal</option><option value="450">fast</option></select></label>
+      <div class="rpunits" id="rpunits"></div>
+    </div></div>`;
+}
+function replaySet(i){
+  const B=BATTLE; if(!B||!B.frames||!B.frames.length) return; i=Math.max(0,Math.min(B.frames.length-1,i)); REPLAY.i=i; const f=B.frames[i];
+  const wrap=document.querySelector('.replay'); if(wrap&&!wrap.classList.contains('ready')) requestAnimationFrame(()=>requestAnimationFrame(()=>wrap.classList.add('ready')));
+  ['tyr','um'].forEach((s,si)=>B.units[s].forEach((u,ui)=>{const g=document.getElementById(`rp-${si}-${ui}`);if(!g)return;const d=(f.u[si]||[])[ui];
+    if(!d||d[0]==null){g.style.display='none';return} g.style.display='';
+    g.style.transform=`translate(${d[0]}px, ${d[1]}px)`; const hp=d[2], max=u.hpMax||1;
+    g.classList.toggle('dead',hp<=0); const hb=g.querySelector('.hp'); hb.setAttribute('width',(+hb.dataset.w*hp/max).toFixed(2)); const alive=hp>0?aliveFromHp(u,hp):0; g.querySelectorAll('.mb').forEach(m=>{m.style.display=(+m.dataset.mi>=u.models-alive||hp<=0)?'':'none'}); g.querySelector('.hpt').textContent=hp>0?`${hp}/${max}`:'✕';
+    g.setAttribute('data-tip',`${u.ds}: ${hp}/${max} HP`);
+  }));
+  const cap=document.getElementById('rpcap'); if(cap) cap.innerHTML=`<b>${i===0?'Deployment':`Round ${f.r}`}</b>${f.a&&i>0?` – <b class="${f.a}">${SIDES[f.a]}</b>`:''}${f.p?`, ${esc(f.p)}`:''} <span class="small muted">(step ${i+1} of ${B.frames.length})</span>${f.ev&&f.ev.length?`<ul class="small">${f.ev.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}`;
+  const sl=document.getElementById('rpSlider'); if(sl) sl.value=i;
+  const ru=document.getElementById('rpunits'); if(ru) ru.innerHTML=['tyr','um'].map((s,si)=>`<div><b class="${s}">${SIDES[s]}</b> ${B.units[s].map((u,ui)=>{const hp=((f.u[si]||[])[ui]||[])[2]||0;return `<span class="rpu ${hp<=0?'dead':''}">${esc(u.name)} ${hp}/${u.hpMax}</span>`}).join(' ')}</div>`).join('');
+}
+function replayPlay(on){
+  REPLAY.playing=on; clearTimeout(REPLAY.timer); const btn=document.getElementById('rpPlay'); if(btn) btn.textContent=on?'⏸ Pause':'▶ Play';
+  if(!on) return;
+  const tick=()=>{if(!REPLAY.playing||!BATTLE||!document.getElementById('replaysvg'))return; if(REPLAY.i>=BATTLE.frames.length-1){replayPlay(false);return} replaySet(REPLAY.i+1); REPLAY.timer=setTimeout(tick,REPLAY.speed)};
+  if(REPLAY.i>=BATTLE.frames.length-1) replaySet(0);
+  REPLAY.timer=setTimeout(tick,REPLAY.speed);
+}
+/* ---------- unit playstyles (community/competitive consensus, summarised) ---------- */
+const PLAYSTYLE={
+  'Norn Emissary':{role:'anchor',tip:'The army’s anchor. Park it on a key central objective (Singular Purpose makes it very hard to shift) and use its psychic Tendril profiles on whatever matters most: neuroparasite to snipe characters, neuroblast for infantry, neurolance into vehicles. Don’t throw it away in early melee.'},
+  'Neurotyrant':{role:'support',tip:'Support hub. Keep it behind the line, leading Zoanthropes or Neurogaunts, and use it to extend Synapse and set up Shadow in the Warp. Its Neuroloids buff the units around it, so it wants to be central, not in front.'},
+  'Zoanthropes':{role:'shoot',tip:'Mid-board psychic artillery. A unit of 6 gets extra mortal wounds on Warp Blast, and the Warp Field aura gives nearby Tyranids a 6+ invulnerable save. Stand behind your monsters and ruins, shoot the same priority target every turn.'},
+  'Deathleaper':{role:'harass',tip:'Assassin and secondary-mission piece. Infiltrate on a flank, use Fear of the Unseen to drop enemy Leadership and OC, and pick off isolated characters or score actions. Avoid fair fights against elite melee.'},
+  'Von Ryan’s Leapers':{role:'skirmish',tip:'Early pressure. Infiltrate, use Stealth to survive turn one and Fights First to win the counter-charge. They are good at taking No Man’s Land objectives early and at tying up shooting units.'},
+  'Pyrovores':{role:'hold',tip:'Cheap home-objective sitters with a short torrent flamer. Keep them on your backfield objective as anti-deep-strike insurance; their flames make enemy charges painful.'},
+  'Exocrine':{role:'shoot',tip:'Long-range gun. Find a firing lane early and stay still to get its accuracy bonus. Point the bio-plasmic cannon at elite infantry or light vehicles and keep it out of charge range.'},
+  'Screamer-Killer':{role:'assault',tip:'Front-line bruiser. Run it forward to body-block, force the enemy to deal with it, and charge into elite infantry or vehicles with its talons. Bio-plasmic scream softens the target first.'},
+  'Termagants':{role:'hold',tip:'Objective holders and screens. Sit them on objectives, perform actions, and spread them out to stop deep strikes. Endless Swarm brings them back, so they trade well.'},
+  'Hormagaunts':{role:'screen',tip:'Fast tarpit. Move-block, tie up shooting units in melee and contest objectives. They are cheap enough to throw in front of your monsters.'},
+  'Maleceptor':{role:'shoot',tip:'Durable mid-board psychic brick. Psychic Overload deals mortal wounds to nearby infantry and its Encephalic Diffusion aura weakens enemies that get close. Hold the centre next to your Emissary.'},
+  'Neurolictor':{role:'harass',tip:'Infiltrating debuffer. Its Psychological Saboteur aura makes nearby enemies worse at holding objectives and passing Battle-shock. Hide it in ruins near the enemy line and strike at weakened units.'},
+  'Parasite of Mortrex':{role:'harass',tip:'Fast flying character. Finish off weakened infantry to spawn Ripper Swarms and force Battle-shock tests in the Fight phase. Strike late into units that already took damage.'},
+  'Apothecary':{role:'support',tip:'Leads Intercessor-type squads. Its Narthecium brings a model back every Command phase, so put it in the squad that will soak the most damage.'},
+  'Assault Intercessor Squad':{role:'assault',tip:'Mid-board brawlers and action monkeys. With a Librarian (4+ invulnerable) and Apothecary they become a tough, self-healing brick that clears objectives in melee.'},
+  'Eliminator Squad':{role:'shoot',tip:'Backfield snipers. Infiltrate into ruins, stay still for Devastating Wounds on Mark the Target, and use Precision to pick off characters such as Neurotyrants.'},
+  'Heavy Intercessor Squad':{role:'hold',tip:'Durable T6 objective holders. Sit on a home or central objective and use the heavy bolt rifles as a steady firebase.'},
+  'Hellblaster Squad':{role:'shoot',tip:'Elite anti-heavy-infantry and monster damage. Supercharge when the target is worth it and stay just outside charge range.'},
+  'Redemptor Dreadnought':{role:'assault',tip:'Mid-board fire support that can punch. Walk it forward to body-block, shoot the gatling cannon (Devastating Wounds) into monsters, then fist anything that charges it.'},
+  'Librarian':{role:'support',tip:'Leads an infantry squad and gives it a 4+ invulnerable save. Smite adds reliable damage into big targets.'},
+  'Vindicator':{role:'shoot',tip:'Short-range siege tank. Push up behind cover to get the 24" demolisher cannon onto elite or monster targets, and use its bulk to body-block lanes.'},
+};
+function unitRole(u){const P=PLAYSTYLE[u.ds];return u.role||(P&&P.role)||'screen'}
+function pickProfiles(ws){const g={};ws.forEach(w=>{if(/one shot/i.test(w.kw))return;const k=w.name.split(' – ')[0];if(!g[k]||(/hazardous/i.test(g[k].kw)&&!/hazardous/i.test(w.kw)))g[k]=w});return Object.values(g)}
+function autoTurn(B){
+  const side=B.active, foe=other(side); const mine=()=>alive(B,side), theirs=()=>alive(B,foe);
+  if(!B.units.tyr.concat(B.units.um).every(u=>u.pos)) autoDeploy(B);
+  // Command: primary (from round 2), Battle-shock
+  if(B.round>=2){const own=controllers(B).filter(c=>c===side).length;const vp=Math.min(15,own*5);B.vp[side].pri[B.round-1]=n(B.vp[side].pri[B.round-1])+vp;if(vp)blog(`scored ${vp} primary VP for ${own} objective${own>1?'s':''}`,side)}
+  mine().forEach(u=>{if(!u.narthecium||!u.chars)return;const ai=u.models-1-[...(u.leaders||[])].reverse().findIndex(l=>/apothecary/i.test(l.ds));const bodyLost=u.models-u.left>0&&u.hp<u.hpMax;
+    if(ai>=u.models-u.left&&bodyLost){const before=u.left;u.hp=Math.min(u.hpMax,u.hp+u.W);poolDamage(u,0);if(u.left>before)blog(`${u.name}: the Apothecary returned 1 model (Narthecium)`,side)}});
+  mine().forEach(u=>{u.shocked=false;if(u.hp<u.hpMax/2){const r=d6()+d6();const ld=parseInt(u.Ld||'7')||7;if(r<ld){u.shocked=true;blog(`${u.name} failed Battle-shock (${r})`,side)}}});
+  snapFrame(B,'Command phase');
+  // Movement
+  B.step=1; const objs=objPoints(B);
+  mine().forEach(u=>{u.moved=false;u.charged=false;if(engagedWith(B,u,side).length)return;
+    const role=unitRole(u); const foes=theirs().sort((a,b)=>uDist(u,a)-uDist(u,b));
+    const meleeFocus=role==='assault'||role==='skirmish'||(role==='harass'&&foes.length&&uDist(u,foes[0])<=u.M+12);
+    if(meleeFocus&&foes.length){const f=role==='harass'?foes.slice().sort((a,b)=>(a.hp/a.hpMax)-(b.hp/b.hpMax)||uDist(u,a)-uDist(u,b))[0]:foes[0];if(moveToward(B,u,f.pos.x,f.pos.y,u.M,u.r+f.r+1.2)>0)u.moved=true;return}
+    const ctl=controllers(B); const home=objs.filter(([x,y])=>zonePolys(B.setup.deploy,sideZone(B,side),false).some(p=>inPoly(x,y,p)));
+    const ownObj=([x,y])=>Math.hypot(u.pos.x-x,u.pos.y-y)-u.r<=3;
+    let pool=objs;
+    if(role==='hold'&&home.length) pool=home;
+    if(role==='anchor') pool=[objs[0]];
+    if(role==='support'){const friends=mine().filter(o=>o!==u&&unitRole(o)!=='support');if(friends.length){const f=friends.sort((a,b)=>uDist(u,a)-uDist(u,b))[0];if(uDist(u,f)>3&&moveToward(B,u,f.pos.x,f.pos.y,u.M,u.r+f.r+1.5)>0)u.moved=true;return}}
+    if((role==='hold'||role==='anchor')&&pool.some(ownObj)) return; // already sitting on its objective
+    let best=null,bd=1e9;pool.forEach(([x,y])=>{const i=objs.findIndex(o=>o[0]===x&&o[1]===y);if(role!=='hold'&&role!=='anchor'&&ctl[i]===side&&ownObj([x,y]))return;const d=Math.hypot(u.pos.x-x,u.pos.y-y);if(d<bd){bd=d;best=[x,y]}});
+    const maxR=Math.max(0,...u.ranged.map(w=>parseFloat(w.range)||0));
+    if(best&&!(foes.length&&uDist(u,foes[0])<=maxR&&(role==='shoot'||u.ranged.some(w=>/heavy/i.test(w.kw))))){if(moveToward(B,u,best[0],best[1],u.M,Math.max(0,u.r-1))>0)u.moved=true}
+  });
+  blog('moved their units',side);
+  snapFrame(B,'Movement phase');
+  // Shooting
+  B.step=2;
+  mine().forEach(u=>{const eng=engagedWith(B,u,side).length>0;
+    pickProfiles(u.ranged).forEach(w=>{if(eng&&!/pistol/i.test(w.kw))return;const R=parseFloat(w.range)||0;const tg=theirs().filter(t=>uDist(u,t)<=R&&(/indirect fire/i.test(w.kw)||losInfo(B,u,t).vis)).sort((a,b)=>uDist(u,a)-uDist(u,b))[0];if(!tg)return;
+      aiAttack(B,side,u,w,tg,{half:uDist(u,tg)<=R/2,still:!u.moved,cover:losInfo(B,u,tg).cover})});
+  });
+  snapFrame(B,'Shooting phase');
+  // Charge
+  B.step=3;
+  mine().forEach(u=>{if(!u.melee.length||engagedWith(B,u,side).length)return;const f=theirs().filter(t=>uDist(u,t)<=12).sort((a,b)=>uDist(u,a)-uDist(u,b))[0];if(!f)return;
+    const need=Math.max(0,uDist(u,f)-1);const r=d6()+d6();
+    if(r>=need){moveToward(B,u,f.pos.x,f.pos.y,99,u.r+f.r+0.5);if(uDist(u,f)<=1.01){u.charged=true;blog(`${u.name} charged ${f.name} (${r} vs ${need.toFixed(1)}")`,side)}else blog(`${u.name} rolled ${r} but could not reach ${f.name}`,side)}
+    else blog(`${u.name} failed a charge on ${f.name} (${r} vs ${need.toFixed(1)}")`,side)});
+  snapFrame(B,'Charge phase');
+  // Fight: chargers first, then alternate starting with the non-active player
+  B.step=4;
+  const fightOnce=(s,list)=>list.forEach(u=>{if(u.dead)return;const tgs=engagedWith(B,u,s);if(!tgs.length)return;const t=tgs.sort((a,b)=>a.hp-b.hp)[0];const w=bestWeapon(u.melee,t);if(!w)return;aiAttack(B,s,u,w,t,{melee:true,charged:u.charged})});
+  fightOnce(side,mine().filter(u=>u.charged));
+  const rest={[side]:mine().filter(u=>!u.charged),[foe]:theirs()};let turn=foe;
+  for(let k=0;k<40&&(rest.tyr.length||rest.um.length);k++){const q=rest[turn];if(q.length){const u=q.shift();fightOnce(turn,[u])}turn=other(turn)}
+  snapFrame(B,'Fight phase');
+}
+function endTurn(B){
+  if(B.active===B.setup.first){B.active=other(B.active);B.step=0;startCommand(B)}
+  else if(B.round<5){B.round++;B.active=B.setup.first;B.step=0;blog(`Battle round ${B.round}`);startCommand(B)}
+  else{B.stage='end';B.units.tyr.concat(B.units.um).forEach(u=>{if(u.dead)u.ooa=d6()});const t=vpTot(B,'tyr').tot,u=vpTot(B,'um').tot;B.result=t>u?'tyr':u>t?'um':'draw';blog(`The battle ends: Tyranids ${t}, Ultramarines ${u}`)}
+  if(B.stage==='battle'&&(alive(B,'tyr').length===0||alive(B,'um').length===0)&&B.units.tyr.concat(B.units.um).every(u=>u.pos)){B.stage='end';const t=vpTot(B,'tyr').tot,u=vpTot(B,'um').tot;B.result=alive(B,'tyr').length?'tyr':'um';B.units.tyr.concat(B.units.um).forEach(x=>{if(x.dead&&!x.ooa)x.ooa=d6()});blog(`${SIDES[B.result]} wiped out the enemy army`)}
+}
+function runAI(B,all){let guard=0;do{autoTurn(B);endTurn(B);guard++}while(B.stage==='battle'&&(all||(B.setup.ai&&B.setup.ai[B.active]))&&guard<12)}
+function tableSvg(B,interactive){
+  const D={layout:B.setup.deploy};const L=LAYOUTS[B.setup.deploy]; if(!L) return '';
+  const zA=zonePolys(B.setup.deploy,'A',false), zB=zonePolys(B.setup.deploy,'B',false);
+  const defSide=B.setup.attacker?other(B.setup.attacker):null;
+  const ctl=B.units.tyr.concat(B.units.um).every(u=>u.pos)?controllers(B):[];
+  const poly=(p,c)=>`<polygon class="${c}" points="${p.map(q=>q.map(v=>v.toFixed(2)).join(',')).join(' ')}"/>`;
+  const grid=[];for(let x=6;x<44;x+=6)grid.push(`<line x1="${x}" y1="0" x2="${x}" y2="60" class="g"/>`);for(let y=6;y<60;y+=6)grid.push(`<line x1="0" y1="${y}" x2="44" y2="${y}" class="g"/>`);
+  const toks=['tyr','um'].flatMap(s=>B.units[s].filter(u=>u.pos).map(u=>{ensureUnit(u);const sel=ATK.unit===u.uid||ATK.target===u.uid;
+    const ini=u.name.replace(/[“”"]/g,'').split(/\s+/).filter(Boolean).map(w=>w[0]).join('').slice(0,3);
+    return `<g class="vtok ${s} ${u.dead?'dead':''} ${sel?'sel':''} ${u.shocked?'shock':''}" data-vt="${s}:${u.uid}" transform="translate(${u.pos.x} ${u.pos.y})" data-tip-title="${esc(u.name)}" data-tip="${esc(u.ds)}: ${u.left}/${u.models} models, ${u.hp}/${u.hpMax} HP, M${u.M}" tabindex="0"><circle class="hit" r="${u.r}"/>${modelsSvg(u,u.dead?u.models:u.left)}<text class="vl" y="${(-u.r-0.35).toFixed(2)}" text-anchor="middle">${esc(ini)}</text>${u.dead?'':`<rect class="hpbg" x="${-u.r}" y="${u.r+0.25}" width="${2*u.r}" height="0.45"/><rect class="hp" x="${-u.r}" y="${u.r+0.25}" width="${(2*u.r*u.hp/u.hpMax).toFixed(2)}" height="0.45"/>`}</g>`}));
+  return `<svg class="vtable" viewBox="-0.6 -1.6 45.2 63.2" role="img" aria-label="Virtual battlefield">
+    <rect class="table" x="0" y="0" width="44" height="60"/>${grid.join('')}
+    ${zA.map(p=>poly(p,defSide==='tyr'?'ztyr':'zum')).join('')}${zB.map(p=>poly(p,defSide==='tyr'?'zum':'ztyr')).join('')}
+    ${terrainSvg((B.setup&&B.setup.terrain)||'none',false)}
+    ${objPoints(B).map(([x,y],i)=>`<g transform="translate(${x} ${y})"><circle class="orng" r="3.79"/><circle class="ob ${ctl[i]||''}" r="0.79"/><text y="0.3" text-anchor="middle">${i+1}</text></g>`).join('')}
+    ${toks.join('')}
+    </svg>`;
 }
 
 // ---------- battle page ----------
@@ -2329,7 +2708,7 @@ let ATK={side:null,unit:'',weapon:0,target:'',models:0,half:false,still:false,ch
 function pBattle(){
   if(!BATTLE) return battleLobby();
   const B=BATTLE, me=mySide();
-  const head=`<div class="bhead"><div><h1 style="margin:0">Let’s Battle</h1><p class="small muted" style="margin:0">${NET.code?`Online game <b>${esc(NET.code)}</b>. ${esc(NET.status)}`:'Hot-seat game on this device.'} ${me&&me!=='both'?`You play the <b>${SIDES[me]}</b>.`:''}</p></div><div class="filter">${NET.code?'':'<button type="button" class="danger" data-action="bReset">New game</button>'}<button type="button" data-action="bLeave">Leave</button></div></div>`;
+  const head=`<div class="bhead"><div><h1 style="margin:0">Let’s Battle</h1><p class="small muted" style="margin:0">${NET.code?`Online game <b>${esc(NET.code)}</b>. <span class="${/could not|error/i.test(NET.status)?'warn':''}">${esc(NET.status)}</span>`:'Hot-seat game on this device.'} ${me&&me!=='both'?`You play the <b>${SIDES[me]}</b>.`:''}</p></div><div class="filter"><button type="button" class="danger" data-action="bReset">New game</button><button type="button" data-action="bLeave">Leave</button></div></div>`;
   return head+(B.stage==='setup'?battleSetup(B):B.stage==='battle'?battleRun(B):battleEnd(B));
 }
 function battleLobby(){
@@ -2350,7 +2729,7 @@ function battleLobby(){
 function rollBtn(action,label,dis){return `<button type="button" data-action="${action}" ${dis?'disabled':''}>${label}</button>`}
 function battleSetup(B){
   const S=B.setup, me=mySide();
-  const seat=side=>{const p=B.players[side];if(!NET.code)return `<span class="tag bt">Hot-seat</span>`;if(p)return `<span class="tag ${p.id===NET.me?'cr':'bt'}">${p.id===NET.me?'You':'Claimed'}</span>`;return me===null||me==='both'?`<button type="button" class="primary" data-action="bClaim" data-side="${side}">Play the ${SIDES[side]}</button>`:'<span class="small muted">Waiting for opponent</span>'};
+  const seat=side=>{const p=B.players[side];if(!NET.code)return `<span class="tag bt">Hot-seat</span>`;if(p)return `<span class="tag ${p.id===NET.me?'cr':'bt'}">${p.id===NET.me?'You':'Claimed'}</span>`;return me===null||me==='both'||me===side?`<button type="button" class="primary" data-action="bClaim" data-side="${side}">Play the ${SIDES[side]}</button>`:'<span class="small muted">Waiting for opponent</span>'};
   const listPick=side=>{const lists=side==='tyr'?state.lists:umState().lists;const li=S[side+'List'];
     if(S.locked[side]) return `<p class="small ok">Army locked in: ${B.units[side].length} units, ${B.units[side].reduce((a,u)=>a+(side==='tyr'?n((state.units.find(x=>x.id===u.uid)||{}).pts):n((umState().units.find(x=>x.id===u.uid)||{}).pts)),0)||''} pts.</p>`;
     if(!canAct(side)) return `<p class="small muted">The ${SIDES[side]} player picks a list.</p>`;
@@ -2358,11 +2737,13 @@ function battleSetup(B){
   const step=(n_,title,body,done)=>`<section class="panel bstep ${done?'done':''}"><h3><span class="d6">${n_}</span>${title}</h3>${body}</section>`;
   const ready=S.locked.tyr&&S.locked.um&&S.primary&&S.rule&&S.deploy&&S.attacker&&S.first;
   return `
-  ${step(1,'Players and armies',`<div class="grid2">${['tyr','um'].map(side=>`<div class="seat ${side}"><h4>${SIDES[side]} ${seat(side)}</h4>${listPick(side)}</div>`).join('')}</div>`,S.locked.tyr&&S.locked.um)}
+  ${step(1,'Players and armies',`<div class="grid2">${['tyr','um'].map(side=>`<div class="seat ${side}"><h4>${SIDES[side]} ${seat(side)}</h4>${listPick(side)}<p class="small" style="margin:8px 0 0">Controlled by <span class="filter" style="display:inline-flex"><button type="button" data-action="bAI" data-side="${side}" data-val="0" aria-pressed="${!(S.ai&&S.ai[side])}">Player</button><button type="button" data-action="bAI" data-side="${side}" data-val="1" aria-pressed="${!!(S.ai&&S.ai[side])}">AI (autocombat)</button></span></p></div>`).join('')}</div>`,S.locked.tyr&&S.locked.um)}
   ${step(2,'Mission (Leviathan deck)',`<div class="grid3">
       <div><b>Primary mission</b><p>${S.primary?`<span class="tag cr">${esc(S.primary)}</span>`:'<span class="muted small">not drawn</span>'}</p>${rollBtn('bDraw" data-what="primary','Draw primary')}</div>
       <div><b>Mission rule</b><p>${S.rule?`<span class="tag cr">${esc(S.rule)}</span>`:'<span class="muted small">not drawn</span>'}</p>${rollBtn('bDraw" data-what="rule','Draw mission rule')}</div>
-      <div><b>Deployment</b><p>${S.deploy?`<span class="tag cr">${esc(LAYOUTS[S.deploy].name)}</span>`:'<span class="muted small">not drawn</span>'}</p>${rollBtn('bDraw" data-what="deploy','Draw deployment')}</div></div>
+      <div><b>Deployment</b><p>${S.deploy?`<span class="tag cr">${esc(LAYOUTS[S.deploy].name)}</span>`:'<span class="muted small">not drawn</span>'}</p>${rollBtn('bDraw" data-what="deploy','Draw deployment')}</div>
+      <div><b>Terrain layout</b><p><select data-bind="__b.setup.terrain">${Object.entries(TERRAIN).map(([k,t])=>`<option value="${k}" ${k===(S.terrain||'none')?'selected':''}>${t.name}</option>`).join('')}</select></p>${rollBtn('bDraw" data-what="terrain','Draw terrain')}</div></div>
+      <p class="small muted">Ruins: Infantry (and Beasts, Swarms) can move through and stand in them; Monsters and Vehicles cannot. Units inside a ruin can see out; units outside shooting at a target inside see it but it gets the Benefit of Cover; a ruin between two units outside it blocks line of sight. Infantry in a crater have cover.</p>
       <p class="small muted">Scoring details are on the mission cards. Battle size: Incursion, 1000 points, 5 battle rounds. Use the Deployment planner on the Tyranids Updated Datasheets page to plan where you set up.</p>`,S.primary&&S.rule&&S.deploy)}
   ${step(3,'Attacker and Defender',`<p class="small">Roll off: the winner chooses who is the Attacker. The Defender picks a deployment zone and deploys first.</p>
       <div class="grid2">${['tyr','um'].map(side=>`<div><b>${SIDES[side]}</b>: ${S.attRoll[side]?`<span class="d6">${S.attRoll[side]}</span>`:canAct(side)?rollBtn('bRollOff" data-what="att" data-side="'+side,'Roll D6'):'<span class="muted small">waiting</span>'}</div>`).join('')}</div>
@@ -2377,7 +2758,8 @@ function battleSetup(B){
   ${step(5,'Deploy and roll for the first turn',`<p class="small">Deploy in alternation (Defender first), then resolve Infiltrators and Scouts. Then roll off: the winner chooses who takes the first turn.</p>
       <div class="grid2">${['tyr','um'].map(side=>`<div><b>${SIDES[side]}</b>: ${S.firstRoll[side]?`<span class="d6">${S.firstRoll[side]}</span>`:canAct(side)?rollBtn('bRollOff" data-what="first" data-side="'+side,'Roll D6'):'<span class="muted small">waiting</span>'}</div>`).join('')}</div>
       ${S.firstRoll.tyr&&S.firstRoll.um&&!S.first?(S.firstRoll.tyr===S.firstRoll.um?`<p class="warn small">Tie: roll again.</p>${rollBtn('bReroll" data-what="first','Re-roll')}`:(()=>{const w=S.firstRoll.tyr>S.firstRoll.um?'tyr':'um';return canAct(w)?`<p class="small"><b>${SIDES[w]}</b> won and chooses:</p><button type="button" data-action="bFirst" data-side="${w}">${SIDES[w]} go first</button> <button type="button" data-action="bFirst" data-side="${other(w)}">${SIDES[other(w)]} go first</button>`:`<p class="small muted">${SIDES[w]} chooses who goes first.</p>`})()):''}
-      ${S.first?`<p class="ok small"><b>${SIDES[S.first]}</b> take the first turn.</p>`:''}`,!!S.first)}
+      ${S.first?`<p class="ok small"><b>${SIDES[S.first]}</b> take the first turn.</p>`:''}
+      ${S.deploy&&S.attacker&&S.locked.tyr&&S.locked.um?`<div class="vtwrap"><div>${tableSvg(B)}</div><div><button type="button" class="primary" data-action="bAutoDeploy">${B.units.tyr.concat(B.units.um).every(u=>u.pos)?'Re-deploy automatically':'Deploy both armies automatically'}</button><p class="small muted">Every model is shown on its real base size, set up in unit coherency (2+ neighbours for 7+ models). The unit shares one HP pool (models × Wounds); when it drops, models are removed from the back of the formation.</p></div></div>`:''}`,!!S.first)}
   <div class="panel" style="text-align:center"><button type="button" class="primary big" data-action="bStart" ${ready?'':'disabled'}>Begin the battle</button>${ready?'':'<p class="small muted">Finish steps 1, 2, 3 and 5 first.</p>'}</div>
   ${logHtml(B)}`;
 }
@@ -2386,12 +2768,20 @@ function vpTot(B,side){const v=B.vp[side];const pri=Math.min(50,v.pri.reduce((a,
 function unitRow(B,side,u,i){
   const act=canAct(side);
   return `<tr class="${u.dead?'deadrow':''}"><td><b>${esc(u.name)}</b><br><span class="small muted">${esc(u.ds)}</span></td>
-    <td class="num">${u.left}/${u.models}</td><td class="num">${u.dead?'–':`${u.wl}/${u.W}`}</td>
+    <td class="num">${u.left}/${u.models}</td><td class="num">${ensureUnit(u),u.dead?'–':`${u.hp}/${u.hpMax}`}</td>
     <td class="num">${act&&!u.dead?`<button type="button" class="ghost" data-action="bHurt" data-side="${side}" data-i="${i}" data-val="1" title="Lose 1 wound">−1W</button>`:''}</td>
     <td class="num">${act&&!u.dead?`<label class="small">${`<input type="checkbox" data-action-chk="bShock" data-side="${side}" data-i="${i}" ${u.shocked?'checked':''}>`} shocked</label>`:(u.shocked?'Battle-shocked':'')}</td>
     <td class="num">${u.kills}</td></tr>`;
 }
+let AI_BUSY=false;
+function maybeRunAI(B){
+  if(AI_BUSY||!B||B.stage!=='battle'||!(B.setup.ai&&B.setup.ai[B.active])) return;
+  const me=mySide(); if(me!=='both'&&me!==other(B.active)) return;
+  AI_BUSY=true; const rev=B.rev;
+  setTimeout(()=>{AI_BUSY=false; if(BATTLE&&BATTLE.rev===rev&&BATTLE.stage==='battle'&&BATTLE.setup.ai[BATTLE.active]){runAI(BATTLE,false);bCommit()}},1500);
+}
 function battleRun(B){
+  maybeRunAI(B);
   const act=B.active, ph=B_PHASES[B.step], me=mySide(), myTurn=canAct(act);
   const ally=B.units[act], foes=B.units[other(act)];
   const phaseList=B_PHASES.map((p,i)=>`<span class="bph ${i===B.step?'on':i<B.step?'past':''}">${p}</span>`).join('');
@@ -2406,12 +2796,19 @@ function battleRun(B){
     <div class="bturn"><span class="small">Active player</span><b class="${act}">${SIDES[act]}</b><div class="bphases">${phaseList}</div></div>
     <div class="bctl">${myTurn?`<button type="button" class="primary big" data-action="bNext">${B.step<4?`Next: ${B_PHASES[B.step+1]} phase`:(act===B.setup.first?`End turn: ${SIDES[other(act)]}’ turn`:(B.round<5?`End battle round ${B.round}`:'End the battle'))}</button>`:`<span class="small muted">Waiting for the ${SIDES[act]}…</span>`}</div></div>
   <div class="bscores">${scores}</div>
+  <section class="panel vtpanel"><div class="vtwrap"><div>${tableSvg(B,true)}</div><div>
+    <h3 style="margin-top:0">Virtual battlefield</h3>
+    ${(B.setup.ai&&B.setup.ai[act])?`<p class="small"><b>${SIDES[act]}</b> are played by the AI.</p><button type="button" class="primary" data-action="bAutoTurn">Run the AI turn now</button>`:(myTurn?`<button type="button" class="primary" data-action="bAutoTurn">Autocombat this turn</button>`:'')}
+    ${mySide()==='both'?` <button type="button" data-action="bAutoAll">Autocombat to the end</button>`:''}
+    <p class="small muted">Autocombat moves each unit toward objectives or the nearest enemy, shoots with every weapon in range, charges within 12" (2D6) and fights. Primary: 5VP per objective controlled from round 2 (max 15 per turn). Click a token to pick it as attacker or target in the resolver.</p>
+    <p class="small"><span class="key tyr"></span> Tyranids <span class="key um"></span> Ultramarines. Bars show the HP pool.</p></div></div></section>
   <div class="grid2">
     <section class="panel"><h3>${ph} phase</h3>${phaseHelp(ph,B)}${(ph==='Command'||B.step===0)?vpInputs:''}
       <h4 style="margin-top:12px">Secondary missions</h4>${['tyr','um'].map(s=>`<div><b class="small">${SIDES[s]}</b>${secHand(s)}</div>`).join('')}</section>
     <section class="panel">${(ph==='Shooting'||ph==='Fight')?attackPanel(B,act,ph==='Fight'):`<h3>Dice roller</h3><p class="small">Quick rolls for Advance, Charge, Battle-shock and other tests.</p><div class="filter">${rollBtn('bQuick" data-val="D6','D6')}${rollBtn('bQuick" data-val="2D6','2D6 (charge, Battle-shock)')}${rollBtn('bQuick" data-val="3D6','3D6 (Battle-shock in Synapse)')}${rollBtn('bQuick" data-val="D3','D3')}</div>`}</section>
   </div>
-  <div class="grid2">${['tyr','um'].map(side=>`<section class="panel"><h3>${SIDES[side]} units</h3><div class="scroll-x"><table class="btab"><thead><tr><th>Unit</th><th class="num">Models</th><th class="num">Wounds</th><th></th><th class="num">Status</th><th class="num">Kills</th></tr></thead><tbody>${B.units[side].map((u,i)=>unitRow(B,side,u,i)).join('')}</tbody></table></div></section>`).join('')}</div>
+  <div class="grid2">${['tyr','um'].map(side=>`<section class="panel"><h3>${SIDES[side]} units</h3><div class="scroll-x"><table class="btab"><thead><tr><th>Unit</th><th class="num">Models</th><th class="num">HP</th><th></th><th class="num">Status</th><th class="num">Kills</th></tr></thead><tbody>${B.units[side].map((u,i)=>unitRow(B,side,u,i)).join('')}</tbody></table></div></section>`).join('')}</div>
+  <details class="panel" id="rpdetails" ${REPLAY.open?'open':''}><summary><b>Replay so far</b></summary>${replayHtml(B)}</details>
   ${logHtml(B)}`;
 }
 function phaseHelp(ph,B){
@@ -2444,6 +2841,7 @@ function attackPanel(B,side,melee){
    </div>
    <div class="filter" style="margin:8px 0">${[['half','Within half range'],['still','Remained Stationary'],['charged','Charged this turn'],['cover','Target in cover'],['lethal','Lethal Hits']].map(([k,l])=>`<label class="small" style="display:inline-flex;gap:4px;align-items:center;margin-right:10px"><input type="checkbox" data-atk="${k}" ${ATK[k]?'checked':''}> ${l}</label>`).join('')}</div>
    ${side==='tyr'?`<p class="small muted">Hyper-adaptation applied automatically: ${ADAPTATIONS[state.settings.adaptation].name}.</p>`:''}
+   ${(!melee&&au&&tu&&au.pos&&tu.pos)?(()=>{const L=losInfo(B,au,tu);return `<p class="small ${L.vis?'':'warn'}">Line of sight: ${L.vis?(L.cover?'visible, target has the Benefit of Cover (applied automatically)':'clear'):'blocked by a ruin'}. Distance ${Math.max(0,uDist(au,tu)).toFixed(1)}".</p>`})():''}
    <button type="button" class="primary" data-action="bAttack" ${w&&tu?'':'disabled'}>Roll the attacks</button>
    ${lastAttack()}`;
 }
@@ -2459,12 +2857,14 @@ function battleEnd(B){
       <label class="small">Marked for Greatness <select id="mfg_${side}"><option value="">none</option>${us.map(x=>`<option value="${x.uid}">${esc(x.name)}</option>`).join('')}</select></label>
       <button type="button" class="primary" data-action="bApply" data-side="${side}">Add results to my crusade</button>`;
   };
+  setTimeout(()=>{if(document.getElementById('replaysvg'))replaySet(REPLAY.i||0)},0);
   return `<section class="panel endpanel"><h2 style="margin-top:0">${win?`${SIDES[win]} win`:'Draw'}</h2>
     <p class="big">Tyranids <b>${t}</b> VP, Ultramarines <b>${u}</b> VP</p>
-    <p class="small muted">${esc(B.setup.primary||'')}, ${esc(B.setup.rule||'')}, ${esc(LAYOUTS[B.setup.deploy]?LAYOUTS[B.setup.deploy].name:'')}</p></section>
+    <p class="small muted">${esc(B.setup.primary||'')}, ${esc(B.setup.rule||'')}, ${esc(LAYOUTS[B.setup.deploy]?LAYOUTS[B.setup.deploy].name:'')}</p><button type="button" class="primary big" data-action="bReset">Play a new game</button></section>
+    <section class="panel">${replayHtml(B)}</section>
     <div class="grid2">${['tyr','um'].map(side=>`<section class="panel"><h3>${SIDES[side]}: after the battle</h3>
       <table class="btab"><thead><tr><th>Unit</th><th class="num">Kills</th><th>State</th></tr></thead><tbody>${B.units[side].map(x=>`<tr><td>${esc(x.name)}</td><td class="num">${x.kills}</td><td class="small">${x.dead?(x.ooa?`Destroyed, Out of Action roll ${x.ooa}${x.ooa===1?' (failed: Battle Scar or Devastating Blow)':' (passed)'}`:'Destroyed'):'Survived'}</td></tr>`).join('')}</tbody></table>
-      ${crusadeSide(side)}</section>`).join('')}</div>
+      </section>`).join('')}</div>
     ${logHtml(B)}`;
 }
 
@@ -2476,16 +2876,16 @@ function bAction(a,b){
     case 'bClaim': if(B.players[side]) return true; B.players[side]={id:NET.me||('guest-'+side)}; blog(`joined as the ${SIDES[side]}`,side); bCommit(); return true;
     case 'bLock': { if(!canAct(side)) return true; const li=+B.setup[side+'List']||0; B.units[side]=side==='tyr'?snapTyr(li):snapUm(li); B.setup.locked[side]=true; blog(`locked in ${(side==='tyr'?state.lists:umState().lists)[li].name}: ${B.units[side].length} units`,side); bCommit(); return true; }
     case 'bDraw': { const what=b.dataset.what; const pick=arr=>arr[Math.floor(Math.random()*arr.length)];
-      if(what==='primary')B.setup.primary=pick(LEV_PRIMARY); if(what==='rule')B.setup.rule=pick(LEV_RULES); if(what==='deploy')B.setup.deploy=pick(['hammer','dawn','search','crucible','sweeping']);
-      blog(`drew ${what==='deploy'?'deployment '+LAYOUTS[B.setup.deploy].name:what+': '+B.setup[what]}`); bCommit(); return true; }
+      if(what==='primary')B.setup.primary=pick(LEV_PRIMARY); if(what==='rule')B.setup.rule=pick(LEV_RULES); if(what==='deploy')B.setup.deploy=pick(['hammer','dawn','search','crucible','sweeping']); if(what==='terrain')B.setup.terrain=pick(['lev1','lev2','lev3','lev4']);
+      blog(`drew ${what==='deploy'?'deployment '+LAYOUTS[B.setup.deploy].name:what==='terrain'?'terrain '+TERRAIN[B.setup.terrain].name:what+': '+B.setup[what]}`); bCommit(); return true; }
     case 'bRollOff': { const what=b.dataset.what; if(!canAct(side)) return true; const r=d6(); B.setup[what==='att'?'attRoll':'firstRoll'][side]=r; blog(`rolled ${r} for ${what==='att'?'Attacker':'first turn'}`,side); bCommit(); return true; }
     case 'bReroll': { const what=b.dataset.what; B.setup[what==='att'?'attRoll':'firstRoll']={}; bCommit(); return true; }
     case 'bAttacker': B.setup.attacker=side; blog(`${SIDES[side]} are the Attacker`); bCommit(); return true;
     case 'bFirst': B.setup.first=side; blog(`${SIDES[side]} take the first turn`); bCommit(); return true;
     case 'bStart': {
       ['tyr','um'].forEach(s=>{ if(B.setup.secMode[s]==='tactical'){const deck=[...LEV_SECONDARY];for(let i=deck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]]}B.sec[s]={deck,hand:[],done:[]}} });
-      B.stage='battle'; B.round=1; B.active=B.setup.first; B.step=0; startCommand(B); blog('The battle begins'); bCommit(); return true; }
-    case 'bNext': { if(!canAct(B.active)) return true;
+      B.units.tyr.concat(B.units.um).forEach(ensureUnit); if(!B.units.tyr.concat(B.units.um).every(u=>u.pos)) autoDeploy(B); B.stage='battle'; B.round=1; B.active=B.setup.first; B.step=0; B.frames=[];B.lastFrameLog=B.logTotal||0; snapFrame(B,'Deployment'); startCommand(B); blog('The battle begins'); bCommit(); return true; }
+    case 'bNext': { if(!canAct(B.active)) return true; snapFrame(B,B_PHASES[B.step]+' phase');
       if(B.step<4){B.step++;blog(`${B_PHASES[B.step]} phase`,B.active)}
       else if(B.active===B.setup.first){B.active=other(B.active);B.step=0;startCommand(B)}
       else if(B.round<5){B.round++;B.active=B.setup.first;B.step=0;blog(`Battle round ${B.round}`);startCommand(B)}
@@ -2500,14 +2900,23 @@ function bAction(a,b){
     case 'bAttack': {
       const s=ATK.side, ally=B.units[s], foes=B.units[other(s)]; const au=ally.find(u=>u.uid===ATK.unit), tu=foes.find(u=>u.uid===ATK.target); if(!au||!tu) return true;
       const melee=B_PHASES[B.step]==='Fight'; const w=(melee?au.melee:au.ranged)[ATK.weapon]; if(!w) return true;
-      const res=resolveAttack({weapon:w,target:tu,models:Math.max(1,ATK.models||1),half:ATK.half,still:ATK.still,charged:ATK.charged,cover:ATK.cover,hitMod:+ATK.hitMod,woundMod:+ATK.woundMod,rrHit:ATK.rrHit,rrWound:ATK.rrWound,sus:ATK.sus,lethal:ATK.lethal,adapt:s==='tyr'?state.settings.adaptation:null});
+      const los=(au.pos&&tu.pos&&!melee)?losInfo(B,au,tu):{vis:true,cover:false};
+      if(!los.vis&&!/indirect fire/i.test(w.kw)){B.lastAttack={title:`${au.name} → ${tu.name}`,lines:['No line of sight: a ruin blocks the view between these units.']};bCommit();return true}
+      const res=resolveAttack({weapon:w,target:tu,models:Math.max(1,ATK.models||1),half:ATK.half,still:ATK.still,charged:ATK.charged,cover:ATK.cover||los.cover,hitMod:+ATK.hitMod,woundMod:+ATK.woundMod,rrHit:ATK.rrHit,rrWound:ATK.rrWound,sus:ATK.sus,lethal:ATK.lethal,adapt:s==='tyr'?state.settings.adaptation:null});
       const ap=applyDamage(tu,res.dmgEvents,res.mortal,ATK.fnp||tu.fnp);
       res.lines.push(`Damage: ${ap.lost} wounds lost${ap.ign?`, ${ap.ign} ignored by Feel No Pain`:''}${res.mortal?` (incl. ${res.mortal} mortal)`:''}; ${ap.slain} model${ap.slain===1?'':'s'} slain${tu.dead?`. ${tu.name} is destroyed!`:''}`);
       if(tu.dead) au.kills++;
       B.lastAttack={title:`${au.name} → ${tu.name} with ${w.name}`,lines:res.lines};
       blog(`${au.name} attacked ${tu.name} with ${w.name}: ${ap.slain} slain${tu.dead?', unit destroyed':''}`,s); bCommit(); return true; }
+    case 'bAI': { B.setup.ai=B.setup.ai||{}; B.setup.ai[side]=b.dataset.val==='1'; blog(`${SIDES[side]} are now controlled by ${B.setup.ai[side]?'the AI':'a player'}`); bCommit(); return true; }
+    case 'bAutoDeploy': autoDeploy(B); bCommit(); return true;
+    case 'bAutoTurn': if(!(canAct(B.active)||(B.setup.ai&&B.setup.ai[B.active]))) return true; runAI(B,false); ATK.last=null; bCommit(); return true;
+    case 'bAutoAll': if(mySide()!=='both') return true; runAI(B,true); bCommit(); return true;
     case 'bApply': applyCrusade(B,side); return true;
-    case 'bReset': if(confirm('Start a new hot-seat game? The current one is lost.')){BATTLE=newBattle('LOCAL');state.battleLocal=BATTLE;save();render()} return true;
+    case 'bReset': {
+      if(B.stage!=='end'&&!b.dataset.armed){b.dataset.armed='1';b.textContent='Click again to start over';setTimeout(()=>{if(b.isConnected){delete b.dataset.armed;b.textContent='New game'}},4000);return true}
+      const nb=newBattle(NET.code||'LOCAL'); nb.setup.ai=Object.assign({tyr:false,um:false},B.setup.ai||{}); if(NET.code) nb.players=B.players||{tyr:null,um:null};
+      BATTLE=nb; ATK.last=null; REPLAY.i=0; replayPlay(false); blog('A new game was started'); bCommit(); return true; }
   }
   return false;
 }
@@ -2571,8 +2980,12 @@ main.addEventListener('drop',e=>{if(!dsDrag)return;const d=e.target.closest&&e.t
 main.addEventListener('dragend',()=>{if(dsDrag){dsDrag=null;render()}});
 main.addEventListener('toggle',e=>{if(e.target.matches&&e.target.matches('.badgebox')){state.settings.badgesOpen=e.target.open;save()}},true);
 main.addEventListener('toggle',e=>{if(e.target.matches&&e.target.matches('.dsrow')){state.settings.dsOpen=state.settings.dsOpen||{};state.settings.dsOpen[e.target.dataset.dsid]=e.target.open;save()}},true);
+main.addEventListener('input',e=>{if(e.target.id==='rpSlider'){replayPlay(false);replaySet(Number(e.target.value))}});
+main.addEventListener('toggle',e=>{if(e.target.id==='rpdetails'){REPLAY.open=e.target.open;if(e.target.open)replaySet(REPLAY.i||0)}},true);
 main.addEventListener('change',e=>{
   const el=e.target;
+  if(el.id==='rpSpeed'){REPLAY.speed=Number(el.value);return}
+  if(el.id==='rpSlider')return;
   if(el.dataset.atk){const k=el.dataset.atk;let v=el.type==='checkbox'?el.checked:(el.type==='number'?Number(el.value):el.value);ATK[k]=v;if(k==='unit'&&BATTLE){const u=BATTLE.units[ATK.side].find(x=>x.uid===v);ATK.weapon=0;ATK.models=u?u.left:1}if(k==='weapon')ATK.weapon=Number(v);render();return}
   if(el.dataset.actionChk==='bShock'&&BATTLE){const u=BATTLE.units[el.dataset.side][+el.dataset.i];u.shocked=el.checked;blog(`${u.name} ${el.checked?'is Battle-shocked':'is no longer Battle-shocked'}`,el.dataset.side);bCommit();return}
   if(el.dataset.bind&&el.dataset.bind.startsWith('__b.')&&BATTLE){let v=el.dataset.type==='num'?n(el.value):el.value;const ks=el.dataset.bind.slice(4).split('.');let o=BATTLE;for(let i=0;i<ks.length-1;i++){if(o[ks[i]]==null)o[ks[i]]={};o=o[ks[i]]}o[ks[ks.length-1]]=v;bCommit();return}
@@ -2595,10 +3008,14 @@ function rollExpr(e){
 }
 
 document.addEventListener('click',e=>{
+  const vt=e.target.closest&&e.target.closest('[data-vt]');
+  if(vt&&BATTLE){const [sd,uid]=vt.dataset.vt.split(':');if(BATTLE.stage==='battle'){if(sd===BATTLE.active){ATK.side=sd;ATK.unit=uid;const u=BATTLE.units[sd].find(x=>x.uid===uid);ATK.weapon=0;ATK.models=u?u.left:1}else ATK.target=uid;render()}return}
   const b=e.target.closest('[data-action]'); if(!b)return;
   const a=b.dataset.action;
   if(a==='stratFilter'){state.settings.stratFilter=b.dataset.val;save();render();return}
   if(a==='dsMove'){e.preventDefault();const ids=[...main.querySelectorAll('.dsrow')].map(d=>d.dataset.dsid);const i=ids.indexOf(b.dataset.id),j=i+Number(b.dataset.val);if(i<0||j<0||j>=ids.length)return;[ids[i],ids[j]]=[ids[j],ids[i]];setDsOrder(ids);render();const nb=main.querySelector(`[data-action="dsMove"][data-id="${b.dataset.id}"][data-val="${b.dataset.val}"]`);if(nb)nb.focus();return}
+  if(a==='rpPlay'){replayPlay(!REPLAY.playing);return}
+  if(a==='rpGo'){replayPlay(false);const v=b.dataset.val;replaySet(v==='first'?0:v==='last'?BATTLE.frames.length-1:REPLAY.i+Number(v));return}
   if(a==='bJoin'){bJoin((document.getElementById('bCode')||{}).value||'');render();return}
   if(a==='bRandom'){const el=document.getElementById('bCode');if(el)el.value=Array.from({length:5},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random()*32)]).join('');return}
   if(a==='bHotseat'){bHotseat();return}
