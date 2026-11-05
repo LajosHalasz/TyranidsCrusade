@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hive Fleet Crusade – Tyranids Invasion Fleet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Saira+Condensed:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#efe6d2; --surface:#f7f0e0; --surface-2:#e7dcc3; --ink:#2a1b30; --muted:#6a5a6d;
+  --chitin:#5e2a72; --chitin-ink:#f7f0e0; --synapse:#256f63; --blood:#962d3b; --bio:#7a2ba3; --syn:#1d5ea8; --epic:#3f1257;
+  --line:#cdbd9c; --line-strong:#8f7c5c;
+  --paper:#e9dec4; --paper-ink:#2b2219; --paper-line:#4a3d2c; --paper-cell:#f1e8d3;
+  --tactic:#2c7a5e; --ploy:#3a4f9a; --deed:#8a5a14; --wargear:#9a2f3d;
+  --focus:#c25ad8;
+  --head:"Saira Condensed","Arial Narrow","Roboto Condensed",sans-serif;
+  --body:"Alegreya",Georgia,"Times New Roman",serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1b1320; --surface:#251a2c; --surface-2:#2f2237; --ink:#ece3cf; --muted:#a898ae;
+    --chitin:#8a4aa1; --chitin-ink:#fbf4e6; --synapse:#8fd3c2; --blood:#e07583; --bio:#c98ff0; --syn:#7fb8f2; --epic:#9a5cc4;
+    --line:#3e2d47; --line-strong:#6a5374;
+    --paper:#2a2130; --paper-ink:#ebe0c8; --paper-line:#a8957a; --paper-cell:#33283a;
+    --tactic:#4fb08c; --ploy:#7b8fe0; --deed:#d29a45; --wargear:#e07583;
+    --focus:#e09af0;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1b1320; --surface:#251a2c; --surface-2:#2f2237; --ink:#ece3cf; --muted:#a898ae;
+  --chitin:#8a4aa1; --chitin-ink:#fbf4e6; --synapse:#8fd3c2; --blood:#e07583; --bio:#c98ff0; --syn:#7fb8f2; --epic:#9a5cc4;
+  --line:#3e2d47; --line-strong:#6a5374;
+  --paper:#2a2130; --paper-ink:#ebe0c8; --paper-line:#a8957a; --paper-cell:#33283a;
+  --tactic:#4fb08c; --ploy:#7b8fe0; --deed:#d29a45; --wargear:#e07583;
+  --focus:#e09af0;
+  color-scheme:dark;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px);background:var(--bg)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55}
+img{max-width:100%}
+a{color:var(--chitin)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+h1,h2,h3,h4{font-family:var(--head);line-height:1.1;margin:0 0 .4em;font-weight:700;letter-spacing:.01em}
+h1{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:800}
+h2{font-size:1.75rem;margin-top:1.6em}
+h3{font-size:1.3rem}
+h4{font-size:1.08rem}
+p{margin:.3em 0 .8em}
+.muted{color:var(--muted)}
+.small{font-size:.9rem}
+
+/* layout */
+.app{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh;background:linear-gradient(to right,var(--surface) 250px,var(--bg) 250px)}
+.rail{position:sticky;top:env(safe-area-inset-top,0px);height:calc(100vh - env(safe-area-inset-top,0px));overflow:auto;background:var(--surface);border-right:1px solid var(--line);padding:22px 14px 18px;display:flex;flex-direction:column;gap:16px}
+.brand{font-family:var(--head);font-weight:800;font-size:1.45rem;line-height:1;color:var(--chitin);padding:0 8px}
+.brand small{display:block;font-weight:500;font-size:.95rem;color:var(--muted);margin-top:4px}
+.status{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:0 4px}
+.status div{background:var(--surface-2);border-radius:6px;padding:6px 8px;font-family:var(--head)}
+.status b{display:block;font-size:1.3rem;line-height:1}
+.status span{font-size:.8rem;color:var(--muted)}
+.status .wide{grid-column:span 2}
+nav.tabs{display:flex;flex-direction:column;gap:2px}
+nav.tabs a{font-family:var(--head);font-weight:600;font-size:1.05rem;text-decoration:none;color:var(--ink);padding:7px 10px 7px 14px;border-radius:0 18px 18px 0;border-left:3px solid transparent}
+nav.tabs a:hover{background:var(--surface-2)}
+nav.tabs a[aria-current="page"]{background:var(--chitin);color:var(--chitin-ink);border-left-color:var(--synapse)}
+.rail-tools{margin-top:auto;display:flex;flex-wrap:wrap;gap:6px;padding:0 4px}
+.rail-tools button{font-size:.85rem}
+main{padding:34px clamp(16px,4vw,56px) 80px;max-width:1280px;width:100%}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:2px solid var(--chitin);padding-bottom:10px;margin-bottom:22px}
+.page-head p{margin:0;max-width:62ch}
+.prose{max-width:72ch}
+
+/* buttons/inputs */
+button,.btn{font-family:var(--head);font-weight:600;font-size:.98rem;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);padding:6px 12px;border-radius:5px;cursor:pointer}
+button:hover{border-color:var(--chitin)}
+button.primary{background:var(--chitin);color:var(--chitin-ink);border-color:var(--chitin)}
+button.ghost{background:transparent}
+button.danger{color:var(--blood);border-color:var(--blood);background:transparent}
+input,select,textarea{font:inherit;font-size:.95rem;color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:4px;padding:4px 6px;max-width:100%}
+textarea{width:100%;min-height:72px;resize:vertical}
+input[type=number]{width:4.6em}
+input[type=checkbox],input[type=radio]{accent-color:var(--chitin);width:18px;height:18px;vertical-align:middle}
+label{cursor:pointer}
+
+/* generic blocks */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px 18px;margin:0 0 16px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.kw{font-family:var(--head);font-weight:700;letter-spacing:.02em}
+.tag{display:inline-block;font-family:var(--head);font-weight:600;font-size:.82rem;padding:1px 7px;border-radius:3px;background:var(--surface-2);color:var(--ink);border:1px solid var(--line);margin:1px 2px 1px 0;white-space:nowrap}
+.tag.bt{border-color:var(--synapse);color:var(--synapse)}
+.tag.wm{border-color:var(--deed);color:var(--deed)}
+.tag.cr{border-color:var(--chitin);color:var(--chitin)}
+.tag.scar{border-color:var(--blood);color:var(--blood)}
+.scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--head);font-weight:700;font-size:.95rem;background:var(--surface-2)}
+.num{text-align:center;font-variant-numeric:tabular-nums}
+.hl td{background:color-mix(in srgb,var(--chitin) 14%,transparent)}
+.rule{border-left:3px solid var(--chitin);padding:2px 0 2px 14px;margin:0 0 14px}
+.rule h4{margin:0 0 2px}
+.rule p{margin:0 0 4px}
+.d6{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:5px;background:var(--chitin);color:var(--chitin-ink);font-family:var(--head);font-weight:700;font-size:.95rem;margin-right:8px;flex:none}
+.d6row{display:flex;align-items:flex-start;gap:4px;padding:8px 0;border-bottom:1px dashed var(--line)}
+.d6row:last-child{border-bottom:0}
+.d6row p{margin:0}
+.note{font-size:.92rem;color:var(--muted);border-left:3px solid var(--line-strong);padding-left:10px}
+.warn{color:var(--blood);font-weight:500}
+.ok{color:var(--synapse);font-weight:500}
+.seq{counter-reset:s;list-style:none;padding:0;margin:0}
+.seq li{counter-increment:s;position:relative;padding:4px 0 10px 42px}
+.seq li::before{content:counter(s);position:absolute;left:0;top:2px;width:28px;height:28px;border-radius:50%;background:var(--chitin);color:var(--chitin-ink);font-family:var(--head);font-weight:700;display:grid;place-items:center}
+
+/* introduction: adaptations */
+.adapt{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin:10px 0 6px}
+.adapt label{display:block;border:1px solid var(--line-strong);border-radius:8px;padding:12px 14px;background:var(--surface)}
+.adapt label:has(input:checked){border:2px solid var(--chitin);background:color-mix(in srgb,var(--chitin) 12%,var(--surface))}
+.adapt b{font-family:var(--head);font-size:1.15rem}
+.adapt .on{display:none;font-family:var(--head);font-size:.85rem;color:var(--chitin)}
+.adapt label:has(input:checked) .on{display:inline}
+
+/* stratagems */
+.phase{margin:22px 0 8px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.phase h3{margin:0;font-size:1.45rem}
+.strats{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:12px}
+.strat{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--ploy);border-radius:6px;padding:12px 14px}
+.strat.tactic{border-left-color:var(--tactic)}
+.strat.ploy{border-left-color:var(--ploy)}
+.strat.deed{border-left-color:var(--deed)}
+.strat.wargear{border-left-color:var(--wargear)}
+.strat header{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.strat h4{margin:0;font-size:1.2rem}
+.cp{font-family:var(--head);font-weight:800;font-size:1.05rem;border:2px solid currentColor;border-radius:50%;min-width:44px;height:44px;display:grid;place-items:center;color:var(--chitin);flex:none}
+.strat .meta{font-family:var(--head);font-size:.88rem;color:var(--muted);margin:2px 0 8px}
+.strat dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:.95rem}
+.strat dt{font-family:var(--head);font-weight:700}
+.strat dd{margin:0}
+.strat.core{background:var(--bg)}
+.filter{display:flex;gap:6px;flex-wrap:wrap}
+.filter button[aria-pressed="true"]{background:var(--chitin);color:var(--chitin-ink);border-color:var(--chitin)}
+
+/* world / progress */
+.stages{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.stage{border:1px solid var(--line-strong);border-radius:8px;padding:12px;background:var(--surface)}
+.stage.current{border:2px solid var(--bio)}
+.stage h4{color:var(--bio)}
+.bio-t{color:var(--bio)}
+.bignums div.bio{border-color:var(--bio)}
+.bignums div.bio b,.bignums div.bio span{color:var(--bio)}
+.status div.bio b,.status div.bio span{color:var(--bio)}
+.tally tr.bio td:first-child,.tally tr.bio.calc td{color:var(--bio)}
+.tally tr.sec.bio td{color:var(--bio)}
+.box.bio{border-color:var(--bio)}
+.box.bio .val,.box.bio .lbl{color:var(--bio)}
+.box.bio .lbl{border-top-color:var(--bio)}
+.stage.done{opacity:.8}
+.stage h4{display:flex;justify-content:space-between;gap:8px}
+.bar{height:10px;border-radius:5px;background:var(--surface-2);overflow:hidden;margin:3px 0 8px}
+.bar i{display:block;height:100%;background:var(--bio)}
+.bar.bp i{background:var(--synapse)}
+@media (max-width:700px){.stages{grid-template-columns:1fr}}
+
+/* tally */
+.tally{min-width:900px}
+.tally th:first-child,.tally td:first-child{position:sticky;left:0;background:var(--surface);z-index:1;min-width:250px}
+.tally th:first-child{background:var(--surface-2)}
+.tally td{padding:4px 6px}
+.tally td input[type=number]{width:3.6em}
+.tally td input[type=date]{width:8.8em;font-size:.85rem}
+.tally td select{font-size:.85rem}
+.tally .sec td{background:var(--surface-2);font-family:var(--head);font-weight:700;font-size:1rem}
+.tally .sec td:first-child{background:var(--surface-2)}
+.tally .calc td{font-weight:700}
+.tally .calc td:first-child{font-weight:500}
+.tally .cost{color:var(--muted);font-size:.85rem}
+.bignums{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
+.bignums div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.bignums b{font-family:var(--head);font-size:2rem;line-height:1;display:block}
+.bignums span{font-family:var(--head);color:var(--muted);font-size:.95rem}
+
+/* order of battle sheet */
+.sheet{background:var(--paper);color:var(--paper-ink);border:3px solid var(--paper-line);border-radius:4px;padding:18px;box-shadow:inset 0 0 0 6px var(--paper),inset 0 0 0 7px var(--paper-line);font-family:var(--head)}
+.sheet input,.sheet select,.sheet textarea{background:var(--paper-cell);color:var(--paper-ink);border-color:var(--paper-line)}
+.sheet .row1{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:18px;align-items:center}
+.box{border:2px solid var(--paper-line);background:var(--paper-cell);padding:6px 10px 4px;border-radius:2px;min-width:0}
+.box .lbl{display:block;font-size:.78rem;font-weight:700;letter-spacing:.06em;border-top:1px dotted var(--paper-line);margin-top:4px;padding-top:2px}
+.box .val{font-size:1.5rem;font-weight:700;line-height:1.2;min-height:1.2em;overflow-wrap:anywhere}
+.box .val input{font-size:1.25rem;width:100%;font-family:var(--head);font-weight:700;background:transparent;border:0;padding:0;color:var(--paper-ink)}
+.dials{display:flex;gap:12px;flex-wrap:nowrap;justify-content:flex-end}
+.dial{width:118px;height:118px;flex:none;border-radius:50%;border:2px solid var(--paper-line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;background:var(--paper-cell);padding:12px}
+.dial b{font-size:2.9rem;line-height:.9;font-weight:800}
+.dial span{font-size:.8rem;font-weight:700;letter-spacing:.03em;line-height:1.05;max-width:84px}
+.dial.bio{border-color:var(--bio);border-width:3px}
+.dial.bio b,.dial.bio span{color:var(--bio)}
+.glyph{width:124px;height:124px;color:var(--paper-ink)}
+.badgebox{border:2px solid var(--bio);background:var(--paper-cell);padding:6px 10px;margin:0 0 14px}
+.badgebox summary{display:flex;align-items:center;gap:14px;cursor:pointer;list-style:none;padding:2px 0}
+.badgebox summary::-webkit-details-marker{display:none}
+.bsum-title{font-size:.85rem;font-weight:700;letter-spacing:.12em;color:var(--bio)}
+.badgebox .bcount{color:var(--bio)}
+.bmini{display:flex;gap:8px}
+.bmini .cbadge-svg{width:38px;height:38px}
+.bmini .mini.locked .cbadge-svg{opacity:.22;filter:grayscale(1)}
+.badgebox[open] .bmini{display:none}
+.bcount{font-size:.82rem;opacity:.75;margin-left:auto}
+.bchev{width:10px;height:10px;border-right:2px solid var(--paper-line);border-bottom:2px solid var(--paper-line);transform:rotate(45deg);margin:0 4px 4px 0;transition:transform .2s}
+.badgebox[open] .bchev{transform:rotate(-135deg);margin:4px 4px 0 0}
+.badgebox[open] summary{margin-bottom:10px}
+.cbadges{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.cbadge{display:flex;gap:12px;align-items:center;min-width:0}
+.cbadge-svg{width:78px;height:78px;flex:none;transition:opacity .4s,filter .4s}
+.cbadge.locked .cbadge-svg{opacity:.22;filter:grayscale(1)}
+.cbadge.locked b,.cbadge.locked .desc{opacity:.55}
+.cbadge b{font-family:var(--head);font-size:1.08rem;display:block;line-height:1.1}
+.cbadge .st{font-family:var(--head);font-size:.78rem;font-weight:700;letter-spacing:.04em}
+.cbadge.earned .st{color:var(--synapse)}
+.cbadge.locked .st{opacity:.6}
+.cbadge .desc{display:block;font-family:var(--body);font-size:.82rem;line-height:1.3;margin:2px 0}
+.cbadge ul{list-style:none;margin:0;padding:0;font-family:var(--head);font-size:.76rem;line-height:1.35;opacity:.8}
+.cbadge li.met{font-weight:700;opacity:1}
+.cbadge li.met::before{content:"\2713 "}
+@media (max-width:980px){.cbadges{grid-template-columns:1fr}}
+.sheet .row2{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0}
+.stagebox .val{font-size:1.15rem}
+.oob{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 230px;gap:14px}
+.oob-col{display:flex;flex-direction:column;gap:5px}
+.oob-head{display:grid;grid-template-columns:minmax(0,1fr) 62px 62px;font-size:.78rem;font-weight:700;letter-spacing:.05em;align-items:end;padding:0 2px}
+.oob-head span:not(:first-child){text-align:center}
+.slot{display:grid;grid-template-columns:minmax(0,1fr) 62px 62px;border:2px solid var(--paper-line);background:var(--paper-cell);min-height:46px}
+.slot>div{padding:4px 8px;display:flex;flex-direction:column;justify-content:center;min-width:0}
+.slot>div+div{border-left:2px solid var(--paper-line);align-items:center;font-size:1.2rem;font-weight:700}
+.slot .nm{font-weight:700;font-size:1.02rem;line-height:1.1;overflow-wrap:anywhere}
+.slot .ds{font-size:.8rem;opacity:.75;font-family:var(--head);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.slot.empty button{background:transparent;border:1px dashed var(--paper-line);color:var(--paper-ink);font-size:.85rem;padding:3px 8px;opacity:.75;align-self:flex-start}
+.slot.empty>div+div{opacity:.4}
+.achv{border:2px solid var(--paper-line);background:var(--paper-cell);padding:8px;display:flex;flex-direction:column}
+.achv h4{text-align:center;font-size:.85rem;letter-spacing:.12em;margin:2px 0 6px}
+.achv textarea{flex:1;min-height:240px;background:transparent;border:0;font-family:var(--body);font-size:.95rem;color:var(--paper-ink)}
+.sheet-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:2px solid var(--paper-line);margin-top:14px;padding-top:6px;font-size:.78rem;letter-spacing:.06em}
+@media (max-width:1300px){.glyph{display:none}.sheet .row1{grid-template-columns:minmax(0,1fr) 0 auto}}
+@media (max-width:1180px){.sheet .row1{grid-template-columns:1fr}.dials{justify-content:flex-start}}
+@media (max-width:980px){.sheet .row1{grid-template-columns:1fr}.glyph{display:none}.dials{justify-content:flex-start}.oob{grid-template-columns:1fr}.sheet .row2{grid-template-columns:1fr 1fr}}
+.roster td,.roster th{white-space:nowrap}
+.roster td input[type=text]{width:12em}
+.roster .listcol{text-align:center}
+.addform{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+.addform label{display:flex;flex-direction:column;font-family:var(--head);font-size:.9rem;gap:2px}
+.listsum{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin:12px 0}
+.listsum div{border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:var(--surface)}
+.listsum b{font-family:var(--head);font-size:1.4rem}
+
+/* crusade cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:18px}
+.ccard{background:var(--paper);color:var(--paper-ink);border:3px solid var(--paper-line);clip-path:polygon(0 0,100% 0,100% calc(100% - 34px),calc(100% - 34px) 100%,0 100%);padding:12px;font-family:var(--head);display:flex;flex-direction:column;gap:8px}
+.ccard .top{display:grid;grid-template-columns:minmax(0,1fr) 66px 66px;border:2px solid var(--paper-line);background:var(--paper-cell)}
+.ccard .top>div{padding:4px 8px;min-width:0}
+.ccard .top>div+div{border-left:2px solid var(--paper-line);text-align:center}
+.ccard .uname{font-weight:800;font-size:1.25rem;line-height:1.05}
+.ccard .lbl{font-size:.68rem;font-weight:700;letter-spacing:.06em;display:block;opacity:.85}
+.ccard .bn{font-size:1.8rem;font-weight:800;line-height:1.05}
+.ccard .mid{display:grid;grid-template-columns:minmax(0,1fr) 108px;gap:8px}
+.ccard .cell{border:2px solid var(--paper-line);background:var(--paper-cell);padding:5px 8px;font-size:.95rem;min-width:0}
+.ccard .cell ul{margin:0;padding-left:16px;font-family:var(--body);font-size:.92rem}
+.ccard .cell p{margin:0;font-family:var(--body);font-size:.92rem}
+.xpcol{display:flex;flex-direction:column;align-items:center;gap:6px}
+.xpdial{width:100px;height:100px;border-radius:50%;border:2px solid var(--paper-line);background:var(--paper-cell);display:grid;place-items:center;text-align:center}
+.xpdial b{font-size:2.7rem;line-height:.95;display:block;font-weight:800}
+.xpdial span{font-size:.95rem;letter-spacing:.08em;font-weight:800}
+.ranks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;width:100%}
+.ranks li{display:flex;align-items:center;gap:6px;font-size:.78rem;line-height:1.05}
+.ranks i{width:14px;height:14px;border:2px solid var(--paper-line);flex:none;background:var(--paper-cell)}
+.ranks li.got i{background:var(--paper-line)}
+.ranks li.na{opacity:.4}
+.tallies{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.tallies div{border:2px solid var(--paper-line);background:var(--paper-cell);text-align:center}
+.tallies span{display:block;background:var(--paper-line);color:var(--paper);font-size:.7rem;font-weight:700;letter-spacing:.04em;padding:2px}
+.tallies b{font-size:2rem;font-weight:800;display:block;padding:2px 0}
+.badges{font-family:var(--body);font-size:.88rem}
+.ccard .actions{display:flex;justify-content:flex-end;gap:6px;margin-top:auto;padding-right:30px}
+.warlord-kw{display:inline-block;color:var(--blood);font-family:var(--head);font-weight:800;letter-spacing:.07em;text-transform:uppercase}
+.syn-kw{display:inline-block;color:var(--syn);font-family:var(--head);font-weight:800;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;margin-left:6px;vertical-align:.12em}
+.slot.char{border:5px double var(--paper-line)}
+.cphoto.sil svg.rank-banner{position:absolute;top:0;right:16px;height:54%;width:auto;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}
+.slot.epic{border:6px double var(--epic)}
+.slot.epic>div+div{border-left-color:var(--epic)}
+.ccard .top .warlord-kw{font-size:.82rem;margin-left:2px}
+.cphoto{position:relative;border:2px solid var(--paper-line);background:var(--paper-cell);aspect-ratio:16/9;overflow:hidden;display:grid;place-items:center}
+.cphoto img{width:100%;height:100%;object-fit:cover;display:block}
+.cphoto.sil{--sil-bg:var(--paper-cell);color:var(--paper-ink);background:radial-gradient(ellipse at 50% 85%,color-mix(in srgb,var(--bio) 16%,var(--paper-cell)),var(--paper-cell) 70%)}
+.cphoto.sil svg{width:100%;height:100%;display:block}
+.cphoto .ph-empty{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:.85rem;opacity:.75;text-align:center;padding:8px}
+.cphoto .ph-tools{position:absolute;right:6px;bottom:6px;display:flex;gap:4px}
+.cphoto button{background:var(--paper-cell);color:var(--paper-ink);border-color:var(--paper-line);font-size:.8rem;padding:2px 8px}
+.walink{display:inline-block;font-size:.82rem;margin-top:2px;color:inherit}
+.ccard .actions button{background:transparent;color:var(--paper-ink);border-color:var(--paper-line);font-size:.85rem;padding:3px 10px}
+.ccard .rankname{font-weight:700;font-size:.95rem}
+.edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;font-size:.9rem}
+.edit-grid label{display:flex;flex-direction:column;gap:2px}
+.edit-grid .full{grid-column:1/-1}
+.edit-grid input[type=text]{width:100%}
+.hrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px;margin-bottom:4px}
+.hrow input{width:100%}
+.cardfilter{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+
+/* mobile */
+@media (max-width:860px){
+  .app{grid-template-columns:minmax(0,1fr);background:var(--bg)}
+  .rail{position:sticky;top:env(safe-area-inset-top,0px);height:auto;z-index:20;flex-direction:column;gap:8px;padding:10px 10px 8px;border-right:0;border-bottom:1px solid var(--line)}
+  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
+  .brand{font-size:1.15rem;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+  .brand small{display:inline;margin:0;font-size:.85rem}
+  .status{display:none}
+  nav.tabs{flex-direction:row;overflow-x:auto;gap:4px;padding-bottom:2px}
+  nav.tabs a{white-space:nowrap;border-radius:16px;border-left:0;padding:5px 12px;font-size:.98rem;background:var(--surface-2)}
+  .rail-tools{display:none}
+  main{padding-top:20px}
+  .cards{grid-template-columns:1fr}
+  .dials{gap:6px}.dial{width:70px;height:70px;padding:5px;gap:2px;border-width:2px}.dial b{font-size:1.7rem}.dial span{font-size:.56rem;max-width:58px;letter-spacing:0}
+}
+@media (prefers-reduced-motion:no-preference){
+  .bar i{transition:width .4s ease}
+}
+@media print{.rail{display:none}.app{display:block}main{max-width:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="rail">
+    <div class="brand" id="brand">Hive Fleet Crusade<small>Tyranids, Invasion Fleet</small></div>
+    <div class="status" id="status"></div>
+    <nav class="tabs" id="tabs" aria-label="Sheets"></nav>
+    <div class="rail-tools">
+      <button type="button" data-action="export" title="Download your data as a JSON file">Export data</button>
+      <button type="button" data-action="import" title="Load a previously exported JSON file">Import data</button>
+      <button type="button" class="danger" data-action="reset" title="Restore the values from the spreadsheet">Reset</button>
+      <input type="file" id="importFile" accept="application/json,.json" hidden>
+      <input type="file" id="photoFile" accept="image/*" hidden>
+    </div>
+  </aside>
+  <main id="main" tabindex="-1"></main>
+</div>
+
+<script>
+/* =========================================================
+   STATIC RULES DATA (paraphrased summaries for quick reference)
+   ========================================================= */
+const PAGES = [
+  ['introduction','Introduction'],
+  ['crusade-rules','Crusade Rules'],
+  ['battle-tally','Battle Tally'],
+  ['agendas','Agendas'],
+  ['order-of-battle','Order of Battle'],
+  ['crusade-cards','Crusade Cards'],
+  ['battle-honours','Battle Honours'],
+  ['battle-traits','Battle Traits'],
+  ['crusade-relics','Crusade Relics'],
+  ['battle-scars','Battle Scars'],
+];
+
+const ADAPTATIONS = {
+  swarming:{name:'Swarming Instincts', text:'Attacks made by <span class="kw">Tyranids</span> models against <span class="kw">Infantry</span> or <span class="kw">Swarm</span> units gain [Sustained Hits 1].', vs:'Infantry & Swarm'},
+  aggression:{name:'Hyper-aggression', text:'Attacks made by <span class="kw">Tyranids</span> models against <span class="kw">Monster</span> or <span class="kw">Vehicle</span> units gain [Lethal Hits].', vs:'Monsters & Vehicles'},
+  predators:{name:'Hive Predators', text:'Attacks made by <span class="kw">Tyranids</span> models against <span class="kw">Character</span> units gain [Precision] on a Critical Hit.', vs:'Characters'},
+};
+
+const ENHANCEMENTS = [
+  ['Alien Cunning',30,'After both armies deploy, redeploy up to three <span class="kw">Tyranids</span> units; they may go into Strategic Reserves regardless of how many units are already there.'],
+  ['Perfectly Adapted',15,'Once per turn, re-roll one Hit, Wound, Damage, Advance, Charge roll or saving throw made for the bearer.'],
+  ['Synaptic Linchpin',20,'Friendly <span class="kw">Tyranids</span> units within 9" of the bearer are within Synapse Range of your army.'],
+  ['Adaptive Biology',25,'Bearer has Feel No Pain 5+. From the start of any turn in which it has lost wounds, it has Feel No Pain 4+ for the rest of the battle.'],
+];
+
+/* type: tactic | ploy | deed | wargear ; turn: yours | theirs | either */
+const STRATS = [
+  // Invasion Fleet detachment
+  {src:'det',name:'Predatory Imperative',cp:1,type:'ploy',phases:['command'],turn:'yours',when:'Your Command phase.',target:'Up to two <span class="kw">Tyranids</span> units within Synapse Range, or one other <span class="kw">Tyranids</span> unit.',effect:'Pick a Hyper-adaptation; it is active for those units (on top of your army’s one) until your next Command phase.',restr:'Cannot pick the Hyper-adaptation you chose at the start of the first battle round.'},
+  {src:'det',name:'Endless Swarm',cp:1,type:'ploy',phases:['command'],turn:'yours',when:'Your Command phase.',target:'Up to two <span class="kw">Endless Multitude</span> units within Synapse Range, or one other <span class="kw">Endless Multitude</span> unit.',effect:'Return up to D3+3 destroyed models to each selected unit.'},
+  {src:'det',name:'Rapid Regeneration',cp:1,type:'tactic',phases:['shooting','fight'],turn:'theirs',when:'Opponent’s Shooting phase or the Fight phase, just after an enemy unit selects its targets.',target:'One of your <span class="kw">Tyranids</span> units that was targeted.',effect:'Until the end of the phase, models in your unit have Feel No Pain 6+ (Feel No Pain 5+ if within Synapse Range).'},
+  {src:'det',name:'Adrenal Surge',cp:2,type:'tactic',phases:['fight'],turn:'either',when:'Fight phase.',target:'Up to two <span class="kw">Tyranids</span> units within Synapse Range and eligible to fight, or one other eligible <span class="kw">Tyranids</span> unit.',effect:'Until the end of the phase, an unmodified Hit roll of 5+ scores a Critical Hit for those units.'},
+  {src:'det',name:'Death Frenzy',cp:1,type:'ploy',phases:['fight'],turn:'either',when:'Fight phase, just after an enemy unit selects its targets.',target:'One of your <span class="kw">Tyranids</span> units that was targeted.',effect:'Each time a model in your unit that has not fought this phase is destroyed, roll a D6: on a 4+ it stays, fights after the attacking unit finishes, then is removed.'},
+  {src:'det',name:'Overrun',cp:1,type:'ploy',phases:['fight'],turn:'either',when:'Fight phase, just before one of your <span class="kw">Tyranids</span> units Consolidates.',target:'That unit.',effect:'It may Consolidate an extra 3" if it can end within Engagement Range of an enemy. If it is within Synapse Range and not in Engagement Range, it can instead make a Normal move of up to 6".'},
+  // Core
+  {src:'core',name:'Command Re-roll',cp:1,type:'ploy',phases:['any'],turn:'either',when:'Any phase, just after you make a Hit, Wound, Damage, Advance, Charge, Desperate Escape or Hazardous roll, a saving throw, or roll for number of attacks.',target:'The unit or model that rolled.',effect:'Re-roll that roll, test or saving throw.'},
+  {src:'core',name:'Insane Bravery',cp:1,type:'deed',phases:['command'],turn:'yours',when:'Battle-shock step of your Command phase, just after you fail a Battle-shock test.',target:'The unit that failed.',effect:'It is treated as having passed.',restr:'Once per battle.'},
+  {src:'core',name:'Rapid Ingress',cp:1,type:'ploy',phases:['movement'],turn:'theirs',when:'End of your opponent’s Movement phase.',target:'One of your units in Reserves.',effect:'Set it up as if it were the Reinforcements step of your Movement phase.',restr:'Cannot arrive in a battle round it otherwise could not.'},
+  {src:'core',name:'Fire Overwatch',cp:1,type:'ploy',phases:['movement','charge'],turn:'theirs',when:'Opponent’s Movement or Charge phase, just after an enemy unit is set up or starts/ends a Normal, Advance, Fall Back or Charge move.',target:'One of your units within 24" of that enemy unit that is eligible to shoot.',effect:'Shoot that enemy unit as if it were your Shooting phase; hits only on an unmodified 6.',restr:'Once per turn. Not usable against units you can’t see.'},
+  {src:'core',name:'Go to Ground',cp:1,type:'wargear',phases:['shooting'],turn:'theirs',when:'Opponent’s Shooting phase, just after an enemy unit selects its targets.',target:'One of your <span class="kw">Infantry</span> units that was targeted.',effect:'Until the end of the phase, models in your unit have a 6+ invulnerable save and the Benefit of Cover.'},
+  {src:'core',name:'Smokescreen',cp:1,type:'wargear',phases:['shooting'],turn:'theirs',when:'Opponent’s Shooting phase, just after an enemy unit selects its targets.',target:'One of your <span class="kw">Smoke</span> units that was targeted.',effect:'Benefit of Cover and Stealth until the end of the phase.',rare:'Needs the Smoke keyword.'},
+  {src:'core',name:'Grenade',cp:1,type:'wargear',phases:['shooting'],turn:'yours',when:'Your Shooting phase.',target:'One <span class="kw">Grenades</span> unit not in Engagement Range that has not shot.',effect:'Pick a visible enemy unit within 8" not in Engagement Range; roll six D6, each 4+ inflicts 1 mortal wound.',rare:'Needs the Grenades keyword.'},
+  {src:'core',name:'Tank Shock',cp:1,type:'tactic',phases:['charge'],turn:'yours',when:'Your Charge phase, just after a <span class="kw">Vehicle</span> unit ends a Charge move.',target:'That Vehicle unit.',effect:'Pick an enemy unit in Engagement Range and roll D6 equal to the Vehicle’s Toughness; each 5+ inflicts 1 mortal wound (max 6).',rare:'Needs a Vehicle.'},
+  {src:'core',name:'Heroic Intervention',cp:2,type:'ploy',phases:['charge'],turn:'theirs',when:'Opponent’s Charge phase, just after an enemy unit ends a Charge move.',target:'One of your units within 6" of that enemy unit that is eligible to charge.',effect:'Your unit declares a charge against only that enemy unit and resolves it; it gets no Charge bonus.',restr:'Vehicles only if they have the Walker keyword.'},
+  {src:'core',name:'Counter-offensive',cp:2,type:'tactic',phases:['fight'],turn:'either',when:'Fight phase, just after an enemy unit has fought.',target:'One of your units in Engagement Range that has not fought this phase.',effect:'Your unit fights next.'},
+  {src:'core',name:'Epic Challenge',cp:1,type:'deed',phases:['fight'],turn:'either',when:'Fight phase, when a <span class="kw">Character</span> unit in Engagement Range is selected to fight.',target:'One <span class="kw">Character</span> model in that unit.',effect:'Until the end of the phase, its melee attacks have [Precision].'},
+];
+const PHASES = [['command','Command phase'],['movement','Movement phase'],['shooting','Shooting phase'],['charge','Charge phase'],['fight','Fight phase'],['any','Any phase']];
+const TYPE_NAMES = {tactic:'Battle Tactic',ploy:'Strategic Ploy',deed:'Epic Deed',wargear:'Wargear'};
+
+const WORLD_TABLES = {
+  'Industrial World':{d6:'1–2',desc:'Forge, manufactorum or refinery world.',rows:[['3','2D3'],['+D3','4'],['+3','5']]},
+  'Rural World':{d6:'3–4',desc:'Agri, feudal or Knight world.',rows:[['3D3','2'],['+2D3','D3'],['+2D3','D3']]},
+  'Hive World':{d6:'5–6',desc:'Capital or shrine world.',rows:[['D3+3','D6'],['+2D3','D6'],['+D6','D6']]},
+};
+const STAGE_NAMES = ['Invasion','Predation','Consumption'];
+const STAGE_INFO = [
+  {req:['Vanguard Adaptation','1RP','Before a battle, once per world. Pick two <span class="kw">Vanguard Invader</span> units (not Characters or Monsters); for the next battle they swap Battle Traits (adjust Crusade points). Swap back afterwards.'],
+   xp:'Units with <span class="kw">Endless Multitude</span>, <span class="kw">Vanguard Invader</span> or <span class="kw">Warlord</span> gain +1XP if they are wholly within the opponent’s deployment zone at the end of the battle.', kws:['Endless Multitude','Vanguard Invader','Warlord']},
+  {req:['Infestation','1RP','Before a battle, once per world. Pick one <span class="kw">Endless Multitude</span> unit; it has the Infiltrators ability for the next battle.'],
+   xp:'Units with <span class="kw">Biovores</span>, <span class="kw">Exocrine</span>, <span class="kw">Haruspex</span>, <span class="kw">Hive Guard</span>, <span class="kw">Hive Tyrant</span>, <span class="kw">Pyrovores</span>, <span class="kw">Tyrannofex</span>, <span class="kw">Tyrant Guard</span> or <span class="kw">Warlord</span> gain +1XP if they control an objective in No Man’s Land at the end of the battle.', kws:['Biovores','Exocrine','Haruspex','Hive Guard','Hive Tyrant','Pyrovores','Tyrannofex','Tyrant Guard','Warlord']},
+  {req:['Guard and Consume','1RP','After a battle, once per world. Pick a <span class="kw">Character</span> or <span class="kw">Monster</span> unit that was not destroyed in that battle; it gains 5XP.'],
+   xp:'Units with <span class="kw">Biovores</span>, <span class="kw">Exocrine</span>, <span class="kw">Haruspex</span>, <span class="kw">Hive Guard</span>, <span class="kw">Hive Tyrant</span>, <span class="kw">Pyrovores</span>, <span class="kw">Tyrannofex</span>, <span class="kw">Tyrant Guard</span> or <span class="kw">Warlord</span> gain +1XP if they were not destroyed at the end of the battle.', kws:['Biovores','Exocrine','Haruspex','Hive Guard','Hive Tyrant','Pyrovores','Tyrannofex','Tyrant Guard','Warlord']},
+];
+
+const BIOGENESIS = [
+  {key:'swarm',name:'The Swarm Grows',cost:2,text:'Supply Limit +100 points.'},
+  {key:'rare',name:'Rare Biomorphs',cost:4,text:'Pick a <span class="kw">Tyranids Character</span>: Renowned Heroes costs 1RP less (min 0) and is used immediately to give it an Enhancement as if it had just gained a rank.'},
+  {key:'enh',name:'Enhanced Organisms',cost:5,text:'One <span class="kw">Tyranids</span> unit gains 5XP (each unit once per devoured world).'},
+  {key:'rapid',name:'Rapid Adaptation',cost:5,text:'Use the Adapted Physiology Requisition once for 0RP.'},
+  {key:'res',name:'Biological Resources',cost:6,text:'Your Crusade force gains 1RP.'},
+];
+
+const REQUISITIONS = [
+  // key, name, cost label, fixed cost or null, group, text
+  {key:'vanguard',name:'Vanguard Adaptation',cost:'1RP',fixed:1,grp:'Stage (Invasion)',text:'See Invasion stage above.'},
+  {key:'infest',name:'Infestation',cost:'1RP',fixed:1,grp:'Stage (Predation)',text:'See Predation stage above.'},
+  {key:'guard',name:'Guard and Consume',cost:'1RP',fixed:1,grp:'Stage (Consumption)',text:'See Consumption stage above.'},
+  {key:'respawn',name:'Respawn Warrior Organisms',cost:'1RP',fixed:1,grp:'Tyranids',text:'Any time. A <span class="kw">Tyranids</span> unit with no Battle Scars loses any or all Battle Traits; for each one lost, pick a new Battle Trait.'},
+  {key:'intellect',name:'An Intellect Vast and Cold',cost:'1RP',fixed:1,grp:'Tyranids',text:'During Select Agendas. Pick one extra Agenda for this battle; at least one of your Agendas must be a Tyranids Agenda.'},
+  {key:'adapted',name:'Adapted Physiology',cost:'2RP',fixed:2,grp:'Tyranids',text:'Any time. Swap a <span class="kw">Tyranids Character</span>’s Crusade Relic for another it is eligible for; adjust Crusade points.'},
+  {key:'synaptic',name:'Synaptic Biogenesis',cost:'2RP',fixed:2,grp:'Tyranids',text:'Any time. Replace a <span class="kw">Synapse</span> unit with a new Synapse unit (must fit Supply Limit). It keeps the XP and gains the matching number of Battle Honours.'},
+  {key:'supply',name:'Increase Supply Limit',cost:'2RP',fixed:2,grp:'Core',text:'Any time. Supply Limit +200. Costs 2RP for Tyranids (Consume to Survive).'},
+  {key:'heroes',name:'Renowned Heroes',cost:'1–3RP',fixed:null,grp:'Core',text:'When you first add a Character, or when a unit gains a rank (instead of a Battle Honour): give it an Enhancement. Not Epic Heroes, units that already have one, or Disgraced/Mark of Shame units. Costs 1RP +1 per other Enhancement in your Order of Battle (max 3).'},
+  {key:'rearm',name:'Rearm and Resupply',cost:'1RP',fixed:1,grp:'Core',text:'Before a battle. Change one unit’s wargear options; replaced relics or modified weapons are lost. Recalculate points.'},
+  {key:'repair',name:'Repair and Recuperate',cost:'1–5RP',fixed:null,grp:'Core',text:'After a battle. Remove one Battle Scar (Crusade points +1). Costs 1RP +1 per Battle Honour the unit has (max 5).'},
+  {key:'fresh',name:'Fresh Recruits',cost:'1–4RP',fixed:null,grp:'Core',text:'Any time. Add models up to the datasheet maximum. Costs 1RP +1 per 2 Battle Honours, rounding up (max 4).'},
+  {key:'legendary',name:'Legendary Veterans',cost:'3RP',fixed:3,grp:'Core',text:'When a non-Character unit reaches 30XP: XP cap removed, it can rank past Battle-hardened, and may hold up to 6 Battle Honours.'},
+];
+
+const AGENDAS = [
+  {name:'Infest the Prey World',text:'At the end of the battle, gain 1 Biomass point for each table quarter that wholly contains one or more of your <span class="kw">Endless Multitude</span> units that are not within 6" of the centre. Each Endless Multitude unit wholly within the opponent’s deployment zone gains 2XP.',table:null,track:'Infest Prey World biomass'},
+  {name:'Hunt and Slay',text:'At the start of the battle your opponent picks five different units from their army to be Prey Targets (as many as possible if fewer). Note each Prey Target your units destroy in the Fight phase. At the end, each unit gains 2XP per Prey Target it destroyed, and your force gains Biomass:',table:[['Prey Targets destroyed','Biomass'],['1','0'],['2–3','1'],['4+','D3']],track:'Prey targets killed in the Fight phase'},
+  {name:'Tyrannoform the Prey World',text:'At the start of your Shooting phase, one <span class="kw">Infantry</span> unit (not a Character, not Battle-shocked, eligible to shoot) more than 12" from any Tyrannoform Spore marker can implant spores instead of shooting. At the end of your turn place a 40mm Tyrannoform Spore marker within 1" of it. At the end of the battle each such unit gains 2XP per marker it placed, and your force gains Biomass:',table:[['Markers placed','Biomass'],['3','1'],['4','D3'],['5+','3']],track:'Tyrannoform markers'},
+  {name:'Tyranid Attack',text:'If no enemy models remain on the battlefield at the end of the battle, each of your <span class="kw">Tyranids</span> units on the battlefield gains 3XP, your force gains 4 Biomass points, and this battle counts as 2 Battles Played points instead of 1.',table:null,track:'Killed everyone'},
+];
+
+const RANKS = [['Battle-ready',0,5],['Blooded',6,15],['Battle-hardened',16,30],['Heroic',31,50],['Legendary',51,9999]];
+
+const TRAITS_SYNAPSE = [
+  ['Unfathomable Terror','At the end of your Movement phase, pick an enemy unit within 6" and visible: it takes a Leadership test at -1. If failed, until your next Movement phase it cannot Advance and has -2" Move.'],
+  ['Psychic Shadow','Each time a ranged Psychic Attack targets this unit, it has the Benefit of Cover and Feel No Pain 5+ against that attack.'],
+  ['Psionic Resonance','Once per battle, when this unit is targeted with a Stratagem, that use costs 1CP less.'],
+  ['Alien Resilience','At the start of your Command phase, one model in this unit regains 1 lost wound.'],
+  ['Armoured Biomorph','+1 Toughness for models in this unit.'],
+  ['Psychic Aberration','Once per battle, at the start of any phase, pick a Battle-shocked <span class="kw">Tyranids</span> unit within 12": it is no longer Battle-shocked.'],
+];
+const TRAITS_TYRANIDS = [
+  ['Strength Born of Hunger','+1 Strength to melee weapons of models in this unit.'],
+  ['Enhanced Senses','Melee attacks ignore all Hit roll and Weapon Skill modifiers; ranged attacks have [Ignores Cover].'],
+  ['Instinctive Autonomy','While within 18" of a friendly <span class="kw">Synapse</span> model, this unit counts as within 6" of it for its Synapse ability.'],
+  ['Ranged Resistance','+1 to armour saving throws against ranged attacks.'],
+  ['Fleet of Claw','You can re-roll Advance and Charge rolls for this unit.'],
+  ['Onslaught Killers','+1 to Hit for melee attacks if this unit made a Charge move this turn.'],
+];
+const WEAPON_MODS = [
+  ['Finely Balanced','Improve the weapon’s BS or WS by 1.'],
+  ['Brutal','+1 Strength.'],
+  ['Armour Piercing','Improve AP by 1.'],
+  ['Master-worked','+1 Damage.'],
+  ['Heirloom','+1 Attacks.'],
+  ['Precise','A Critical Wound with this weapon gains [Precision].'],
+];
+const RELICS = [
+  {cat:'Artificer',rank:'Any rank',cp:'+1',items:[
+    ['Spirit-Leech Cortex','<span class="kw">Psyker</span> only. Each time an enemy unit loses a wound to the bearer’s Psychic Attack: the bearer regains 1 lost wound, and its melee weapons get +1 Strength until your next Command phase.'],
+    ['Balemind Membrane','Model with a Psychic weapon only. Re-roll Hit and Wound rolls for the bearer’s Psychic weapons.'],
+    ['Slayer Sabres','<span class="kw">Monster</span> only. Pick one melee weapon: after the bearer fights, pick one enemy unit it hit and roll a D6; on 2+ it suffers D3 mortal wounds (D6+1 if it is a <span class="kw">Psyker</span>).'],
+  ]},
+  {cat:'Antiquity',rank:'Heroic or Legendary',cp:'+2',items:[
+    ['Mortrexite Implant Attack','The bearer’s melee weapons gain [Devastating Wounds]. When the bearer destroys enemy models (not Vehicles) in a fight, add 1 model to a friendly <span class="kw">Ripper Swarms</span> unit within 12" (D3 if a Monster was destroyed).'],
+  ]},
+  {cat:'Legendary',rank:'Legendary',cp:'+3',items:[
+    ['The Norn Crown','While on the battlefield, use Shadow in the Warp one additional time per battle, and friendly <span class="kw">Synapse</span> units’ Synapse range becomes 9".'],
+  ]},
+];
+const SCARS_GENERIC = [
+  ['Crippling Damage','Cannot Advance; -1" Move.'],
+  ['Battle-weary','-1 to Battle-shock, Leadership, Desperate Escape and Out of Action tests.'],
+  ['Fatigued','-1 OC and never receives a Charge bonus.'],
+  ['Disgraced','No Stratagems can affect this unit; it cannot be Marked for Greatness.'],
+  ['Mark of Shame','Cannot form an Attached unit, unaffected by friendly Aura abilities, cannot be Marked for Greatness.'],
+  ['Deep Scars','Each Critical Hit against this unit automatically wounds.'],
+];
+const SCARS_TYRANIDS = [
+  ['Uncontrollable','Never counts as within Synapse range of your army.'],
+  ['By Instinct Alone','Cannot be targeted with Stratagems.'],
+  ['Mindless Focus','When shooting, can only target the closest eligible enemy unit.'],
+  ['Bestial Rage','When declaring a charge, one target must be the closest eligible enemy unit.'],
+  ['Generate from the main Crusade rules','Roll on the generic Battle Scars table.'],
+  ['Generate from the main Crusade rules','Roll on the generic Battle Scars table.'],
+];
+const SCARS_SYNAPSE = [
+  ['Neural Dissonance','Cannot benefit from Stratagems or Detachment rules that require the <span class="kw">Synapse</span> keyword.'],
+  ['Synaptic Decay','Its Synapse ability range drops to 3".'],
+  ['Lobe Impairment','Loses the Synapse ability.'],
+  ['Casts No Shadow','Is affected by your own Shadow in the Warp (must take the Battle-shock test).'],
+  ['Generate from the main Crusade rules','Roll on the generic Battle Scars table.'],
+  ['Generate from the main Crusade rules','Roll on the generic Battle Scars table.'],
+];
+
+const TYRANID_DATASHEETS = ['Barbgaunts','Biovores','Broodlord','Carnifexes','Deathleaper','Exocrine','Gargoyles','Genestealers','Harpy','Haruspex','Hive Crone','Hive Guard','Hive Tyrant','Hormagaunts','Lictor','Maleceptor','Mawloc','Mucolid Spores','Neurogaunts','Neurolictor','Neurotyrant','Norn Assimilator','Norn Emissary','Old One Eye','Parasite of Mortrex','Psychophage','Pyrovores','Raveners','Ripper Swarms','Screamer-Killer','Spore Mines','Sporocyst','Termagants','Tervigon','The Swarmlord','Toxicrene','Trygon','Tyrannocyte','Tyrannofex','Tyranid Warriors with Melee Bio-weapons','Tyranid Warriors with Ranged Bio-weapons','Tyrant Guard','Venomthropes','Von Ryan’s Leapers','Winged Hive Tyrant','Winged Tyranid Prime','Zoanthropes','Barbed Hierodule','Harridan','Hierophant','Scythed Hierodule'];
+const BATTLELINE = ['Termagants','Hormagaunts','Gargoyles','Neurogaunts','Barbgaunts'];
+
+/* Unit silhouettes (original drawings, based on how each model looks) */
+// Silhouette library: each returns inner SVG (viewBox 0 0 320 180, ground y=166)
+function silTr(x,y,s,inner,flip){return `<g transform="translate(${x} ${y}) scale(${flip?-s:s} ${s})">${inner}</g>`}
+// ---- parts ----
+const SILP = {
+  jelly:(t)=>`<path d="M-42 0 C-44 -30 -24 -50 0 -50 C24 -50 44 -30 42 0 C34 8 20 4 14 8 C8 2 -8 2 -14 8 C-20 4 -34 8 -42 0 Z"/>
+    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="${t||4}">
+    <path d="M-34 4 C-38 24 -28 36 -36 58"/><path d="M-20 6 C-24 30 -12 44 -20 70"/><path d="M-6 6 C-8 30 4 46 -2 78"/>
+    <path d="M8 6 C10 30 0 48 8 72"/><path d="M22 6 C26 26 16 42 24 62"/><path d="M34 4 C40 20 32 34 38 50"/></g>
+    <path d="M-30 -30 Q0 -16 30 -30" fill="none" stroke="var(--sil-bg)" stroke-width="2.5"/><path d="M-36 -14 Q0 0 36 -14" fill="none" stroke="var(--sil-bg)" stroke-width="2.5"/>`,
+  wasp:()=>`<g opacity=".5"><ellipse cx="-10" cy="-15" rx="19" ry="5.5" transform="rotate(-28 -10 -15)"/><ellipse cx="-4" cy="-17" rx="15" ry="4.5" transform="rotate(-58 -4 -17)"/></g>
+    <path d="M-6 3 C-14 -5 -31 -3 -39 5 C-45 11 -48 18 -56 26 C-44 24 -35 21 -27 19 C-16 16 -8 12 -6 3 Z"/>
+    <g fill="none" stroke="var(--sil-bg)" stroke-width="2.2"><path d="M-15 -1 C-18 6 -18 12 -15 16"/><path d="M-24 0 C-27 7 -27 13 -24 18"/><path d="M-33 4 C-35 9 -35 14 -33 19"/></g>
+    <ellipse cx="0" cy="0" rx="8.5" ry="7.5"/>
+    <path d="M10 -16 C18 -18 26 -12 26 -4 C26 4 20 8 13 7 C6 6 4 0 5 -6 C6 -11 7 -14 10 -16 Z"/>
+    <path d="M12 -12 C15 -9 13 -6 17 -4 M19 -14 C20 -10 18 -7 21 -5" fill="none" stroke="var(--sil-bg)" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="M22 4 L27 9 L22 8 Z"/>
+    <g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M-3 6 L-6 15 L-11 21"/><path d="M1 7 L1 17 L-2 24"/><path d="M5 6 L9 15 L8 23"/><path d="M14 -16 C14 -24 18 -28 23 -29"/><path d="M18 -15 C20 -22 25 -25 30 -25"/></g>`,
+  zoan:()=>`<path d="M0 -44 C22 -44 34 -30 32 -14 C30 -2 20 6 8 8 L4 16 C2 26 6 34 0 44 C-6 34 -2 26 -4 16 L-8 8 C-20 6 -30 -2 -32 -14 C-34 -30 -22 -44 0 -44 Z"/>
+    <path d="M-4 16 C-14 18 -20 24 -22 30 M4 16 C14 18 20 24 22 30" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    <path d="M-20 -26 Q-6 -34 2 -20 M6 -32 Q20 -30 22 -16" fill="none" stroke="var(--sil-bg)" stroke-width="2.2" stroke-linecap="round"/>`,
+  gaunt:()=>`<path d="M-14 -40 C-6 -46 8 -44 14 -38 L22 -36 L18 -32 L10 -32 C8 -26 4 -22 2 -18 L6 -10 L10 0 L14 0 L12 4 L4 4 L0 -8 L-6 -8 L-10 0 L-6 0 L-8 4 L-16 4 L-14 -4 L-12 -14 C-20 -18 -26 -26 -34 -22 C-28 -28 -20 -30 -16 -30 Z"/>
+    <path d="M2 -26 L24 -26 L26 -22 L4 -20 Z"/>`,
+  horma:()=>`<path d="M-10 -34 C-2 -40 10 -38 16 -32 L24 -30 L18 -26 L10 -26 C8 -20 4 -16 0 -14 L8 -6 L16 2 L10 4 L2 -4 L-4 -8 L-10 0 L-16 4 L-12 -6 L-12 -14 C-22 -16 -30 -20 -38 -14 C-32 -22 -20 -26 -14 -24 Z"/>
+    <path d="M2 -24 C10 -40 20 -48 30 -50 C22 -42 14 -34 8 -22 Z"/><path d="M-4 -24 C2 -44 10 -54 18 -58 C12 -48 6 -38 2 -22 Z"/>`,
+};
+const SIL = {
+  'Neurotyrant': ()=> silTr(150,72,1.15,SILP.jelly(4.5)) + silTr(50,58,.5,SILP.jelly(5)) + silTr(226,44,.45,SILP.jelly(5)),
+  'Zoanthropes': ()=> [[74,52,1,0],[168,44,1.05,0],[236,98,.95,0],[72,128,1,1],[150,132,1.05,0],[292,150,.9,0]].map(([x,y,sc,f])=>silTr(x,y,sc,SILP.wasp(),f)).join(''),
+  'Termagants': ()=> [40,100,160,220,280].map((x,i)=>silTr(x,166,1.15-(i%2)*.08,SILP.gaunt())).join(''),
+  'Hormagaunts': ()=> [45,105,165,225,285].map((x,i)=>silTr(x,i%2?150:166,1.1,SILP.horma())).join(''),
+  'Norn Emissary': ()=>`<path d="M128 118 L106 146 L116 166 L134 166 L124 148 L152 126 Z"/><path d="M174 122 L200 146 L192 166 L210 166 L216 140 L188 114 Z"/>
+    <path d="M118 124 C110 104 116 80 134 66 C148 56 170 56 182 64 C196 74 202 96 196 116 C190 130 172 136 152 136 C138 136 124 132 118 124 Z"/>
+    <path d="M120 120 C102 122 88 132 80 146 C94 138 108 134 126 134 Z"/>
+    <path d="M170 70 C180 54 190 44 202 38 L212 46 C202 54 194 64 188 78 Z"/>
+    <path d="M198 38 C206 28 222 26 234 32 L252 36 L236 44 C230 52 216 54 204 48 Z"/><path d="M204 34 C198 20 188 12 174 10 C188 18 194 26 200 38 Z"/><path d="M212 30 C212 18 218 10 228 6 C222 16 220 24 220 32 Z"/>
+    <path d="M236 44 L244 52 L232 48 Z"/>
+    <path d="M140 70 C120 52 108 30 110 6 C118 28 132 44 150 58 Z"/><path d="M152 64 C142 42 144 22 156 4 C154 24 158 40 166 58 Z"/>
+    <path d="M184 76 C206 66 228 72 246 92 C262 110 268 132 266 154 C256 132 242 114 222 102 C208 94 196 92 184 94 Z"/>
+    <path d="M186 108 C204 112 214 122 218 138 L210 132 L212 144 L200 128 C196 122 192 118 184 116 Z"/>
+    <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M132 78 C116 66 110 50 118 34"/><path d="M126 92 C108 86 96 72 96 56"/></g>`,
+  'Deathleaper': ()=>`<path d="M146 104 L110 136 L122 166 L136 166 L126 140 L158 118 Z"/><path d="M164 112 L198 132 L188 166 L202 166 L214 128 L180 104 Z"/>
+    <path d="M134 112 C132 96 146 80 164 74 C178 70 192 74 198 84 C204 96 196 110 182 116 C168 122 144 124 134 112 Z"/>
+    <path d="M138 106 C118 102 100 110 88 124 C104 118 120 118 140 118 Z"/>
+    <path d="M188 82 C196 70 214 66 226 72 L244 76 L230 84 C222 92 208 94 196 90 Z"/><path d="M196 76 C198 60 208 50 222 46 C214 56 210 64 208 74 Z"/>
+    <g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M230 84 C236 94 244 98 252 98"/><path d="M226 88 C228 100 236 106 244 108"/></g>
+    <path d="M176 78 C168 54 178 30 200 18 C220 10 240 16 252 32 C236 24 216 28 204 38 C192 48 188 62 190 78 Z"/><path d="M164 80 C152 60 154 38 168 22 C166 42 170 58 180 76 Z"/>
+    <path d="M194 98 C212 102 226 112 232 128 C220 118 206 114 192 110 Z"/>`,
+  'Von Ryan’s Leapers': ()=> [[70,166,.85],[165,140,1],[262,166,.85]].map(([x,y,s])=>silTr(x,y,s,`<path d="M-48 0 L-36 -22 L-20 -28 C-10 -40 6 -44 18 -40 L28 -48 C34 -54 44 -52 46 -44 C48 -38 44 -32 38 -30 L30 -26 L40 -8 L52 0 L42 0 L30 -10 L20 -14 L12 0 L4 0 L8 -14 L-8 -16 L-20 0 L-30 0 L-22 -16 L-34 -14 L-40 0 Z"/>
+    <path d="M24 -42 C30 -62 44 -72 60 -74 C48 -66 40 -56 34 -40 Z"/><path d="M14 -40 C14 -60 22 -72 36 -80 C28 -66 24 -54 24 -40 Z"/><path d="M-30 -24 C-46 -30 -56 -42 -60 -56 C-52 -44 -42 -36 -28 -30 Z"/>`)).join(''),
+  'Pyrovores': ()=> [[78,166,.9],[170,166,1.05],[262,166,.9]].map(([x,y,s])=>silTr(x,y,s,`<path d="M-30 0 L-26 -20 C-36 -30 -38 -48 -28 -60 C-18 -72 4 -74 16 -64 C24 -58 28 -48 26 -40 L32 -36 L36 -30 L28 -28 L24 -20 L28 0 L18 0 L14 -16 L-8 -16 L-14 0 Z"/>
+    <path d="M-26 -58 C-30 -74 -22 -86 -10 -88 C-16 -78 -16 -70 -12 -62 Z"/>
+    <path d="M28 -40 L46 -44 L48 -38 L30 -34 Z"/>
+    <path d="M48 -42 C58 -50 66 -46 72 -52 C70 -42 76 -40 82 -42 C74 -34 64 -36 56 -36 C52 -36 50 -38 48 -40 Z" opacity=".75"/>
+    <path d="M-14 -50 Q2 -58 16 -48" fill="none" stroke="var(--sil-bg)" stroke-width="2.5"/>`)).join(''),
+  'Exocrine': ()=>`<path d="M70 166 L82 132 C70 128 64 118 66 108 C70 96 86 88 104 88 L200 84 C222 84 236 92 240 104 C244 116 236 126 222 130 L232 166 L218 166 L206 134 L184 136 L190 166 L176 166 L168 136 L130 136 L124 166 L110 166 L114 136 L96 134 L84 166 Z"/>
+    <path d="M100 90 C102 70 116 58 136 56 L232 50 L278 46 C290 46 296 52 296 58 C296 64 290 68 278 68 L236 70 C226 80 210 84 196 84 Z"/>
+    <path d="M276 46 L300 40 L302 48 L298 58 L302 68 L300 76 L276 70 Z"/>
+    <path d="M240 104 C254 102 264 108 268 118 C258 114 250 114 240 118 Z"/>
+    <path d="M120 64 Q180 54 230 58" fill="none" stroke="var(--sil-bg)" stroke-width="3"/><path d="M110 112 Q160 104 220 108" fill="none" stroke="var(--sil-bg)" stroke-width="2.5"/>`,
+  'Screamer-Killer': ()=>`<path d="M86 166 L98 124 C82 116 76 98 84 82 C94 64 120 56 150 58 C176 60 198 70 210 86 L228 90 C240 92 246 100 244 108 C240 116 230 118 222 114 L210 112 C206 122 198 128 188 130 L200 166 L184 166 L172 132 L136 134 L124 166 L108 166 L114 132 Z"/>
+    <path d="M232 96 L254 92 L250 104 L256 116 L232 112 Z" fill="var(--sil-bg)"/>
+    <path d="M168 74 C176 46 194 26 220 16 C204 32 194 50 186 76 Z"/><path d="M150 70 C150 42 160 20 180 4 C172 26 168 46 168 72 Z"/>
+    <path d="M192 104 C214 108 234 126 244 150 C226 132 212 122 190 118 Z"/><path d="M174 110 C190 124 200 142 202 162 C192 144 182 132 168 124 Z"/>
+    <path d="M100 76 L90 54 L108 70 L112 52 L122 66 L130 48 L136 62 Z"/>`,
+  'Maleceptor': ()=>`<path d="M96 166 L106 136 C92 132 86 124 88 114 L98 112 C84 98 80 76 90 56 C102 32 132 18 164 18 C196 18 226 32 238 56 C248 76 244 98 230 112 L240 114 C242 124 236 132 222 136 L232 166 L216 166 L206 138 L186 140 L190 166 L176 166 L172 140 L156 140 L152 166 L138 166 L142 140 L122 138 L112 166 Z"/>
+    <g fill="none" stroke="var(--sil-bg)" stroke-width="3" stroke-linecap="round"><path d="M110 60 C124 46 140 52 150 40"/><path d="M164 30 C164 50 176 56 170 74"/><path d="M196 44 C190 58 206 66 218 62"/><path d="M118 88 C136 80 148 92 162 86 C176 80 190 90 210 84"/></g>
+    <path d="M100 116 C82 120 68 132 62 148 C76 136 88 130 104 128 Z"/><path d="M228 116 C246 120 260 132 266 148 C252 136 240 130 224 128 Z"/>`,
+  'Neurolictor': ()=>`<path d="M146 104 L110 136 L122 166 L136 166 L126 140 L158 118 Z"/><path d="M164 112 L198 132 L188 166 L202 166 L214 128 L180 104 Z"/>
+    <path d="M134 112 C132 96 146 80 164 74 C178 70 192 74 198 84 C204 96 196 110 182 116 C168 122 144 124 134 112 Z"/>
+    <path d="M138 106 C118 102 100 110 88 124 C104 118 120 118 140 118 Z"/>
+    <path d="M206 50 C222 48 236 58 236 74 C236 88 224 96 210 96 C196 96 186 86 188 72 C190 58 196 50 206 50 Z"/>
+    <g fill="none" stroke="var(--sil-bg)" stroke-width="2.4" stroke-linecap="round"><path d="M198 64 C206 60 210 70 220 66"/><path d="M196 78 C206 74 214 84 228 78"/></g>
+    <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M214 50 C214 34 226 22 242 20"/><path d="M204 52 C198 36 202 22 214 12"/><path d="M226 90 C240 98 252 96 262 86"/></g>
+    <path d="M178 80 C190 70 204 74 210 88 L232 126 L236 146 L224 128 L200 98 Z"/><path d="M168 84 C176 96 178 112 174 130 L170 148 L164 128 C166 112 164 100 158 90 Z"/>`,
+  'Parasite of Mortrex': ()=>`<path d="M160 70 C150 60 136 48 112 40 C90 34 64 36 40 46 C58 46 70 50 80 58 C66 58 54 62 44 70 C62 68 76 70 86 76 C78 80 72 86 68 94 C88 84 108 80 130 82 C140 82 150 80 158 76 Z"/>
+    <path d="M176 70 C186 58 202 48 226 40 C248 34 274 36 298 46 C280 46 268 50 258 58 C272 58 284 62 294 70 C276 68 262 70 252 76 C260 80 266 86 270 94 C250 84 230 80 208 82 C198 82 188 80 180 76 Z"/>
+    <path d="M168 50 C178 50 186 58 186 68 C186 82 180 96 172 106 C166 114 160 116 154 112 C148 104 150 90 152 76 C152 60 158 50 168 50 Z"/>
+    <path d="M168 50 C164 40 166 32 172 28 C180 30 182 38 178 48 Z"/>
+    <path d="M160 108 C150 126 150 142 160 152 C172 162 190 160 204 150 L212 146 L208 156 L222 146 L206 140 L206 146 C194 154 178 154 170 146 C162 138 164 124 170 110 Z"/>
+    <path d="M156 92 C144 100 140 112 142 124 C146 114 152 106 160 100 Z"/><path d="M180 92 C192 100 196 112 194 124 C190 114 184 106 176 100 Z"/>
+    <path d="M100 166 H240" stroke="currentColor" stroke-width="2" opacity=".25"/>`,
+  'generic': ()=> silTr(160,166,1.8,SILP.horma()),
+};
+
+
+/* =========================================================
+   DEFAULT STATE (from Crusade_kisokos.xlsx)
+   ========================================================= */
+function H(type,name,detail,tier){return {type,name,detail:detail||'',tier:tier||''}}
+const DEFAULT_STATE = {
+  v:2,
+  settings:{adaptation:'swarming', stratFilter:'all', cardsFilter:'all'},
+  force:{name:'Tyranid CF – Invasion Fleet', player:'', startRP:5, startSupply:1000,
+    achievements:'Employee of the Month:\n– The Hive Queen\n– Prey Hunter (Screamer-Killer)\n– Swarmpatrol Purple\n– Norn Emissary\n– Maleceptor\n\nBattle 4: killed ALL – Tyranid Attack (+4 Biomass, 2 Battles Played).\nHormagaunts had Infiltrators (Infestation) in Predation.'},
+  world:{type:'Hive World', name:'', targets:[{bio:4,bp:3},{bio:9,bp:3},{bio:11,bp:2}], rolls:'Invasion: D3+3 → 4 Biomass, D6 → 3 battles. Predation: +2D3 → +5 (9), D6 → 3 battles. Consumption: +D6 → +2 (11), D6 → 2 battles.'},
+  battles:[
+    {date:'2025-06-11',opponent:'',result:'L',prey:2,preyBio:1,tyr:0,tyrBio:0,infestBio:0,killedAll:false,notes:'',bio:{},rp:{supply:2,heroes:2}},
+    {date:'2025-06-19',opponent:'',result:'W',prey:1,preyBio:0,tyr:4,tyrBio:2,infestBio:0,killedAll:false,notes:'',bio:{},rp:{repair:1}},
+    {date:'2025-09-19',opponent:'',result:'W',prey:2,preyBio:1,tyr:4,tyrBio:3,infestBio:0,killedAll:false,notes:'',bio:{swarm:6},rp:{fresh:1}},
+    {date:'2026-10-02',opponent:'',result:'W',prey:2,preyBio:1,tyr:0,tyrBio:0,infestBio:0,killedAll:true,notes:'Killed ALL',bio:{swarm:2,enh:5},rp:{fresh:1,infest:1}},
+  ],
+  lists:[{name:'Giant victory'},{name:'List 2'},{name:'List 3'}],
+  units:[
+    {id:'u1',name:'The Synaptic Tyrant',props:['mic'],ds:'Norn Emissary',models:1,pts:260,xp:17,cpAdj:0,character:true,epic:false,warlord:false,titanic:false,
+      type:'Monster, Character, Psyker, Synapse',equip:'Psychic tendril (neuroparasite, neuroblast, neurolance)\nMonstrous scything talons\nMonstrous rending claws',enh:'',
+      honours:[H('BT','Psychic Aberration','Synapse trait'),H('WM','Neuroblast: +1 Strength, +1 AP','Brutal, Armour Piercing')],scars:['Battle-weary','Mark of Shame'],
+      t:{played:4,skipped:0,survived:1,destroyed:4,mfg:2,prey:3,spores:0,killedAll:0},notes:'',lists:[true,true,false]},
+    {id:'u2',name:'The Hive Queen',ds:'Neurotyrant',models:1,pts:105,xp:14,cpAdj:0,character:true,epic:false,warlord:true,titanic:false,
+      type:'Monster, Character, Fly, Psyker, Synapse',equip:'Psychic scream [Ignores Cover, Psychic, Torrent]\nNeurotyrant claws and lashes\nNeuroloids',enh:'',
+      honours:[H('CR','Spirit-Leech Cortex','Artificer relic','Artificer')],scars:['Lobe Impairment'],
+      t:{played:4,skipped:0,survived:3,destroyed:3,mfg:1,prey:1,spores:0,killedAll:1},notes:'Gained the Warlord stage bonus (+1XP) at the end of a Predation battle.',lists:[true,true,true]},
+    {id:'u3',name:'Queen’s Guard',ds:'Zoanthropes',models:6,pts:200,xp:8,cpAdj:0,character:false,epic:false,warlord:false,titanic:false,
+      type:'Infantry, Fly, Psyker, Synapse',equip:'Warp blast\nChitinous claws and teeth',enh:'',
+      honours:[H('BT','Alien Resilience','Synapse trait')],scars:[],
+      t:{played:4,skipped:0,survived:1,destroyed:4,mfg:0,prey:0,spores:0,killedAll:1},notes:'',lists:[true,true,true]},
+    {id:'u4',name:'Tyranid Chan',art:'chan',ds:'Deathleaper',models:1,pts:80,xp:0,cpAdj:0,character:true,epic:true,warlord:false,titanic:false,
+      type:'Infantry, Character, Epic Hero, Great Devourer, Vanguard Invader',equip:'Lictor claws and talons [Precision]',enh:'',
+      honours:[],scars:[],
+      t:{played:1,skipped:3,survived:0,destroyed:0,mfg:0,prey:0,spores:0,killedAll:0},notes:'Epic Hero: never gains XP, Battle Honours or Battle Scars.',lists:[false,false,false]},
+    {id:'u5',name:'Princess’ Guard',ds:'Von Ryan’s Leapers',models:3,pts:70,xp:3,cpAdj:0,character:false,epic:false,warlord:false,titanic:false,
+      type:'Infantry, Great Devourer, Vanguard Invader',equip:'Leaper’s talons',enh:'',
+      honours:[],scars:[],
+      t:{played:3,skipped:1,survived:0,destroyed:0,mfg:0,prey:0,spores:0,killedAll:0},notes:'',lists:[true,false,true]},
+    {id:'u6',name:'Flameboys',ds:'Pyrovores',models:3,pts:105,xp:3,cpAdj:0,character:false,epic:false,warlord:false,titanic:false,
+      type:'Infantry',equip:'Flamespurt\nChitinous claws and teeth',enh:'',
+      honours:[],scars:[],
+      t:{played:3,skipped:1,survived:1,destroyed:0,mfg:0,prey:0,spores:0,killedAll:0},notes:'Pyrovores keyword: +1XP bonus in Predation and Consumption.',lists:[false,false,true]},
+    {id:'u7',name:'Exo-Lana',ds:'Exocrine',models:1,pts:140,xp:8,cpAdj:0,character:false,epic:false,warlord:false,titanic:false,
+      type:'Monster',equip:'Bio-plasmic cannon [Blast, Heavy]\nPowerful limbs',enh:'',
+      honours:[H('WM','Bio-plasmic cannon: +1 Strength, +1 Damage','Brutal, Master-worked')],scars:[],
+      t:{played:3,skipped:1,survived:0,destroyed:0,mfg:0,prey:0,spores:0,killedAll:0},notes:'Enhanced Organisms: +5XP. Exocrine keyword: +1XP bonus in Predation and Consumption.',lists:[true,false,true]},
+    {id:'u8',name:'Prey Hunter',ds:'Screamer-Killer',models:1,pts:125,xp:15,cpAdj:0,character:false,epic:false,warlord:false,titanic:false,
+      type:'Monster',equip:'Bio-plasmic scream [Assault, Blast]\nScreamer-killer talons',enh:'',
+      honours:[H('WM','Talons (melee): +1 AP, +1 Damage','Armour Piercing, Master-worked')],scars:[],
+      t:{played:4,skipped:0,survived:1,destroyed:6,mfg:0,prey:3,spores:0,killedAll:1},notes:'',lists:[true,true,false]},
+    {id:'u9',name:'Swarmpatrol T10-1 “Green”',ds:'Termagants',models:10,pts:60,xp:7,cpAdj:0,character:false,epic:false,warlord:false,titanic:false,
+      type:'Infantry, Battleline, Endless Multitude',equip:'Termagant spinefists ×9\nSpike rifle ×1\nChitinous claws and teeth',enh:'',
+      honours:[H('WM','Spike rifle: +1 Attack, +1 BS','Heirloom, Finely Balanced')],scars:['Deep Scars'],
+      t:{played:3,skipped:1,survived:0,destroyed:0,mfg:0,prey:0,spores:2,killedAll:0},notes:'',lists:[true,false,true]},
+    {id:'u10',name:'Swarmpatrol T10-2 “Purple”',ds:'Termagants',models:10,pts:60,xp:17,cpAdj:0,character:false,epic:false,warlord:false,titanic:false,
+      type:'Infantry, Battleline, Endless Multitude',equip:'Fleshborer ×9\nSpike rifle ×1\nChitinous claws and teeth',enh:'',
+      honours:[H('WM','Spike rifle: +1 AP, +1 Attack','Armour Piercing, Heirloom'),H('BT','Strength Born of Hunger','+1 Strength, whole unit melee')],scars:['Mindless Focus'],
+      t:{played:3,skipped:1,survived:1,destroyed:0,mfg:0,prey:0,spores:7,killedAll:0},notes:'',lists:[false,false,false]},
+    {id:'u11',name:'Clawpatrol H10-1 “Black”',ds:'Hormagaunts',models:10,pts:65,xp:5,cpAdj:0,character:false,epic:false,warlord:false,titanic:false,
+      type:'Infantry, Battleline, Endless Multitude',equip:'Hormagaunt talons',enh:'',
+      honours:[],scars:['Mindless Focus'],
+      t:{played:2,skipped:2,survived:1,destroyed:0,mfg:0,prey:0,spores:0,killedAll:1},notes:'Had Infiltrators (Infestation) in battle 4.',lists:[false,true,false]},
+    {id:'u12',name:'Maleceptor',ds:'Maleceptor',models:1,pts:170,xp:7,cpAdj:0,character:false,epic:false,warlord:false,titanic:false,
+      type:'Monster, Psyker, Synapse',equip:'Psychic overload\nMassive scything talons',enh:'',
+      honours:[H('WM','Psychic overload: +1 Attack, +1 AP','Heirloom, Armour Piercing')],scars:[],
+      t:{played:1,skipped:3,survived:1,destroyed:1,mfg:1,prey:0,spores:0,killedAll:1},notes:'',lists:[false,true,true]},
+    {id:'u13',name:'Neuro-Chan',art:'neurochan',ds:'Neurolictor',models:1,pts:70,xp:8,cpAdj:0,character:false,epic:false,warlord:false,titanic:false,
+      type:'Infantry, Vanguard Invader',equip:'Piercing claws and talons [Precision]',enh:'',
+      honours:[H('WM','Claws and talons: +1 Attack, +1 Damage','Heirloom, Master-worked')],scars:[],
+      t:{played:1,skipped:3,survived:1,destroyed:2,mfg:0,prey:2,spores:0,killedAll:1},notes:'',lists:[false,true,true]},
+    {id:'u14',name:'Parasite',ds:'Parasite of Mortrex',models:1,pts:80,xp:0,cpAdj:0,character:true,epic:false,warlord:false,titanic:false,
+      type:'Infantry, Character, Fly',equip:'',enh:'',
+      honours:[],scars:[],
+      t:{played:0,skipped:4,survived:0,destroyed:0,mfg:0,prey:0,spores:0,killedAll:0},notes:'',lists:[false,false,true]},
+  ],
+  quickref:[
+    ['Singular Purpose: pick an objective in round 1','Norn Emissary','','10"','','','','Extra attacks'],
+    ['Shadow in the Warp: enemy tests at -1, -2 within Synapse','Neurotyrant','Neuroloids 18" (Screamer-Killer, Hormagaunts)','6"','Neuroloids 18"','','',''],
+    ['','Zoanthropes','One model heals 1 wound','5"','6" aura; Battle-shock failure','','',''],
+    ['','Screamer-Killer','','8" + Advance D6','','Assault; forces Battle-shock','',''],
+    ['','Maleceptor','','8"','6" aura: -1 to Hit, -1 to Wound','','',''],
+    ['Infiltrators','Hormagaunts','','10" + Advance D6','','','Charge even after Advancing',''],
+    ['Infiltrators','Neurolictor','Forces Battle-shock','8"','12" aura on Battle-shocked enemies','','',''],
+  ],
+  statref:[['Norn Emissary',11,'8 / 7 / 12 / 10 / 8'],['Neurotyrant',8,'5 / 6'],['Zoanthropes',5,'7 / 12 / 4'],['Screamer-Killer',9,'8 / 10 (11?)'],['Maleceptor',11,'10 / 10 / 8'],['Hormagaunts',3,'3 (4?)'],['Neurolictor',5,'7']],
+};
+
+/* =========================================================
+   STATE + PERSISTENCE
+   ========================================================= */
+const KEY='hive-fleet-crusade-v1';
+let state;
+function clone(o){return JSON.parse(JSON.stringify(o))}
+function load(){
+  try{const raw=localStorage.getItem(KEY); if(raw){const s=JSON.parse(raw); if(s && (s.v===1||s.v===2) && Array.isArray(s.units)){state=migrate(s);save();return;}}}catch(e){}
+  state=clone(DEFAULT_STATE);
+}
+let saveWarned=false;
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){if(!saveWarned){saveWarned=true;alert('Your browser storage is full, so the latest change was not saved. Remove a photo or use Export data to keep a copy.')}}}
+function wahaUrl(ds){return 'https://wahapedia.ru/wh40k10ed/factions/tyranids/'+String(ds).trim().replace(/[’']/g,'-').replace(/\s+/g,'-')}
+/* v1 -> v2: one Weapon Modification honour = two modifications on the same weapon */
+function migrate(s){
+  (s.units||[]).forEach(u=>{if(u.ds==='Parasite of Mordrex')u.ds='Parasite of Mortrex';if(u.id==='u1'&&!u.props)u.props=['mic'];if(u.id==='u4'&&!u.art)u.art='chan';if(u.id==='u13'&&!u.art)u.art='neurochan'});
+  if(s.v===1){
+    s.units.forEach(u=>{
+      const out=[], byWeapon={};
+      (u.honours||[]).forEach(h=>{
+        if(h.type!=='WM'){out.push(h);return}
+        const k=h.name.indexOf(':'); const w=k>0?h.name.slice(0,k).trim():h.name; const m=k>0?h.name.slice(k+1).trim():'';
+        const ex=byWeapon[w];
+        if(ex&&ex.n<2){ex.h.name+=', '+m;ex.h.detail=[ex.h.detail,h.detail].filter(Boolean).join(', ');ex.n++;return}
+        const nh=Object.assign({},h); out.push(nh); byWeapon[w]={h:nh,n:1};
+      });
+      u.honours=out;
+    });
+    s.v=2;
+  }
+  return s;
+}
+load();
+
+/* =========================================================
+   CALCULATIONS
+   ========================================================= */
+function n(v){v=Number(v);return isFinite(v)?v:0}
+function sumObj(o){return Object.values(o||{}).reduce((a,b)=>a+n(b),0)}
+function calc(){
+  const T=state.world.targets;
+  let total=0, worldTotal=0, currency=0, rp=n(state.force.startRP), stage=0, stageBP=0, wins=0, bpTotal=0;
+  const ws=n(state.world.startBattle);
+  let supplySpent=0, swarmSpent=0;
+  const rows=[];
+  state.battles.forEach((b,i)=>{
+    const resBio=b.result==='W'?1:(b.result==='L'?-1:0);
+    const kaBio=b.killedAll?4:0;
+    const gained=resBio+n(b.preyBio)+n(b.tyrBio)+n(b.infestBio)+kaBio;
+    const before=total;
+    total=Math.max(0,total+gained);
+    const bp=b.killedAll?2:1;
+    let stageAt=-1, completed=false;
+    if(i>=ws){
+      worldTotal=Math.max(0,worldTotal+gained);
+      bpTotal+=bp;
+      stageAt=stage;
+      stageBP+=bp;
+      if(stage<3 && worldTotal>=n(T[stage].bio) && stageBP>=n(T[stage].bp)){stage++;stageBP=0;completed=true}
+    }
+    const bioSpent=sumObj(b.bio);
+    currency=Math.max(0,currency+(total-before))-bioSpent;
+    const rpBefore=rp;
+    rp=Math.min(10,rp+1);
+    const rpSpent=sumObj(b.rp);
+    rp=rp-rpSpent;
+    if(b.result==='W')wins++;
+    supplySpent+=n((b.rp||{}).supply); swarmSpent+=n((b.bio||{}).swarm);
+    const supply=n(state.force.startSupply)+Math.floor(supplySpent/2)*200+Math.floor(swarmSpent/2)*100;
+    rows.push({resBio,kaBio,gained,total,bp,stageAt,completed,bioSpent,currency,rpSpent,rp,supply,stageBPafter:stageBP});
+  });
+  const supply=n(state.force.startSupply)+Math.floor(supplySpent/2)*200+Math.floor(swarmSpent/2)*100;
+  const used=state.units.reduce((a,u)=>a+n(u.pts),0);
+  const totalBioSpent=state.battles.reduce((a,b)=>a+sumObj(b.bio),0);
+  const totalRPSpent=state.battles.reduce((a,b)=>a+sumObj(b.rp),0);
+  return {rows,total,worldTotal,currency,rp,stage,stageBP,wins,battles:state.battles.length,bpTotal,supply,used,totalBioSpent,totalRPSpent};
+}
+function rankOf(u){
+  if(u.epic) return 4; // Epic Heroes count as Legendary
+  const xp=n(u.xp);
+  let r=0; RANKS.forEach((R,i)=>{if(xp>=R[1])r=i});
+  if(!u.character && !u.legendaryVet && r>2) r=2;
+  return r;
+}
+function maxHonours(u){return (u.character||u.legendaryVet)?6:3}
+function honourCP(h,u){
+  if(h.type==='CR'){return h.tier==='Legendary'?3:(h.tier==='Antiquity'?2:1)}
+  return u.titanic?2:1;
+}
+function unitCP(u){
+  if(u.epic) return null;
+  return u.honours.reduce((a,h)=>a+honourCP(h,u),0)-u.scars.length+n(u.cpAdj);
+}
+function badgeStatus(){
+  const c=calc();
+  const dev=(state.devoured||[]).slice(); if(c.stage>=3) dev.push(state.world.type);
+  const types=new Set(dev).size;
+  const legendary=state.units.some(u=>u.character&&!u.epic&&n(u.xp)>=51);
+  const crown=state.units.some(u=>u.honours.some(h=>h.type==='CR'&&/norn crown/i.test(h.name)));
+  return [
+    {name:'Vanguard Tendril',desc:'Devour one world and win two battles.',req:[['Worlds devoured',dev.length,1],['Victories',c.wins,2]]},
+    {name:'Monstrous Tendril',desc:'Devour three different world types and win six battles.',req:[['World types devoured',types,3],['Victories',c.wins,6]]},
+    {name:'All-Consuming Tendril',desc:'Devour five worlds of every type, win ten battles, have a Legendary Character and The Norn Crown.',req:[['Worlds devoured',dev.length,5],['World types',types,3],['Victories',c.wins,10],['Legendary Character',legendary?1:0,1],['The Norn Crown',crown?1:0,1]]},
+  ].map(b=>Object.assign(b,{earned:b.req.every(r=>r[1]>=r[2])}));
+}
+function badgeSvg(i){
+  const field=['#a65f2a','#7c7f8a','#b9892c'][i];
+  const k=i+1; let t='';
+  for(let j=0;j<k;j++){
+    const rot=(k===1?-25:0)+j*360/k;
+    t+=`<path transform="rotate(${rot} 50 50)" d="M50 54 C44 38 52 20 72 14 C64 24 61 33 63 43 C57 40 53 46 50 54 Z"/><path transform="rotate(${rot} 50 50)" d="M58 30 L64 25 L62 33 Z"/>`;
+  }
+  return `<svg class="cbadge-svg" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="48" fill="#d9ccae"/><circle cx="50" cy="50" r="48" fill="none" stroke="#2b2219" stroke-opacity=".35" stroke-width="1.5"/><circle cx="50" cy="50" r="39" fill="${field}"/><circle cx="50" cy="50" r="39" fill="none" stroke="#2b2219" stroke-opacity=".3" stroke-width="1.5"/><g fill="#efe5cd">${t}<circle cx="50" cy="52" r="7"/></g><circle cx="50" cy="52" r="3" fill="${field}"/></svg>`;
+}
+function badgesHtml(){
+  return `<div class="cbadges">${badgeStatus().map((b,i)=>`<div class="cbadge ${b.earned?'earned':'locked'}">${badgeSvg(i)}<div><b>${b.name}</b><span class="st">${b.earned?'Earned':'Not yet earned'}</span><span class="desc">${b.desc}</span><ul>${b.req.map(r=>`<li class="${r[1]>=r[2]?'met':''}">${r[0]}: ${Math.min(r[1],r[2])}/${r[2]}</li>`).join('')}</ul></div></div>`).join('')}</div>`;
+}
+function hasKw(u,kw){
+  const s=(u.type+', '+u.ds+(u.warlord?', Warlord':'')).toLowerCase();
+  return s.includes(kw.toLowerCase());
+}
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function inp(path,val,type='text',attrs=''){
+  if(type==='num') return `<input type="number" data-bind="${path}" data-type="num" value="${esc(val)}" ${attrs}>`;
+  if(type==='date') return `<input type="date" data-bind="${path}" value="${esc(val)}" ${attrs}>`;
+  return `<input type="text" data-bind="${path}" value="${esc(val)}" ${attrs}>`;
+}
+function chk(path,val,attrs=''){return `<input type="checkbox" data-bind="${path}" data-type="bool" ${val?'checked':''} ${attrs}>`}
+function getPath(path){return path.split('.').reduce((o,k)=>o==null?undefined:o[k],state)}
+function setPath(path,val){
+  const ks=path.split('.'); let o=state;
+  for(let i=0;i<ks.length-1;i++){if(o[ks[i]]==null)o[ks[i]]={};o=o[ks[i]]}
+  o[ks[ks.length-1]]=val;
+}
+const pageHead=(title,sub,extra='')=>`<div class="page-head"><div><h1>${title}</h1>${sub?`<p class="muted">${sub}</p>`:''}</div>${extra}</div>`;
+const fmtSigned=v=>v>0?'+'+v:String(v);
+
+/* =========================================================
+   PAGES
+   ========================================================= */
+function pIntroduction(){
+  const ad=state.settings.adaptation;
+  const f=state.settings.stratFilter;
+  const strats=STRATS.filter(s=>f==='all'||s.src===f);
+  let phaseHtml='';
+  PHASES.forEach(([k,label])=>{
+    const list=strats.filter(s=>s.phases.includes(k));
+    if(!list.length) return;
+    phaseHtml+=`<div class="phase"><h3>${label}</h3><span class="muted small">${list.length} stratagem${list.length>1?'s':''}</span></div><div class="strats">${list.map(s=>stratCard(s,ad)).join('')}</div>`;
+  });
+  return pageHead('Introduction','Your army: Tyranids, Invasion Fleet detachment. Pick the Hyper-adaptation for the first battle round; the stratagem list below is sorted by the phase you play it in.')+`
+  <section class="grid2">
+    <div class="panel">
+      <h3>Army rules</h3>
+      <div class="rule"><h4>Synapse</h4><p>A <span class="kw">Tyranids</span> unit within 6" of a friendly <span class="kw">Synapse</span> model is within Synapse Range. Such units take Battle-shock tests on 3D6, and add 1 to the Strength of their melee attacks.</p></div>
+      <div class="rule"><h4>Shadow in the Warp</h4><p>Once per battle, in either player’s Command phase: every enemy unit on the battlefield takes a Battle-shock test, at -1 if within 6" of one of your <span class="kw">Synapse</span> units.</p></div>
+    </div>
+    <div class="panel prose">
+      <h3>How a detachment works</h3>
+      <p><b>Detachment rule.</b> Applies to your whole army or to particular units. For Invasion Fleet: choose one Hyper-adaptation at the start of the first battle round.</p>
+      <p><b>Enhancements.</b> Only <span class="kw">Characters</span> can take them. In Crusade you can also gain one through the Renowned Heroes Requisition.</p>
+      <p><b>Stratagems.</b> There are Core stratagems and detachment stratagems. Each costs Command points (CP) and says when you can use it.</p>
+    </div>
+  </section>
+
+  <h2>Detachment rule: Hyper-adaptations</h2>
+  <p class="muted">At the start of the first battle round, select one; it is active for your <span class="kw">Tyranids</span> units until the end of the battle.</p>
+  <div class="adapt" role="radiogroup" aria-label="Hyper-adaptation">
+    ${Object.entries(ADAPTATIONS).map(([k,a])=>`<label><input type="radio" name="adapt" value="${k}" data-bind="settings.adaptation" ${ad===k?'checked':''}> <b>${a.name}</b> <span class="on">(active)</span><br><span class="small">${a.text}</span></label>`).join('')}
+  </div>
+
+  <h2>Enhancements</h2>
+  <div class="grid2">${ENHANCEMENTS.map(e=>`<div class="rule"><h4>${e[0]} <span class="muted small">(${e[1]} pts)</span></h4><p>${e[2]}</p><p class="small muted">Tyranids model only.</p></div>`).join('')}</div>
+
+  <div class="page-head" style="margin-top:28px"><div><h2 style="margin:0">Stratagems by phase</h2></div>
+    <div class="filter" role="group" aria-label="Show stratagems">
+      ${[['all','All'],['det','Invasion Fleet'],['core','Core']].map(([k,l])=>`<button type="button" data-action="stratFilter" data-val="${k}" aria-pressed="${f===k}">${l}</button>`).join('')}
+    </div></div>
+  <p class="small muted">Colour stripe: <span style="color:var(--tactic)">Battle Tactic</span>, <span style="color:var(--ploy)">Strategic Ploy</span>, <span style="color:var(--deed)">Epic Deed</span>, <span style="color:var(--wargear)">Wargear</span>. Rapid Regeneration and Fire Overwatch appear in two phases.</p>
+  ${phaseHtml}`;
+}
+function stratCard(s,ad){
+  const turn={yours:'Your turn',theirs:'Opponent’s turn',either:'Either turn'}[s.turn];
+  let restr=s.restr||'';
+  if(s.name==='Predatory Imperative') restr=`Cannot pick ${ADAPTATIONS[ad].name}, your army’s active Hyper-adaptation.`;
+  return `<article class="strat ${s.type} ${s.src==='core'?'core':''}">
+    <header><div><h4>${s.name}</h4><div class="meta">${s.src==='core'?'Core':'Invasion Fleet'}, ${TYPE_NAMES[s.type]}. ${turn}</div></div><div class="cp">${s.cp}CP</div></header>
+    <dl><dt>When</dt><dd>${s.when}</dd><dt>Target</dt><dd>${s.target}</dd><dt>Effect</dt><dd>${s.effect}</dd>${restr?`<dt>Limits</dt><dd>${restr}</dd>`:''}${s.rare?`<dt>Note</dt><dd class="muted">${s.rare} Rarely usable by Tyranids.</dd>`:''}</dl>
+  </article>`;
+}
+
+function pCrusadeRules(){
+  const c=calc(); const W=state.world; const T=W.targets;
+  const stages=STAGE_NAMES.map((nm,i)=>{
+    const done=c.stage>i, cur=c.stage===i;
+    const bpNow=done?T[i].bp:(cur?c.stageBP:0);
+    const bioPct=Math.min(100,c.worldTotal/Math.max(1,T[i].bio)*100);
+    const bpPct=Math.min(100,bpNow/Math.max(1,T[i].bp)*100);
+    return `<div class="stage ${done?'done':''} ${cur?'current':''}">
+      <h4><span>Stage ${i+1}: ${nm}</span><span class="small ${done?'ok':(cur?'':'muted')}">${done?'Complete':(cur?'Current':'Locked')}</span></h4>
+      <div class="small">Biomass ${c.worldTotal} / ${inp(`world.targets.${i}.bio`,T[i].bio,'num','aria-label="Biomass needed"')}</div>
+      <div class="bar"><i style="width:${bioPct}%"></i></div>
+      <div class="small">Battles Played ${bpNow} / ${inp(`world.targets.${i}.bp`,T[i].bp,'num','aria-label="Battles needed"')}</div>
+      <div class="bar bp"><i style="width:${bpPct}%"></i></div>
+    </div>`;
+  }).join('');
+  const worldTables=Object.entries(WORLD_TABLES).map(([nm,w])=>`
+    <div class="panel" ${nm===W.type?'style="border:2px solid var(--chitin)"':''}>
+      <h3>${nm} <span class="muted small">D6 ${w.d6}</span> ${nm===W.type?'<span class="tag cr">Your world</span>':''}</h3>
+      <p class="small muted">${w.desc}</p>
+      <table><thead><tr><th>Stage</th><th class="num">Biomass</th><th class="num">Battles Played</th></tr></thead>
+      <tbody>${w.rows.map((r,i)=>`<tr class="${nm===W.type?'hl':''}"><td>${STAGE_NAMES[i]}</td><td class="num">${r[0]}</td><td class="num">${r[1]}</td></tr>`).join('')}</tbody></table>
+    </div>`).join('');
+  return pageHead('Crusade Rules','Tyranids devour one world at a time, in three stages. Your force is working on a Hive World.')+`
+  <section class="panel">
+    <div class="page-head" style="border:0;margin:0;padding:0"><div><h2 class="bio-t" style="margin-top:0">Your world: ${esc(W.type)}</h2>
+      <p class="small muted">Rolled values: ${esc(W.rolls)}</p></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <label class="small">World type <select data-bind="world.type">${Object.keys(WORLD_TABLES).map(k=>`<option ${k===W.type?'selected':''}>${k}</option>`).join('')}</select></label>
+        <button type="button" data-action="rollWorld" title="Roll a new world type and its stage targets">Roll a new world</button>
+      </div></div>
+    <p class="small">Biomass needed is cumulative (it carries over between stages); Battles Played resets for each stage. Current stage: <b>${c.stage>=3?'World devoured':STAGE_NAMES[c.stage]}</b>.</p>
+    <div class="stages">${stages}</div>
+    ${c.stage>=3?'<p class="ok">World devoured! Spend Biomass on Biogenesis, then roll a new world.</p>':''}
+  </section>
+
+  <h2>Playing a Crusade battle</h2>
+  <ol class="seq prose">
+    <li><b>Muster.</b> Choose units from your Order of Battle up to the battle size (Incursion 1000 pts). Include at least one <span class="kw">Character</span>, pick a Warlord, max three of the same datasheet (six for Battleline).</li>
+    <li><b>Pre-battle requisitions.</b> Rearm and Resupply, Vanguard Adaptation, Infestation and similar are bought now.</li>
+    <li><b>Select Agendas.</b> Choose your Agendas (An Intellect Vast and Cold adds one). Note Prey Targets if you take Hunt and Slay.</li>
+    <li><b>Play the mission.</b> Track kills per unit, Prey Targets killed in the Fight phase, Tyrannoform markers.</li>
+    <li><b>Out of Action.</b> For each destroyed unit roll a D6; on a 1 choose Devastating Blow (lose an Honour) or a Battle Scar.</li>
+    <li><b>Experience.</b> Each unit: +1XP Battle Experience, +1XP per third kill (Dealers of Death), Agenda XP, stage bonus XP. One unit is Marked for Greatness (+3XP).</li>
+    <li><b>Ranks and honours.</b> Promote units that crossed an XP threshold; each new rank gives a Battle Honour (or Renowned Heroes).</li>
+    <li><b>Bookkeeping.</b> +1RP (max 10). Win +1 Biomass, loss -1 Biomass (min 0), plus Agenda Biomass. Add Battles Played. Spend RP and Biomass.</li>
+  </ol>
+
+  <h2 class="bio-t">Generating a world</h2>
+  <p class="prose">Roll a D6 for world type, then roll the Invasion targets, then add the Predation roll to Invasion, and the Consumption roll to Predation. Biomass from earlier stages still counts toward later targets.</p>
+  <div class="grid3">${worldTables}</div>
+
+  <h2 class="bio-t">Earning Biomass</h2>
+  <div class="panel prose"><p>Win a battle: +1 Biomass. Lose: -1 Biomass (never below 0). Agendas give more (see Agendas). Reaching a stage unlocks its Requisition, usable once per world.</p></div>
+
+  <h2 class="bio-t">Devouring stages</h2>
+  <div class="grid3">${STAGE_INFO.map((s,i)=>`<div class="panel"><h3>Stage ${i+1}: ${STAGE_NAMES[i]}</h3>
+    <div class="rule"><h4>${s.req[0]} <span class="muted small">(${s.req[1]})</span></h4><p class="small">${s.req[2]}</p></div>
+    <div class="rule"><h4>Battle Experience bonus</h4><p class="small">${s.xp}</p></div></div>`).join('')}</div>
+
+  <h2 class="bio-t">Biogenesis</h2>
+  <p class="prose">After completing Consumption, spend Biomass on these upgrades before generating a new world. Your spreadsheet tracks Biomass spending per battle on the Battle Tally page.</p>
+  <div class="grid2">${BIOGENESIS.map(b=>`<div class="rule"><h4>${b.name} <span class="muted small">(${b.cost} Biomass)</span></h4><p class="small">${b.text}</p></div>`).join('')}</div>
+
+  <h2>Requisitions</h2>
+  <p class="prose small"><b>Consume to Survive:</b> if your force includes any Tyranids units, Increase Supply Limit costs 2RP. You start with 5RP, gain 1RP per battle, and can never hold more than 10.</p>
+  <div class="scroll-x"><table><thead><tr><th>Requisition</th><th>Cost</th><th>Source</th><th>Summary</th></tr></thead><tbody>
+  ${REQUISITIONS.map(r=>`<tr><td><b>${r.name}</b></td><td>${r.cost}</td><td class="small">${r.grp}</td><td class="small">${r.text}</td></tr>`).join('')}
+  </tbody></table></div>
+
+  <h2 class="bio-t">Crusade Badges</h2>
+  <p class="prose small muted">Badges light up automatically once you meet every requirement. A world counts as devoured when you finish its Consumption stage.</p>
+  <div class="panel">${badgesHtml()}</div>`;
+}
+
+function pBattleTally(){
+  const c=calc(); const B=state.battles;
+  const cols=B.map((b,i)=>i);
+  const row=(label,cells,cls='')=>`<tr class="${cls} ${/Biomass|Bio each|Devouring/.test(label)?'bio':''}"><td>${label}</td>${cells}</tr>`;
+  const cellsIn=(fn)=>cols.map(i=>`<td class="num">${fn(i)}</td>`).join('');
+  let h='';
+  h+=`<tr><th>Battle</th>${cols.map(i=>`<th class="num">#${i+1} <button type="button" class="ghost small" data-action="delBattle" data-i="${i}" title="Delete battle ${i+1}" aria-label="Delete battle ${i+1}" style="padding:0 6px">×</button></th>`).join('')}</tr>`;
+  h+=row('Date',cellsIn(i=>inp(`battles.${i}.date`,B[i].date,'date')));
+  h+=row('Opponent',cellsIn(i=>inp(`battles.${i}.opponent`,B[i].opponent,'text','style="width:7em"')));
+  h+=row('Devouring stage',cellsIn(i=>STAGE_NAMES[c.rows[i].stageAt]||'Devoured'));
+  h+=row('Result',cellsIn(i=>`<select data-bind="battles.${i}.result">${[['W','Win'],['L','Loss'],['D','Draw']].map(([k,l])=>`<option value="${k}" ${B[i].result===k?'selected':''}>${l}</option>`).join('')}</select>`));
+  h+=`<tr class="sec bio"><td>Biomass earned</td>${cols.map(()=>'<td></td>').join('')}</tr>`;
+  h+=row('Win / loss Biomass',cellsIn(i=>fmtSigned(c.rows[i].resBio)));
+  h+=row('Prey Targets killed in the Fight phase',cellsIn(i=>inp(`battles.${i}.prey`,B[i].prey,'num')));
+  h+=row('Prey Target Biomass <span class="cost">(1:0, 2–3:1, 4+:D3)</span>',cellsIn(i=>inp(`battles.${i}.preyBio`,B[i].preyBio,'num')));
+  h+=row('Tyrannoform markers',cellsIn(i=>inp(`battles.${i}.tyr`,B[i].tyr,'num')));
+  h+=row('Tyrannoform Biomass <span class="cost">(3:1, 4:D3, 5+:3)</span>',cellsIn(i=>inp(`battles.${i}.tyrBio`,B[i].tyrBio,'num')));
+  h+=row('Infest the Prey World Biomass',cellsIn(i=>inp(`battles.${i}.infestBio`,B[i].infestBio,'num')));
+  h+=row('Killed everyone (Tyranid Attack, +4)',cellsIn(i=>chk(`battles.${i}.killedAll`,B[i].killedAll,`aria-label="Battle ${i+1} killed everyone"`)));
+  h+=row('Biomass gained this battle',cellsIn(i=>`<b>${fmtSigned(c.rows[i].gained)}</b>`),'calc');
+  h+=row('Total Biomass acquired',cellsIn(i=>c.rows[i].total),'calc');
+  h+=row('Battles Played points',cellsIn(i=>c.rows[i].bp),'calc');
+  h+=`<tr class="sec bio"><td>Biomass spent (Biogenesis)</td>${cols.map(()=>'<td></td>').join('')}</tr>`;
+  BIOGENESIS.forEach(bg=>{h+=row(`${bg.name} <span class="cost">(${bg.cost} Bio each)</span>`,cellsIn(i=>inp(`battles.${i}.bio.${bg.key}`,(B[i].bio||{})[bg.key]||0,'num',`step="${bg.cost}" min="0"`)))});
+  h+=row('Total Biomass spent',cellsIn(i=>c.rows[i].bioSpent),'calc');
+  h+=row('Biomass currency after',cellsIn(i=>`<b>${c.rows[i].currency}</b>`),'calc');
+  h+=`<tr class="sec"><td>RP spent after the battle</td>${cols.map(()=>'<td></td>').join('')}</tr>`;
+  REQUISITIONS.forEach(r=>{h+=row(`${r.name} <span class="cost">(${r.cost})</span>`,cellsIn(i=>inp(`battles.${i}.rp.${r.key}`,(B[i].rp||{})[r.key]||0,'num',`min="0" ${r.fixed?`step="${r.fixed}"`:''}`)))});
+  h+=row('Total RP spent',cellsIn(i=>c.rows[i].rpSpent),'calc');
+  h+=row('RP after (+1 per battle, max 10)',cellsIn(i=>`<b>${c.rows[i].rp}</b>`),'calc');
+  h+=row('Supply Limit for next battle',cellsIn(i=>c.rows[i].supply),'calc');
+  h+=row('Notes',cellsIn(i=>inp(`battles.${i}.notes`,B[i].notes,'text','style="width:7em"')));
+
+  return pageHead('Battle Tally','One column per battle. Biomass, RP and Supply Limit are calculated from what you enter.',`<button type="button" class="primary" data-action="addBattle">Add battle</button>`)+`
+  <div class="bignums">
+    <div><b>${c.battles}</b><span>Battles played</span></div>
+    <div><b>${c.wins}</b><span>Victories</span></div>
+    <div class="bio"><b>${c.total}</b><span>Total Biomass acquired</span></div>
+    <div class="bio"><b>${c.totalBioSpent}</b><span>Biomass spent</span></div>
+    <div class="bio"><b>${c.currency}</b><span>Biomass available</span></div>
+    <div><b>${c.totalRPSpent}</b><span>RP spent</span></div>
+    <div><b>${c.rp}</b><span>RP available</span></div>
+    <div><b>${c.supply}</b><span>Supply Limit</span></div>
+  </div>
+  <div class="panel small" style="display:flex;gap:18px;flex-wrap:wrap;align-items:center">
+    <label>Starting RP ${inp('force.startRP',state.force.startRP,'num')}</label>
+    <label>Starting Supply Limit ${inp('force.startSupply',state.force.startSupply,'num','style="width:6em"')}</label>
+    <span class="muted">Battles Played points this world: ${c.bpTotal}. Stage: ${c.stage>=3?'World devoured':STAGE_NAMES[c.stage]} (${c.stageBP} Battles Played in stage).</span>
+  </div>
+  <div class="scroll-x panel" data-keep-scroll="tally" style="padding:0"><table class="tally">${h}</table></div>
+  <p class="note">Spend columns follow the spreadsheet: enter the amount spent, not the number of purchases. Increase Supply Limit adds 200 per 2RP; The Swarm Grows adds 100 per 2 Biomass.</p>`;
+}
+
+function pAgendas(){
+  const B=state.battles;
+  const usedPrey=B.reduce((a,b)=>a+n(b.prey),0), usedTyr=B.reduce((a,b)=>a+n(b.tyr),0), ka=B.filter(b=>b.killedAll).length, inf=B.reduce((a,b)=>a+n(b.infestBio),0);
+  const counts=[`${inf} Biomass earned so far`,`${usedPrey} Prey Targets killed so far`,`${usedTyr} markers placed so far`,`Achieved ${ka} time${ka===1?'':'s'}`];
+  return pageHead('Agendas','Tyranids Agendas you can select in the Select Agendas step, alongside the mission pack’s own Agendas.')+`
+  <div class="grid2">${AGENDAS.map((a,i)=>`<section class="panel"><h3>${a.name}</h3><p>${a.text}</p>
+    ${a.table?`<table style="max-width:360px"><thead><tr><th>${a.table[0][0]}</th><th class="num">${a.table[0][1]}</th></tr></thead><tbody>${a.table.slice(1).map(r=>`<tr><td>${r[0]}</td><td class="num">${r[1]}</td></tr>`).join('')}</tbody></table>`:''}
+    <p class="small ok" style="margin-top:10px">Your campaign: ${counts[i]}.</p></section>`).join('')}</div>
+  <div class="panel prose"><h3>Extra Agenda</h3><p>The <b>An Intellect Vast and Cold</b> Requisition (1RP) lets you pick one additional Agenda for a battle, as long as at least one of your Agendas is a Tyranids Agenda.</p>
+  <p class="small muted">Hunt and Slay and Tyrannoform the Prey World XP go on the unit’s Crusade card (Prey Targets killed, Spores planted).</p></div>`;
+}
+
+function pOrderOfBattle(){
+  const c=calc(); const F=state.force;
+  const units=state.units;
+  const slots=[];
+  for(let i=0;i<Math.max(24,units.length+ (units.length%2)) ;i++) slots.push(units[i]||null);
+  const half=Math.ceil(slots.length/2);
+  const slotHtml=(u)=>u?`<div class="slot${u.character?' char':''}${u.epic?' epic':''}"${u.character?` title="${u.epic?'Epic Hero':'Character'}"`:''}><div><span class="nm">${esc(u.name)}${hasKw(u,'Synapse')?'<span class="syn-kw">Synapse</span>':''}</span><span class="ds">${esc(u.ds)}${u.models>1?`, ${u.models} models`:''}${u.warlord?', Warlord':''}</span></div><div>${u.pts}</div><div>${u.epic?'N/A':unitCP(u)}</div></div>`
+    :`<div class="slot empty"><div><button type="button" data-action="focusAdd">Add unit</button></div><div></div><div></div></div>`;
+  const col=(arr)=>`<div class="oob-col"><div class="oob-head"><span>Unit name</span><span>Points value</span><span>Crusade points</span></div>${arr.map(slotHtml).join('')}</div>`;
+  const stageTxt=c.stage>=3?'Devoured':STAGE_NAMES[c.stage];
+  const T=state.world.targets;
+  const stageNeed=c.stage<3?`${c.worldTotal}/${T[c.stage].bio} Bio, ${c.stageBP}/${T[c.stage].bp} battles`:'';
+
+  // list summaries
+  const lists=state.lists.map((L,li)=>{
+    const us=units.filter(u=>u.lists&&u.lists[li]);
+    const pts=us.reduce((a,u)=>a+n(u.pts),0), cp=us.reduce((a,u)=>a+(u.epic?0:unitCP(u)),0);
+    const hasChar=us.some(u=>u.character);
+    const dsCount={}; us.forEach(u=>dsCount[u.ds]=(dsCount[u.ds]||0)+1);
+    const over=Object.entries(dsCount).filter(([d,k])=>k>(BATTLELINE.includes(d)?6:3));
+    const issues=[];
+    if(pts>1000) issues.push(`${pts-1000} pts over 1000`);
+    if(us.length&&!hasChar) issues.push('needs a Character');
+    if(over.length) issues.push('too many '+over.map(o=>o[0]).join(', '));
+    return `<div><input type="text" data-bind="lists.${li}.name" value="${esc(L.name)}" aria-label="List name" style="font-family:var(--head);font-weight:700;width:100%"><br><b>${pts}</b> pts, <b>${cp}</b> Crusade points, ${us.length} units<br>${issues.length?`<span class="warn small">${issues.join('; ')}</span>`:(us.length?'<span class="ok small">Legal for Incursion (1000 pts)</span>':'<span class="muted small">Tick units below</span>')}</div>`;
+  }).join('');
+
+  const roster=units.map((u,i)=>{
+    const r=rankOf(u); const cp=unitCP(u);
+    return `<tr>
+      <td>${inp(`units.${i}.name`,u.name,'text','aria-label="Unit name"')}</td>
+      <td class="small">${esc(u.ds)}</td>
+      <td class="num">${inp(`units.${i}.models`,u.models,'num','min="1" aria-label="Models"')}</td>
+      <td class="num">${inp(`units.${i}.pts`,u.pts,'num','min="0" aria-label="Points"')}</td>
+      <td class="num">${u.epic?'N/A':`<b>${cp}</b>`}</td>
+      <td class="num">${u.epic?'N/A':inp(`units.${i}.xp`,u.xp,'num','min="0" aria-label="XP"')}</td>
+      <td class="small">${u.epic?'Legendary (Epic Hero)':RANKS[r][0]}</td>
+      <td class="num">${u.epic?'N/A':`${u.honours.length}/${maxHonours(u)}`}</td>
+      <td class="num">${u.scars.length}</td>
+      <td class="num">${chk(`units.${i}.character`,u.character,'aria-label="Character"')}</td>
+      ${state.lists.map((L,li)=>`<td class="listcol">${chk(`units.${i}.lists.${li}`,u.lists&&u.lists[li],`aria-label="In ${esc(L.name)}"`)}</td>`).join('')}
+      <td><button type="button" class="danger small" data-action="delUnit" data-i="${i}" aria-label="Remove ${esc(u.name)}" style="padding:2px 8px">Remove</button></td>
+    </tr>`;
+  }).join('');
+
+  const qr=state.quickref.map(r=>`<tr>${r.map((c,j)=>j===1?`<td><b>${esc(c)}</b></td>`:`<td class="small">${esc(c)}</td>`).join('')}</tr>`).join('');
+  const sr=state.statref.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td class="num">${r[1]}</td><td>${esc(r[2])}</td></tr>`).join('');
+
+  return pageHead('Order of Battle','Every unit in your Crusade force, with campaign totals pulled from the Battle Tally.')+`
+  <section class="sheet" aria-label="Order of Battle sheet">
+    <div class="row1">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="box"><div class="val"><input type="text" data-bind="force.name" value="${esc(F.name)}" aria-label="Crusade force name"></div><span class="lbl">Crusade force</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="box"><div class="val">${c.supply}</div><span class="lbl">Supply limit</span></div>
+          <div class="box"><div class="val" style="${c.used>c.supply?'color:var(--blood)':''}">${c.used}</div><span class="lbl">Supply used</span></div>
+        </div>
+      </div>
+      <svg class="glyph" viewBox="0 0 120 120" role="img" aria-label="Crossed swords"><defs><g id="oobSword"><path d="M60 2 L67 13 L66.5 80 L53.5 80 L53 13 Z"/><path d="M60 15 V76" stroke="var(--paper)" stroke-width="2" stroke-linecap="round"/><path d="M36 80 C43 78 50 79 60 79 C70 79 77 78 84 80 L86 87 C77 85 70 86 60 86 C50 86 43 85 34 87 Z"/><path d="M56.5 86 H63.5 V105 H56.5 Z"/><path d="M58 89 H62 M58 94 H62 M58 99 H62" stroke="var(--paper)" stroke-width="1.6"/><circle cx="60" cy="110.5" r="6.5"/></g></defs><use href="#oobSword" fill="currentColor" transform="rotate(-42 60 60)"/><use href="#oobSword" fill="currentColor" stroke="var(--paper)" stroke-width="3" paint-order="stroke" transform="rotate(42 60 60)"/></svg>
+      <div class="dials">
+        <div class="dial"><b>${c.battles}</b><span>Battle tally</span></div>
+        <div class="dial"><b>${c.wins}</b><span>Victories</span></div>
+        <div class="dial"><b>${c.rp}</b><span>Requisition points (RP)</span></div>
+        <div class="dial bio"><b>${c.currency}</b><span>Current biomass</span></div>
+      </div>
+    </div>
+    <div class="row2">
+      <div class="box bio"><div class="val">${c.total}</div><span class="lbl">Total biomass acquired</span></div>
+      <div class="box bio"><div class="val">${c.totalBioSpent}</div><span class="lbl">Total biomass spent</span></div>
+      <div class="box"><div class="val">${c.totalRPSpent} <span style="font-size:.9rem;font-weight:500">of ${n(F.startRP)+c.battles} earned</span></div><span class="lbl">Total RP spent</span></div>
+      <div class="box stagebox bio"><div class="val">${esc(state.world.type)}: ${stageTxt}</div><span class="lbl">Devouring ${stageNeed?`(${stageNeed})`:''}</span></div>
+    </div>
+    <details class="badgebox" ${state.settings.badgesOpen?'open':''}><summary><span class="bsum-title">Crusade badges</span><span class="bmini">${badgeStatus().map((b,i)=>`<span class="mini ${b.earned?'earned':'locked'}" title="${b.name}: ${b.earned?'earned':'not yet earned'}">${badgeSvg(i)}</span>`).join('')}</span><span class="bcount">${badgeStatus().filter(b=>b.earned).length} of 3 earned</span><span class="bchev" aria-hidden="true"></span></summary>${badgesHtml()}</details>
+    <div class="oob">${col(slots.slice(0,half))}${col(slots.slice(half))}
+      <div class="achv"><h4>Record of achievement</h4><textarea data-bind="force.achievements" aria-label="Record of achievement">${esc(F.achievements)}</textarea></div>
+    </div>
+    <div class="sheet-foot"><span>Supply left: ${c.supply-c.used} pts</span><span>Crusade points total: ${units.reduce((a,u)=>a+(u.epic?0:unitCP(u)),0)}</span><span>Subject: Order of Battle</span></div>
+  </section>
+
+  <h2>Roster and army lists</h2>
+  <p class="prose muted">Tick units for each army list (Incursion, 1000 points). Crusade points are calculated from honours and scars on the Crusade Cards.</p>
+  <div class="listsum">${lists}</div>
+  <div class="scroll-x panel" style="padding:0"><table class="roster">
+    <thead><tr><th>Unit name</th><th>Datasheet</th><th class="num">Models</th><th class="num">Points</th><th class="num">CP</th><th class="num">XP</th><th>Rank</th><th class="num">Honours</th><th class="num">Scars</th><th class="num">Char.</th>${state.lists.map((L,li)=>`<th class="listcol">${esc(L.name)}</th>`).join('')}<th></th></tr></thead>
+    <tbody>${roster}</tbody></table></div>
+
+  <section class="panel" id="addUnit">
+    <h3>Add a Tyranids unit</h3>
+    <div class="addform">
+      <label>Datasheet<select id="addDs">${TYRANID_DATASHEETS.slice().sort().map(d=>`<option>${esc(d)}</option>`).join('')}</select></label>
+      <label>Unit name<input type="text" id="addName" placeholder="e.g. Swarmpatrol T10-3"></label>
+      <label>Models<input type="number" id="addModels" value="1" min="1"></label>
+      <label>Points<input type="number" id="addPts" value="0" min="0" style="width:5.5em"></label>
+      <label>Crusade points<input type="number" id="addCP" value="0"></label>
+      <label style="flex-direction:row;align-items:center;gap:6px"><input type="checkbox" id="addChar"> Character</label>
+      <label style="flex-direction:row;align-items:center;gap:6px"><input type="checkbox" id="addEpic"> Epic Hero</label>
+      <button type="button" class="primary" data-action="addUnit">Add to Order of Battle</button>
+    </div>
+    <p class="small muted" id="addMsg">Supply left: ${c.supply-c.used} pts. A Crusade card is created for the new unit automatically.</p>
+  </section>
+
+  <h2>Phase cheat sheet</h2>
+  <div class="scroll-x panel" style="padding:0"><table><thead><tr><th>Pre-game</th><th>Unit</th><th>Command</th><th>Move</th><th>Aura</th><th>Shooting</th><th>Charge (2D6)</th><th>Fight</th></tr></thead><tbody>${qr}</tbody></table></div>
+  <h3>Toughness and weapon Strength</h3>
+  <div class="scroll-x panel" style="padding:0;max-width:560px"><table><thead><tr><th>Unit</th><th class="num">T</th><th>Weapon S</th></tr></thead><tbody>${sr}</tbody></table></div>`;
+}
+
+let editing=null;
+function pCrusadeCards(){
+  const f=state.settings.cardsFilter;
+  const lists=state.lists;
+  const units=state.units.map((u,i)=>[u,i]).filter(([u])=>f==='all'||(u.lists&&u.lists[Number(f)]));
+  return pageHead('Crusade Cards','One card per unit on your Order of Battle. Select Edit on a card to update it after a battle.')+`
+  <div class="cardfilter"><span class="small">Show</span>
+    <div class="filter">${[['all','All units'],...lists.map((L,i)=>[String(i),L.name])].map(([k,l])=>`<button type="button" data-action="cardsFilter" data-val="${k}" aria-pressed="${f===k}">${esc(l)}</button>`).join('')}</div></div>
+  <div class="cards">${units.map(([u,i])=>editing===u.id?cardEdit(u,i):cardView(u,i)).join('')}</div>`;
+}
+/* Custom per-unit art */
+const CHAN = {
+  body:()=>`<rect x="-3.2" y="-101" width="6.4" height="8"/>
+    <path d="M-12 -94 C-6 -96.5 6 -96.5 12 -94 L13.5 -72 L10 -60 L-10 -60 L-13.5 -72 Z"/>
+    <path d="M-12 -93 L-19 -70 L-17 -52 C-16 -50 -13 -50 -13 -52 L-14 -69 L-8.5 -86 Z"/>
+    <path d="M12 -93 L21 -76 L13 -63 L10.5 -66 L16.5 -76 L8.5 -86 Z"/>
+    <path d="M-11 -61 L11 -61 L23 -37 L19 -38 L16 -36 L12 -38 L8 -36 L4 -38 L0 -36 L-4 -38 L-8 -36 L-12 -38 L-16 -36 L-19 -38 L-23 -37 Z"/>
+    <path d="M-8.5 -38 L-8 -5 L-12.5 0 L-2.5 0 L-3 -6 L-2.5 -38 Z"/><path d="M2.5 -38 L3.5 -6 L2.5 0 L12 0 L8.5 -5 L8.5 -38 Z"/>
+    <path d="M-9 -22 H-2.5 M3 -22 H8.6" stroke="var(--sil-bg)" stroke-width="1.4"/>`,
+  talons:()=>{const one=`<path d="M-4 -91 L-10 -83 L-48 -114 L-42 -126 Z"/><circle cx="-46" cy="-120" r="5.5"/>
+      <path d="M-50 -126 C-70 -130 -90 -118 -98 -96 C-102 -84 -102 -70 -97 -56 C-94 -72 -90 -88 -80 -100 L-76 -94 L-74 -104 C-68 -110 -62 -113 -56 -114 L-53 -108 L-50 -116 C-47 -117 -45 -117 -42 -116 Z"/>
+      <path d="M-6 -80 L-10 -72 L-36 -88 L-31 -97 Z"/><circle cx="-34" cy="-92" r="4"/>
+      <path d="M-37 -97 C-53 -96 -65 -84 -69 -68 C-71 -60 -71 -52 -68 -44 C-65 -54 -62 -64 -55 -74 L-52 -70 L-51 -78 C-47 -83 -42 -86 -35 -87 Z"/>`;
+    return one+`<g transform="scale(-1 1)">${one}</g>`;},
+  hairChan:()=>`<circle cx="0" cy="-110" r="11"/>
+    <path d="M-13 -110 C-15 -126 -6 -133 0 -133 C8 -133 16 -127 14 -110 C18 -96 22 -78 20 -60 C16 -68 12 -82 11 -96 C8 -100 -8 -100 -11 -96 C-12 -82 -16 -68 -20 -60 C-22 -78 -18 -96 -13 -110 Z"/>
+    <path d="M1 -133 C3 -142 10 -145 14 -141 C9 -141 5 -138 3 -132 Z"/>
+    <path d="M-11 -126 C-26 -126 -33 -110 -32 -92 C-31 -78 -27 -66 -21 -56 C-27 -74 -27 -94 -17 -114 Z"/><path d="M11 -126 C26 -126 33 -110 32 -92 C31 -78 27 -66 21 -56 C27 -74 27 -94 17 -114 Z"/>
+    <path d="M-14 -126 L-11 -130 L-9 -124 Z M14 -126 L11 -130 L9 -124 Z"/>
+    <path d="M-11 -114 C-6 -110 -2 -116 0 -112 C3 -116 7 -110 11 -114 L11 -121 L-11 -121 Z" fill="var(--sil-bg)" opacity=".0"/>`,
+  headNeuro:()=>`<circle cx="0" cy="-108" r="10.5"/>
+    <path d="M-12 -106 C-14 -96 -14 -90 -11 -86 C-9 -92 -8 -98 -8 -104 Z"/><path d="M12 -106 C14 -96 14 -90 11 -86 C9 -92 8 -98 8 -104 Z"/>
+    <path d="M-17 -112 C-24 -128 -14 -146 2 -147 C18 -147 27 -132 21 -113 C12 -118 -8 -118 -17 -112 Z"/>
+    <g fill="none" stroke="var(--sil-bg)" stroke-width="1.6" stroke-linecap="round"><path d="M1 -145 C-3 -136 4 -130 0 -120"/><path d="M-12 -132 C-8 -128 -12 -122 -6 -119"/><path d="M14 -136 C9 -131 15 -125 10 -120"/><path d="M-16 -122 C-12 -121 -12 -117 -8 -117"/></g>
+    <g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M-6 -146 C-12 -156 -22 -158 -30 -152"/><path d="M8 -146 C14 -158 26 -160 34 -152"/></g>`,
+};
+const SILART = {
+  chan:()=>`<g transform="translate(148 166) scale(1.0)">${CHAN.talons()}<g stroke="var(--sil-bg)" stroke-width="3" paint-order="stroke" stroke-linejoin="round">${CHAN.body()}${CHAN.hairChan()}</g></g>`,
+  neurochan:()=>`<g transform="translate(148 166) scale(1.0)">${CHAN.talons()}<g stroke="var(--sil-bg)" stroke-width="3" paint-order="stroke" stroke-linejoin="round">${CHAN.body()}${CHAN.headNeuro()}</g></g>`,
+};
+const SILPROPS = {
+  mic:()=>{const g=`<path d="M234 166 L248 148 L262 166 M248 166 V148"/><path d="M248 148 V98"/><path d="M248 98 L230 68"/>`;
+    const head=`<g transform="rotate(-31 226 61)"><rect x="221" y="49" width="10" height="22" rx="5"/><rect x="223.5" y="70" width="5" height="5" rx="1"/></g>`;
+    return `<g fill="none" stroke="var(--sil-bg)" stroke-width="7" stroke-linecap="round">${g}</g><g transform="rotate(-31 226 61)" fill="var(--sil-bg)"><rect x="218" y="46" width="16" height="28" rx="8"/></g>
+      <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">${g}</g><circle cx="248" cy="98" r="3.5"/>${head}
+      <g transform="rotate(-31 226 61)" stroke="var(--sil-bg)" stroke-width="1" opacity=".7"><path d="M222 54 H230 M222 58 H230 M222 62 H230"/></g>`;},
+};
+function rankBanner(u){
+  const r=rankOf(u); if(r===null||r<1) return '';
+  const names=['','Blooded','Battle-hardened','Heroic','Legendary'];
+  const sword=(blade,dark)=>`<path d="M30 20 L34 26 L34 64 L26 64 L26 26 Z" fill="${blade}"/><path d="M30 28 V60" stroke="${dark}" stroke-width="1.2" opacity=".5"/><path d="M19 63 H41 V68 H19 Z" fill="${blade}"/><path d="M28 68 H32 V78 H28 Z" fill="${dark}"/><circle cx="30" cy="81" r="3.2" fill="${blade}"/>`;
+  const cross=(c)=>`<path d="M21 22 H39 L35 40 L49 36.5 V53.5 L35 50 L39 72 H21 L25 50 L11 53.5 V36.5 L25 40 Z" fill="${c}"/>`;
+  const skull=(c)=>`<path d="M30 37 C35 37 38.5 40.5 38.5 45 C38.5 48 37 50 35 51 V54 H25 V51 C23 50 21.5 48 21.5 45 C21.5 40.5 25 37 30 37 Z" fill="${c}"/><circle cx="26.8" cy="45" r="2.3" fill="#1c1420"/><circle cx="33.2" cy="45" r="2.3" fill="#1c1420"/><path d="M29 48.5 L30 50.5 L31 48.5 Z" fill="#1c1420"/><path d="M27 54 V51.5 M30 54 V51.5 M33 54 V51.5" stroke="#1c1420" stroke-width=".8"/>`;
+  let star='';
+  if(r>=4){let pts=[];for(let k=0;k<24;k++){const a=k*Math.PI/12-Math.PI/2;const rad=k%2?9:22;pts.push((30+rad*Math.cos(a)).toFixed(1)+' '+(46+rad*Math.sin(a)).toFixed(1))}star=`<path d="M${pts.join(' L')} Z" fill="#c4262e"/>`}
+  let emb='';
+  if(r===1) emb=sword('#a3a8ae','#4c5157');
+  if(r===2) emb=cross('#2f63b9')+sword('#d3d7dd','#5c6168');
+  if(r===3) emb=sword('#d3d7dd','#5c6168')+skull('#f6f3ec');
+  if(r>=4) emb=sword('#dcae32','#7a5a12')+skull('#f6f3ec');
+  const fab=r===3?'#5b1f86':(r>=4?'#a11c24':'#241a29');
+  const cloth=r>=4
+    ? `<path d="M6 5 H54 V76 L51 84 L54 91 L47 89 L45 100 L40 90 L35 97 L31 87 L26 99 L22 88 L17 95 L14 86 L9 98 L8 85 L6 80 Z" fill="${fab}"/><path d="M51 8 V74 M9 8 V80 M9 8 H51" fill="none" stroke="#d4a84e" stroke-width="1.4"/>`
+    : `<path d="M6 5 H54 V100 L30 88 L6 100 Z" fill="${fab}"/><path d="M9 8 H51 V95 L30 84.5 L9 95 Z" fill="none" stroke="#b08d4a" stroke-width="1.4"/>`;
+  return `<svg class="rank-banner" viewBox="0 0 60 104" role="img" aria-label="${names[Math.min(r,4)]} rank"><title>${names[Math.min(r,4)]}</title>
+    <rect x="2" y="1" width="56" height="4" rx="2" fill="#6b5640"/><circle cx="3" cy="3" r="3" fill="#8a7152"/><circle cx="57" cy="3" r="3" fill="#8a7152"/>
+    ${cloth}
+    ${emb}</svg>`;
+}
+function cardView(u,i){
+  const r=rankOf(u); const cp=unitCP(u); const c=calc();
+  const curStage=Math.min(c.stage,2);
+  const bonus=STAGE_INFO[curStage].kws.filter(k=>hasKw(u,k));
+  const dod=Math.floor(n(u.t.destroyed)/3);
+  const ranks=RANKS.map((R,ri)=>{
+    const na=!u.epic&&(!u.character&&!u.legendaryVet&&ri>2);
+    return `<li class="${!na&&r!==null&&ri<=r?'got':''} ${na?'na':''}" title="${ri===4?'51+':R[1]+'–'+R[2]} XP"><i></i>${R[0]}</li>`;
+  }).slice(1).join('');
+  const hon=u.honours.length?`<ul>${u.honours.map(h=>`<li><span class="tag ${h.type.toLowerCase()}">${{BT:'Battle Trait',WM:'Weapon Mod',CR:'Relic'}[h.type]}</span> ${esc(h.name)}${h.detail?` <span style="opacity:.7">(${esc(h.detail)})</span>`:''}</li>`).join('')}</ul>`:`<p style="opacity:.6">${u.epic?'Never gains Battle Honours.':'None yet'}</p>`;
+  const sc=u.scars.length?`<ul>${u.scars.map(s=>`<li><span class="tag scar">Scar</span> ${esc(s)}</li>`).join('')}</ul>`:`<p style="opacity:.6">${u.epic?'Never gains Battle Scars.':'None'}</p>`;
+  return `<article class="ccard" aria-label="Crusade card: ${esc(u.name)}">
+    <div class="top"><div><span class="uname">${esc(u.name)}</span><span class="lbl">Unit name</span>${u.warlord?'<span class="warlord-kw">Warlord</span>':''}</div><div><span class="bn">${u.pts}</span><span class="lbl">Points cost</span></div><div><span class="bn">${u.epic?'N/A':cp}</span><span class="lbl">Crusade points</span></div></div>
+    <div class="cphoto sil" title="${esc(u.ds)}"><svg viewBox="0 0 320 180" fill="currentColor" role="img" aria-label="${esc(u.ds)} silhouette">${(u.art&&SILART[u.art]?SILART[u.art]:(SIL[u.ds]||SIL.generic))()}${(u.props||[]).map(p=>SILPROPS[p]?SILPROPS[p]():'').join('')}<path d="M0 166 H320" stroke="currentColor" stroke-width="2" opacity=".3"/></svg>${rankBanner(u)}</div>
+    <div class="mid">
+      <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+        <div class="cell"><b>${esc(u.ds)}</b>, ${u.models} model${u.models>1?'s':''}<span class="lbl">Unit type</span><p class="small">${esc(u.type)}${u.warlord?`${u.type?', ':''}<span class="warlord-kw">Warlord</span>`:''}</p><a class="walink" href="${esc(wahaUrl(u.ds))}" target="_blank" rel="noopener">Datasheet on Wahapedia</a></div>
+        <div class="cell"><span class="lbl">Equipment</span>${u.equip?`<ul>${u.equip.split('\n').filter(Boolean).map(l=>`<li>${esc(l)}</li>`).join('')}</ul>`:'<p style="opacity:.6">Not recorded</p>'}</div>
+        <div class="cell"><span class="lbl">Enhancements and upgrades</span><p>${esc(u.enh)||'<span style="opacity:.6">None</span>'}</p></div>
+      </div>
+      <div class="xpcol"><div class="xpdial"><div><b>${u.epic?'N/A':u.xp}</b><span>XP</span></div></div>
+        <div class="rankname">${u.epic?'Legendary<br><span style="font-size:.75rem;font-weight:600">Epic Hero</span>':RANKS[r][0]}</div>
+        <ul class="ranks">${ranks}</ul>
+        <div class="small" style="text-align:center">Honours ${u.epic?'N/A':`${u.honours.length}/${maxHonours(u)}`}</div>
+      </div>
+    </div>
+    <div class="tallies"><div><span>Battles played</span><b>${u.t.played}</b></div><div><span>Battles survived</span><b>${u.t.survived}</b></div><div><span>Enemy units destroyed</span><b>${u.t.destroyed}</b></div></div>
+    <div class="cell"><span class="lbl">Battle honours</span>${hon}</div>
+    <div class="cell"><span class="lbl">Battle scars</span>${sc}</div>
+    <div class="cell badges"><span class="lbl" style="font-family:var(--head)">Campaign badges and agendas</span>
+      Skipped ${u.t.skipped}. Marked for Greatness ${u.t.mfg}×. Prey Targets killed ${u.t.prey}. Spores planted ${u.t.spores}. Killed everything and survived ${u.t.killedAll}×. Dealers of Death XP earned: ${dod}.
+      ${bonus.length?`<br><span class="ok" style="color:inherit"><b>${STAGE_NAMES[curStage]} bonus XP applies</b> (${bonus.join(', ')}).</span>`:''}
+      ${u.notes?`<br>${esc(u.notes)}`:''}
+    </div>
+    <div class="actions"><button type="button" data-action="editCard" data-id="${u.id}">Edit</button></div>
+  </article>`;
+}
+function cardEdit(u,i){
+  const p=`units.${i}`;
+  const honRows=u.honours.map((h,hi)=>`<div class="hrow">
+      <select data-bind="${p}.honours.${hi}.type" aria-label="Honour type">${['BT','WM','CR'].map(t=>`<option value="${t}" ${h.type===t?'selected':''}>${{BT:'Battle Trait',WM:'Weapon Mod',CR:'Crusade Relic'}[t]}</option>`).join('')}</select>
+      <input type="text" data-bind="${p}.honours.${hi}.name" value="${esc(h.name)}" aria-label="Honour name">
+      <button type="button" class="ghost" data-action="delHonour" data-i="${i}" data-j="${hi}" aria-label="Remove honour" style="padding:0 8px">×</button>
+      ${h.type==='CR'?`<select data-bind="${p}.honours.${hi}.tier" aria-label="Relic category" style="grid-column:1/-1">${['Artificer','Antiquity','Legendary'].map(t=>`<option ${h.tier===t?'selected':''}>${t}</option>`).join('')}</select>`:''}
+    </div>`).join('');
+  const scarRows=u.scars.map((s,si)=>`<div class="hrow" style="grid-template-columns:minmax(0,1fr) auto"><input type="text" data-bind="${p}.scars.${si}" value="${esc(s)}" aria-label="Scar"><button type="button" class="ghost" data-action="delScar" data-i="${i}" data-j="${si}" aria-label="Remove scar" style="padding:0 8px">×</button></div>`).join('');
+  return `<article class="ccard" aria-label="Editing ${esc(u.name)}">
+    <div class="edit-grid">
+      <label class="full">Unit name${inp(p+'.name',u.name)}</label>
+      <label>Datasheet${inp(p+'.ds',u.ds)}</label>
+      <label>Models${inp(p+'.models',u.models,'num')}</label>
+      <label>Points${inp(p+'.pts',u.pts,'num')}</label>
+      <label>XP${inp(p+'.xp',u.xp,'num')}</label>
+      <label class="full">Unit type and keywords${inp(p+'.type',u.type)}</label>
+      <label class="full">Equipment (one per line)<textarea data-bind="${p}.equip">${esc(u.equip)}</textarea></label>
+      <label class="full">Enhancements and upgrades${inp(p+'.enh',u.enh)}</label>
+      <label>Battles played${inp(p+'.t.played',u.t.played,'num')}</label>
+      <label>Battles skipped${inp(p+'.t.skipped',u.t.skipped,'num')}</label>
+      <label>Battles survived${inp(p+'.t.survived',u.t.survived,'num')}</label>
+      <label>Enemy units destroyed${inp(p+'.t.destroyed',u.t.destroyed,'num')}</label>
+      <label>Marked for Greatness${inp(p+'.t.mfg',u.t.mfg,'num')}</label>
+      <label>Prey Targets killed${inp(p+'.t.prey',u.t.prey,'num')}</label>
+      <label>Spores planted${inp(p+'.t.spores',u.t.spores,'num')}</label>
+      <label>Killed everything, survived${inp(p+'.t.killedAll',u.t.killedAll,'num')}</label>
+      <label>Crusade points adjustment${inp(p+'.cpAdj',u.cpAdj,'num')}</label>
+      <div style="display:flex;flex-direction:column;gap:4px;justify-content:flex-end">
+        <label style="flex-direction:row;gap:6px">${chk(p+'.character',u.character)} Character</label>
+        <label style="flex-direction:row;gap:6px">${chk(p+'.warlord',u.warlord)} Warlord</label>
+        <label style="flex-direction:row;gap:6px">${chk(p+'.epic',u.epic)} Epic Hero</label>
+        <label style="flex-direction:row;gap:6px">${chk(p+'.titanic',u.titanic)} Titanic</label>
+        <label style="flex-direction:row;gap:6px">${chk(p+'.legendaryVet',u.legendaryVet)} Legendary Veterans</label>
+      </div>
+      <div class="full"><b>Battle honours</b> <span class="small">(${u.honours.length}/${maxHonours(u)})</span>${honRows}<button type="button" class="ghost" data-action="addHonour" data-i="${i}">Add honour</button></div>
+      <div class="full"><b>Battle scars</b> <span class="small">(max 3)</span>${scarRows}<button type="button" class="ghost" data-action="addScar" data-i="${i}">Add scar</button></div>
+      <label class="full">Notes<textarea data-bind="${p}.notes">${esc(u.notes)}</textarea></label>
+    </div>
+    <div class="actions"><button type="button" data-action="doneCard">Done</button></div>
+  </article>`;
+}
+
+function pBattleHonours(){
+  return pageHead('Battle Honours','Check this after every battle: did any unit cross an XP threshold?')+`
+  <section class="panel prose">
+    <h3>In short</h3>
+    <p>When a unit gains enough XP it ranks up before its next battle. Each rank gives one Battle Honour: a Battle Trait, a Weapon Modification or a Crusade Relic. Every Battle Honour raises the unit’s Crusade points.</p>
+  </section>
+  <div class="grid2">
+    <section class="panel"><h3>Ranks</h3>
+      <table><thead><tr><th>Experience points</th><th>Rank</th></tr></thead><tbody>${RANKS.map((R,i)=>`<tr><td class="num">${i===4?'51+':R[1]+'–'+R[2]}</td><td>${R[0]}${i>=3?' <span class="small muted">(Characters only)</span>':''}</td></tr>`).join('')}</tbody></table>
+      <p class="small" style="margin-top:10px">Only <span class="kw">Characters</span> reach Heroic or Legendary. Other units stop at Battle-hardened and at 30XP, unless they buy Legendary Veterans.</p>
+    </section>
+    <section class="panel"><h3>Gaining XP</h3>
+      <div class="rule"><h4>Battle Experience, 1XP</h4><p class="small">Every unit with a Crusade card that took part in the battle.</p></div>
+      <div class="rule"><h4>Dealers of Death, 1XP</h4><p class="small">For every third enemy unit destroyed (check the Units Destroyed tally).</p></div>
+      <div class="rule"><h4>Marked for Greatness, 3XP</h4><p class="small">One unit of your choice from that battle.</p></div>
+      <div class="rule"><h4>Agendas and stage bonuses</h4><p class="small">See Agendas and the Devouring stages on Crusade Rules.</p></div>
+      <p class="small muted">Epic Heroes, Fortifications, Swarms (and Mucolid Spores, Spore Mines) never gain XP or Honours, and automatically pass Out of Action tests.</p>
+    </section>
+  </div>
+  <section class="panel prose">
+    <h3>Battle Honour rules</h3>
+    <p>Each new Battle Honour: <b>+1 Crusade point</b> (+2 if <span class="kw">Titanic</span>). Crusade Relics instead give +1, +2 or +3 depending on category.</p>
+    <p>Maximum: <b>3 Battle Honours</b>, or <b>6 for a Character</b> (or a Legendary Veterans unit). At the cap, remove an old honour before adding a new one.</p>
+    <p>You can pick from any category each time. Gaining a rank can instead buy Renowned Heroes to take an Enhancement.</p>
+  </section>
+  <div class="grid3">
+    <a class="panel" href="#battle-traits" style="text-decoration:none;color:inherit"><h3>Battle Traits</h3><p class="small">New skills; roll D6 or choose from the Tyranids tables.</p></a>
+    <a class="panel" href="#crusade-relics" style="text-decoration:none;color:inherit"><h3>Weapon Modifications and Crusade Relics</h3><p class="small">Upgrade a weapon, or give a Character an artefact.</p></a>
+    <a class="panel" href="#battle-scars" style="text-decoration:none;color:inherit"><h3>Battle Scars</h3><p class="small">What happens when a unit fails its Out of Action test.</p></a>
+  </div>`;
+}
+const d6list=(arr)=>arr.map((t,i)=>`<div class="d6row"><span class="d6">${i+1}</span><div><b class="kw">${t[0]}</b><p class="small">${t[1]}</p></div></div>`).join('');
+function pBattleTraits(){
+  return pageHead('Battle Traits','Each time a unit gains a Battle Trait, pick its table, then roll a D6 or choose the one that tells the best story.')+`
+  <section class="panel prose small"><p>A unit can have several Battle Traits but never the same one twice (re-roll duplicates). Note it on the Crusade card and add +1 Crusade point. Mucolid Spores and Spore Mines never gain XP or honours (Rudimentary Instincts).</p></section>
+  <div class="grid2">
+    <section class="panel"><h3>Synapse units <span class="muted small">(D6)</span></h3>${d6list(TRAITS_SYNAPSE)}</section>
+    <section class="panel"><h3>Tyranids units <span class="muted small">(D6, excluding Synapse)</span></h3>${d6list(TRAITS_TYRANIDS)}</section>
+  </div>`;
+}
+function pCrusadeRelics(){
+  return pageHead('Crusade Relics','Weapon Modifications for any unit, and Crusade Relics for Tyranids Characters.')+`
+  <div class="grid2">
+    <section class="panel"><h3>Weapon Modifications</h3>
+      <p class="small">Pick one model (the Character or champion if there is one) and one of its weapons that is not already modified, and not an Enhancement or relic. Roll two D6 (re-roll doubles) or choose two different results. One honour = two modifications on that weapon.</p>
+      ${d6list(WEAPON_MODS)}
+    </section>
+    <section class="panel"><h3>Crusade Relic rules</h3>
+      <p class="small">Only <span class="kw">Character</span> models can gain relics. A Character can have any number, but each relic appears only once in your Order of Battle. A relic raises Crusade points by its category value instead of the usual +1.</p>
+      <table><thead><tr><th>Category</th><th>Rank required</th><th class="num">Crusade points</th></tr></thead><tbody>${RELICS.map(r=>`<tr><td>${r.cat}</td><td>${r.rank}</td><td class="num">${r.cp}</td></tr>`).join('')}</tbody></table>
+    </section>
+  </div>
+  ${RELICS.map(r=>`<h2>${r.cat} relics <span class="muted small">(${r.rank}, ${r.cp} Crusade points)</span></h2><div class="grid2">${r.items.map(it=>`<div class="rule"><h4>${it[0]}</h4><p class="small">${it[1]}</p></div>`).join('')}</div>`).join('')}`;
+}
+function pBattleScars(){
+  return pageHead('Battle Scars','Roll an Out of Action test for each of your units destroyed at the end of the battle.')+`
+  <div class="grid2">
+    <section class="panel prose"><h3>Out of Action</h3>
+      <p>Roll a D6 per destroyed unit. On 2+ nothing happens. On a 1, choose:</p>
+      <p><b>Devastating Blow</b>: lose one Battle Honour (-1 Crusade point, -2 if Titanic). Only for units that have honours.</p>
+      <p><b>Battle Scar</b>: gain one Battle Scar, decided before the next battle. -1 Crusade point for each scar the unit has.</p>
+      <p class="small">Max 3 scars, no duplicates. A unit with 3 scars must take Devastating Blow; with no honours left it is removed from your Order of Battle.</p>
+    </section>
+    <section class="panel prose"><h3>Attached units</h3>
+      <p class="small">A Leader and its Bodyguard share all their honours and scars while attached (“every model has this ability” rules need both). Each takes its own Out of Action test if destroyed, and each gets Battle Experience. Kills, Agenda tallies and bonus XP go to one of them, your choice.</p>
+      <p class="small"><b>Repair and Recuperate</b> (after a battle) removes a scar: 1RP +1 per Battle Honour, max 5.</p>
+    </section>
+  </div>
+  <div class="grid3">
+    <section class="panel"><h3>Tyranids units <span class="muted small">(excl. Synapse)</span></h3>${d6list(SCARS_TYRANIDS)}</section>
+    <section class="panel"><h3>Synapse units</h3>${d6list(SCARS_SYNAPSE)}</section>
+    <section class="panel"><h3>Generic Battle Scars</h3>${d6list(SCARS_GENERIC)}</section>
+  </div>`;
+}
+
+const RENDER={'introduction':pIntroduction,'crusade-rules':pCrusadeRules,'battle-tally':pBattleTally,'agendas':pAgendas,'order-of-battle':pOrderOfBattle,'crusade-cards':pCrusadeCards,'battle-honours':pBattleHonours,'battle-traits':pBattleTraits,'crusade-relics':pCrusadeRelics,'battle-scars':pBattleScars};
+
+/* =========================================================
+   RENDER + ROUTING
+   ========================================================= */
+const main=document.getElementById('main');
+function current(){const h=(location.hash||'').slice(1);return RENDER[h]?h:'introduction'}
+function renderNav(){
+  const cur=current();
+  document.getElementById('tabs').innerHTML=PAGES.map(([k,l])=>`<a href="#${k}" ${k===cur?'aria-current="page"':''}>${l}</a>`).join('');
+  const c=calc();
+  document.getElementById('status').innerHTML=`
+    <div><b>${c.rp}</b><span>RP</span></div>
+    <div class="bio"><b>${c.currency}</b><span>Biomass</span></div>
+    <div><b ${c.used>c.supply?'class="warn"':''}>${c.used}</b><span>of ${c.supply} pts</span></div>
+    <div><b>${c.wins}/${c.battles}</b><span>Wins</span></div>
+    <div class="wide bio"><b style="font-size:1.05rem">${esc(state.world.type)}</b><span>${c.stage>=3?'Devoured':STAGE_NAMES[c.stage]+' stage'}</span></div>`;
+}
+function render(keepFocus){
+  const scrolls={};
+  main.querySelectorAll('[data-keep-scroll]').forEach(el=>scrolls[el.dataset.keepScroll]=el.scrollLeft);
+  const active=document.activeElement; const ab=active&&active.dataset?active.dataset.bind:null;
+  main.innerHTML=RENDER[current()]();
+  main.querySelectorAll('[data-keep-scroll]').forEach(el=>{if(scrolls[el.dataset.keepScroll]!=null)el.scrollLeft=scrolls[el.dataset.keepScroll]});
+  renderNav();
+  if(keepFocus&&ab){const el=main.querySelector(`[data-bind="${ab}"]`);if(el&&el.type!=='radio')el.focus()}
+}
+window.addEventListener('hashchange',()=>{editing=null;render();window.scrollTo(0,0)});
+
+main.addEventListener('toggle',e=>{if(e.target.matches&&e.target.matches('.badgebox')){state.settings.badgesOpen=e.target.open;save()}},true);
+main.addEventListener('change',e=>{
+  const el=e.target; const path=el.dataset.bind; if(!path)return;
+  let v;
+  if(el.dataset.type==='bool') v=el.checked;
+  else if(el.dataset.type==='num') v=n(el.value);
+  else v=el.value;
+  setPath(path,v);
+  if(path.endsWith('.type')&&path.includes('honours')&&v==='CR'){const hp=path.replace(/\.type$/,'.tier');if(!getPath(hp))setPath(hp,'Artificer')}
+  save(); render(true);
+});
+
+function rollD(n_,s){let t=0;for(let i=0;i<n_;i++)t+=1+Math.floor(Math.random()*s);return t}
+function rollExpr(e){
+  e=e.replace('+','');
+  if(e==='D3+3') return rollD(1,3)+3;
+  let m=e.match(/^(\d*)D(\d)$/); if(m) return rollD(Number(m[1]||1),Number(m[2]));
+  return Number(e);
+}
+
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-action]'); if(!b)return;
+  const a=b.dataset.action;
+  if(a==='stratFilter'){state.settings.stratFilter=b.dataset.val;save();render();return}
+  if(a==='cardsFilter'){state.settings.cardsFilter=b.dataset.val;save();render();return}
+  if(a==='addBattle'){state.battles.push({date:new Date().toISOString().slice(0,10),opponent:'',result:'W',prey:0,preyBio:0,tyr:0,tyrBio:0,infestBio:0,killedAll:false,notes:'',bio:{},rp:{}});save();render();
+    const sc=main.querySelector('[data-keep-scroll]');if(sc)sc.scrollLeft=sc.scrollWidth;return}
+  if(a==='delBattle'){const i=Number(b.dataset.i);if(confirm(`Delete battle ${i+1}? Its Biomass and RP entries are removed.`)){state.battles.splice(i,1);save();render()}return}
+  if(a==='focusAdd'){const f=document.getElementById('addUnit');f.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>document.getElementById('addDs').focus(),300);return}
+  if(a==='addUnit'){
+    const ds=document.getElementById('addDs').value;
+    const name=document.getElementById('addName').value.trim()||ds;
+    const models=Math.max(1,n(document.getElementById('addModels').value));
+    const pts=n(document.getElementById('addPts').value);
+    const cp=n(document.getElementById('addCP').value);
+    const ch=document.getElementById('addChar').checked, ep=document.getElementById('addEpic').checked;
+    const c=calc();
+    state.units.push({id:'u'+Date.now(),name,ds,models,pts,xp:0,cpAdj:cp,character:ch||ep,epic:ep,warlord:false,titanic:false,type:'',equip:'',enh:'',honours:[],scars:[],t:{played:0,skipped:0,survived:0,destroyed:0,mfg:0,prey:0,spores:0,killedAll:0},notes:'',lists:state.lists.map(()=>false)});
+    save();render();
+    const msg=document.getElementById('addMsg');
+    if(msg){msg.textContent=(c.used+pts>c.supply)?`Added ${name}, but you are now ${c.used+pts-c.supply} pts over your Supply Limit.`:`Added ${name}. Its Crusade card is ready on the Crusade Cards page.`;msg.className='small '+((c.used+pts>c.supply)?'warn':'ok')}
+    return}
+  if(a==='delUnit'){const i=Number(b.dataset.i);const u=state.units[i];if(confirm(`Remove ${u.name} from your Order of Battle? Removed units cannot be added back, and their honours are lost.`)){state.units.splice(i,1);save();render()}return}
+  if(a==='editCard'){editing=b.dataset.id;render();return}
+  if(a==='addPhoto'){photoTarget=b.dataset.id;document.getElementById('photoFile').click();return}
+  if(a==='delPhoto'){const u=state.units.find(x=>x.id===b.dataset.id);if(u&&confirm(`Remove the photo of ${u.name}?`)){delete u.photo;save();render()}return}
+  if(a==='doneCard'){editing=null;render();return}
+  if(a==='addHonour'){const u=state.units[Number(b.dataset.i)];u.honours.push(H('BT',''));save();render();return}
+  if(a==='delHonour'){const u=state.units[Number(b.dataset.i)];u.honours.splice(Number(b.dataset.j),1);save();render();return}
+  if(a==='addScar'){const u=state.units[Number(b.dataset.i)];if(u.scars.length<3){u.scars.push('');save();render()}return}
+  if(a==='delScar'){const u=state.units[Number(b.dataset.i)];u.scars.splice(Number(b.dataset.j),1);save();render();return}
+  if(a==='rollWorld'){
+    if(!confirm('Roll a new world? This replaces the world type and stage targets (battles stay recorded).'))return;
+    const d=rollD(1,6); const type=d<=2?'Industrial World':(d<=4?'Rural World':'Hive World');
+    const rows=WORLD_TABLES[type].rows; let bio=0; const t=[]; const notes=[];
+    rows.forEach((r,i)=>{const add=rollExpr(r[0]);bio+=add;const bp=rollExpr(r[1]);t.push({bio,bp});notes.push(`${STAGE_NAMES[i]}: ${r[0]} → ${i?'+':''}${add} (${bio}), ${r[1]} → ${bp} battles`)});
+    const cw=calc(); if(cw.stage>=3) state.devoured=(state.devoured||[]).concat(state.world.type);
+    state.world={type,name:'',targets:t,startBattle:state.battles.length,rolls:`D6 = ${d}. `+notes.join('. ')+'.'};save();render();return}
+  if(a==='export'){
+    const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);const l=document.createElement('a');l.href=url;l.download='crusade-data.json';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);return}
+  if(a==='import'){document.getElementById('importFile').click();return}
+  if(a==='reset'){if(confirm('Reset everything to the values from your spreadsheet? Your changes in this browser are lost.')){state=clone(DEFAULT_STATE);save();editing=null;render()}return}
+});
+let photoTarget=null;
+document.getElementById('photoFile').addEventListener('change',e=>{
+  const f=e.target.files[0]; e.target.value=''; if(!f||!photoTarget)return;
+  const id=photoTarget; photoTarget=null;
+  const r=new FileReader();
+  r.onload=()=>{
+    const img=new Image();
+    img.onload=()=>{
+      const max=640; const sc=Math.min(1,max/Math.max(img.width,img.height));
+      const cv=document.createElement('canvas'); cv.width=Math.round(img.width*sc); cv.height=Math.round(img.height*sc);
+      cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);
+      const u=state.units.find(x=>x.id===id); if(!u)return;
+      u.photo=cv.toDataURL('image/jpeg',0.78); save(); render();
+    };
+    img.onerror=()=>alert('That file could not be read as an image. Try a JPG or PNG.');
+    img.src=r.result;
+  };
+  r.readAsDataURL(f);
+});
+document.getElementById('importFile').addEventListener('change',e=>{
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();r.onload=()=>{try{const s=JSON.parse(r.result);if(!Array.isArray(s.units))throw 0;state=migrate(s);save();render();alert('Data imported.')}catch(err){alert('That file is not a Crusade data export. Choose a file saved with Export data.')}};r.readAsText(f);e.target.value='';
+});
+
+render();
+</script>
+</body>
+</html>
